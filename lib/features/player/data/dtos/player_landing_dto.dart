@@ -1,5 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/network/converters/localized_string_converter.dart';
+import 'player_stats_dto.dart';
+
 part 'player_landing_dto.freezed.dart';
 part 'player_landing_dto.g.dart';
 
@@ -7,12 +10,28 @@ part 'player_landing_dto.g.dart';
 abstract class PlayerLandingDto with _$PlayerLandingDto {
   const factory PlayerLandingDto({
     int? playerId,
-    Map<String, dynamic>? firstName,
-    Map<String, dynamic>? lastName,
+    bool? isActive,
+    int? currentTeamId,
+    String? currentTeamAbbrev,
+    @LocalizedStringConverter() String? fullTeamName,
+    @LocalizedStringConverter() String? firstName,
+    @LocalizedStringConverter() String? lastName,
+    String? teamLogo,
+    int? sweaterNumber,
     String? position,
     String? headshot,
-    int? teamId,
-    Map<String, dynamic>? teamLogo,
+    String? heroImage,
+    int? heightInInches,
+    int? weightInPounds,
+    String? birthDate,
+    @LocalizedStringConverter() String? birthCity,
+    String? birthCountry,
+    String? shootsCatches,
+    DraftDetailsDto? draftDetails,
+    String? playerSlug,
+    FeaturedStatsDto? featuredStats,
+    CareerTotalsDto? careerTotals,
+    List<SeasonTotalDto>? seasonTotals,
   }) = _PlayerLandingDto;
 
   factory PlayerLandingDto.fromJson(Map<String, dynamic> json) =>
