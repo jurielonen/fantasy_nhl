@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/watchlist/presentation/watchlist_screen.dart';
 import '../../features/player/presentation/explore_screen.dart';
+import '../../features/player/presentation/player_detail_screen.dart';
+import '../../features/player/presentation/team_roster_screen.dart';
 import '../../features/schedule/presentation/schedule_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../features/watchlist/presentation/watchlist_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -29,6 +31,15 @@ final appRouter = GoRouter(
             GoRoute(
               path: '/explore',
               builder: (context, state) => const ExploreScreen(),
+              routes: [
+                GoRoute(
+                  path: 'team/:teamAbbrev',
+                  parentNavigatorKey: _rootNavigatorKey,
+                  builder: (context, state) => TeamRosterScreen(
+                    teamAbbrev: state.pathParameters['teamAbbrev']!,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -49,6 +60,13 @@ final appRouter = GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: '/player/:playerId',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => PlayerDetailScreen(
+        playerId: int.parse(state.pathParameters['playerId']!),
+      ),
     ),
   ],
 );

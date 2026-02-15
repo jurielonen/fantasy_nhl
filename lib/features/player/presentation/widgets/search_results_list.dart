@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../shared/widgets/app_error_widget.dart';
+import '../../../../shared/widgets/empty_state.dart';
+import '../../../../shared/widgets/player_list_tile.dart';
+import '../providers/explore_providers.dart';
+
+class SearchResultsList extends ConsumerWidget {
+  final void Function(int playerId)? onPlayerTap;
+
+  const SearchResultsList({super.key, this.onPlayerTap});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final query = ref.watch(searchQueryProvider);
+    if (query.trim().length < 2) return const SizedBox.shrink();
+
+    final resultsAsync = ref.watch(searchResultsProvider);
+
+    return resultsAsync.when(
+      data: (players) {
+        if (players.isEmpty) {
+          return const EmptyState(
+            icon: Icons.search_off,
+            title: 'No players found',
+            subtitle: 'Try a different search term',
+          );
+        }
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: players.length,
+          itemBuilder: (context, index) {
+            final player = players[index];
+            return PlayerListTile(
+              player: player,
+              onTap: () => onPlayerTap?.call(player.id),
+            );
+          },
+        );
+      },
+      loading: () => Column(
+        children: List.generate(
+          5,
+          (index) => const ShimmerPlayerListTile(),
+        ),
+      ),
+      error: (error, stack) => AppErrorWidget(
+        message: 'Search failed: $error',
+        onRetry: () => ref.invalidate(searchResultsProvider),
+      ),
+    );
+  }
+}

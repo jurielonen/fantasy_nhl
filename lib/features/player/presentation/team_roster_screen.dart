@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../shared/widgets/app_error_widget.dart';
+import '../../../shared/widgets/player_list_tile.dart';
+import 'providers/explore_providers.dart';
+
+class TeamRosterScreen extends ConsumerWidget {
+  final String teamAbbrev;
+
+  const TeamRosterScreen({super.key, required this.teamAbbrev});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final rosterAsync = ref.watch(teamRosterProvider(teamAbbrev));
+
+    return Scaffold(
+      appBar: AppBar(title: Text('$teamAbbrev Roster')),
+      body: rosterAsync.when(
+        data: (players) {
+          if (players.isEmpty) {
+            return const Center(child: Text('No players found'));
+          }
+          return RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(teamRosterProvider(teamAbbrev));
+            },
+            child: ListView.builder(
+              itemCount: players.length,
+              itemBuilder: (context, index) {
+                final player = players[index];
+                return PlayerListTile(
+                  player: player,
+                  trailingStat: player.position,
+                  trailingLabel: player.sweaterNumber != null
+                      ? '#${player.sweaterNumber}'
+                      : null,
+                  onTap: () => context.push('/player/${player.id}'),
+                );
+              },
+            ),
+          );
+        },
+        loading: () => ListView.builder(
+          itemCount: 15,
+          itemBuilder: (context, index) => const ShimmerPlayerListTile(),
+        ),
+        error: (error, stack) => AppErrorWidget(
+          message: 'Failed to load roster: $error',
+          onRetry: () => ref.invalidate(teamRosterProvider(teamAbbrev)),
+        ),
+      ),
+    );
+  }
+}
