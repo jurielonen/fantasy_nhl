@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../shared/widgets/app_error_widget.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/player_list_tile.dart';
+import '../../../watchlist/presentation/providers/add_to_watchlist_action.dart';
 import '../providers/explore_providers.dart';
 
 class SearchResultsList extends ConsumerWidget {
@@ -36,6 +37,8 @@ class SearchResultsList extends ConsumerWidget {
             return PlayerListTile(
               player: player,
               onTap: () => onPlayerTap?.call(player.id),
+              onAddToWatchlist: () =>
+                  addToWatchlist(ref, context, player),
             );
           },
         );

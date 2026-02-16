@@ -11,4 +11,6 @@ abstract class PlayerRepository {
   Future<List<StatLeader>> getSkaterLeaders(String category, {int? limit});
   Future<List<StatLeader>> getGoalieLeaders(String category, {int? limit});
   Future<List<Player>> getSpotlightPlayers();
+  Player? getCachedPlayer(int id);
+  Future<Player> getPlayerBasicInfo(int id);
 }

@@ -89,6 +89,49 @@ class WatchlistRepositoryImpl implements WatchlistRepository {
   }
 
   @override
+  Future<void> renameWatchlist(String id, String newName) async {
+    final watchlist = await getWatchlist(id);
+    if (watchlist == null) return;
+
+    final updated = Watchlist(
+      id: watchlist.id,
+      name: newName,
+      playerIds: watchlist.playerIds,
+      sortOrder: watchlist.sortOrder,
+      createdAt: watchlist.createdAt,
+    );
+    await _storage.setJson('$_prefix$id', updated.toModel().toJson());
+    _storage.notifyWatchlistChanged();
+  }
+
+  @override
+  Future<void> movePlayer(String fromId, String toId, int playerId) async {
+    final from = await getWatchlist(fromId);
+    final to = await getWatchlist(toId);
+    if (from == null || to == null) return;
+    if (to.playerIds.contains(playerId)) return;
+
+    final updatedFrom = Watchlist(
+      id: from.id,
+      name: from.name,
+      playerIds: from.playerIds.where((id) => id != playerId).toList(),
+      sortOrder: from.sortOrder,
+      createdAt: from.createdAt,
+    );
+    final updatedTo = Watchlist(
+      id: to.id,
+      name: to.name,
+      playerIds: [...to.playerIds, playerId],
+      sortOrder: to.sortOrder,
+      createdAt: to.createdAt,
+    );
+
+    await _storage.setJson('$_prefix$fromId', updatedFrom.toModel().toJson());
+    await _storage.setJson('$_prefix$toId', updatedTo.toModel().toJson());
+    _storage.notifyWatchlistChanged();
+  }
+
+  @override
   Future<void> reorderPlayers(
     String watchlistId,
     List<int> playerIds,
@@ -105,6 +148,23 @@ class WatchlistRepositoryImpl implements WatchlistRepository {
     );
     await _storage.setJson('$_prefix$watchlistId', updated.toModel().toJson());
     _storage.notifyWatchlistChanged();
+  }
+
+  @override
+  Future<Watchlist?> findWatchlistContainingPlayer(int playerId) async {
+    final all = await getWatchlists();
+    for (final wl in all) {
+      if (wl.playerIds.contains(playerId)) return wl;
+    }
+    return null;
+  }
+
+  @override
+  Future<void> ensureDefaultWatchlist() async {
+    final all = await getWatchlists();
+    if (all.isEmpty) {
+      await createWatchlist('My Players');
+    }
   }
 
   @override

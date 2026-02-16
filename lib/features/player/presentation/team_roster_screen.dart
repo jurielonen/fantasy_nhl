@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/player_list_tile.dart';
+import '../../watchlist/presentation/providers/add_to_watchlist_action.dart';
 import 'providers/explore_providers.dart';
 
 class TeamRosterScreen extends ConsumerWidget {
@@ -37,6 +38,8 @@ class TeamRosterScreen extends ConsumerWidget {
                       ? '#${player.sweaterNumber}'
                       : null,
                   onTap: () => context.push('/player/${player.id}'),
+                  onAddToWatchlist: () =>
+                      addToWatchlist(ref, context, player),
                 );
               },
             ),

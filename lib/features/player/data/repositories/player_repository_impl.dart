@@ -17,6 +17,7 @@ import '../dtos/spotlight_player_dto.dart';
 import '../mappers/game_log_mapper.dart';
 import '../mappers/player_mapper.dart';
 import '../mappers/stat_leader_mapper.dart';
+import '../models/cached_player_model.dart';
 
 class PlayerRepositoryImpl implements PlayerRepository {
   final NhlWebApiClient _webApiClient;
@@ -201,5 +202,21 @@ class PlayerRepositoryImpl implements PlayerRepository {
     await _storage.setCacheTimestamp(cacheKey);
 
     return dtos.map((d) => d.toPlayer()).toList();
+  }
+
+  @override
+  Player? getCachedPlayer(int id) {
+    final json = _storage.getJson('cache:player:$id');
+    if (json == null) return null;
+    return CachedPlayerModel.fromJson(json).toPlayer();
+  }
+
+  @override
+  Future<Player> getPlayerBasicInfo(int id) async {
+    final cached = getCachedPlayer(id);
+    if (cached != null) return cached;
+
+    final detail = await getPlayerDetail(id);
+    return detail.player;
   }
 }

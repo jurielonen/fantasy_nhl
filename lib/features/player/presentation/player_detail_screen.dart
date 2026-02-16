@@ -5,6 +5,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/shimmer_loader.dart';
+import '../../watchlist/presentation/providers/add_to_watchlist_action.dart';
+import '../../watchlist/providers.dart';
+import '../domain/entities/player.dart';
 import 'providers/player_detail_providers.dart';
 import 'widgets/career_stats_tab.dart';
 import 'widgets/game_log_tab.dart';
@@ -84,6 +87,11 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                 floating: true,
                 snap: true,
                 forceElevated: innerBoxIsScrolled,
+                actions: [
+                  _WatchlistButton(
+                    player: detail.player,
+                  ),
+                ],
               ),
               SliverToBoxAdapter(
                 child: PlayerDetailHeader(
@@ -265,6 +273,58 @@ class _StatTrendSection extends ConsumerWidget {
             ref.read(selectedStatTrendProvider.notifier).select(metric),
       ),
     );
+  }
+}
+
+class _WatchlistButton extends ConsumerWidget {
+  final Player player;
+
+  const _WatchlistButton({required this.player});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FutureBuilder<bool>(
+      future: _isInWatchlist(ref),
+      builder: (context, snapshot) {
+        final isInWatchlist = snapshot.data ?? false;
+        return IconButton(
+          icon: Icon(
+            isInWatchlist ? Icons.bookmark_added : Icons.bookmark_add_outlined,
+            color: isInWatchlist ? AppColors.accent : null,
+          ),
+          tooltip: isInWatchlist ? 'In watchlist' : 'Add to watchlist',
+          onPressed: () async {
+            if (isInWatchlist) {
+              final repo = ref.read(watchlistRepositoryProvider);
+              final wl =
+                  await repo.findWatchlistContainingPlayer(player.id);
+              if (wl != null) {
+                await repo.removePlayer(wl.id, player.id);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        '${player.fullName} removed from "${wl.name}"',
+                      ),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              }
+            } else {
+              await addToWatchlist(ref, context, player);
+            }
+          },
+        );
+      },
+    );
+  }
+
+  Future<bool> _isInWatchlist(WidgetRef ref) async {
+    final wl = await ref
+        .read(watchlistRepositoryProvider)
+        .findWatchlistContainingPlayer(player.id);
+    return wl != null;
   }
 }
 
