@@ -218,3 +218,26 @@ lib/
 - Include brief code comments only where logic is non-obvious.
 
 ---
+
+## Localization (l10n) Rules
+
+This project uses Flutter's built-in localization with ARB files. **Every user-facing string MUST be localized.** Never hardcode UI strings.
+
+### How to use
+- Access localized strings via `context.l10n.keyName` (extension defined in `core/utils/l10n_extension.dart`)
+- ARB file location: `lib/l10n/app_en.arb`
+- Generated output: `AppLocalizations` class via `flutter gen-l10n`
+
+### Key naming convention
+- Pure camelCase — **no underscores**
+- Prefix with screen/section name: `exploreTitle`, `watchlistEmpty`, `playerDetailGameLog`, `settingsTheme`, `scheduleNoGames`
+- Common/shared: `commonRetry`, `commonCancel`, `commonSave`
+- Errors: `errorGeneric`, `errorNoConnection`, `errorLoadingFailed`
+
+### Rules
+- **Never use hardcoded strings** in `Text()`, `hintText`, `label`, `title`, `tooltip`, `semanticLabel`, snackbar messages, dialog content, or any other user-facing context
+- **Always add new keys** to `app_en.arb` when creating new UI text, then run `flutter gen-l10n`
+- **Use placeholders** for dynamic values: `"watchlistAddedTo": "Added to {watchlistName}"` with `@watchlistAddedTo` metadata
+- **Use ICU plural format** for count-dependent strings: `"{count, plural, =0{No players} =1{1 player} other{{count} players}}"`
+- **Do NOT localize**: stat abbreviations (GP, G, A, P, +/-, PIM, PPG, etc.), team abbreviations, player names, API-sourced data values
+- **Use `intl` `DateFormat`** with the current locale for date/time formatting — never hardcode date formats
