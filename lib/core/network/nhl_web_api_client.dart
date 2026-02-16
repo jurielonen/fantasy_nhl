@@ -67,6 +67,9 @@ abstract class NhlWebApiClient {
   @GET('/v1/schedule/now')
   Future<ScheduleDto> getTodaySchedule();
 
+  @GET('/v1/schedule/{date}')
+  Future<ScheduleDto> getScheduleByDate(@Path('date') String date);
+
   @GET('/v1/club-schedule/{team}/week/now')
   Future<ClubWeekScheduleDto> getClubWeekSchedule(
     @Path('team') String team,
@@ -75,6 +78,9 @@ abstract class NhlWebApiClient {
   // Scores
   @GET('/v1/score/now')
   Future<ScoresDto> getTodayScores();
+
+  @GET('/v1/score/{date}')
+  Future<ScoresDto> getScoresByDate(@Path('date') String date);
 
   @GET('/v1/scoreboard/now')
   Future<ScoreboardDto> getScoreboard();

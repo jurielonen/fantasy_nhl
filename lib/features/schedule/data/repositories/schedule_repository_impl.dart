@@ -43,6 +43,28 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   }
 
   @override
+  Future<List<ScheduleGame>> getScheduleByDate(String date) async {
+    final cacheKey = 'schedule:$date';
+
+    if (!_storage.isCacheExpired(cacheKey, ttlMinutes: 5)) {
+      final cached = _storage.getString('cache:$cacheKey');
+      if (cached != null) {
+        final dto = ScheduleDto.fromJson(
+          jsonDecode(cached) as Map<String, dynamic>,
+        );
+        return dto.toGames();
+      }
+    }
+
+    final dto = await _webApiClient.getScheduleByDate(date);
+
+    await _storage.setString('cache:$cacheKey', jsonEncode(dto.toJson()));
+    await _storage.setCacheTimestamp(cacheKey);
+
+    return dto.toGames();
+  }
+
+  @override
   Future<List<ScheduleGame>> getTeamWeekSchedule(String teamAbbrev) async {
     final cacheKey = 'club_schedule:$teamAbbrev';
 
@@ -80,6 +102,28 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     final dto = await _webApiClient.getTodayScores();
+
+    await _storage.setString('cache:$cacheKey', jsonEncode(dto.toJson()));
+    await _storage.setCacheTimestamp(cacheKey);
+
+    return dto.toGames();
+  }
+
+  @override
+  Future<List<ScheduleGame>> getScoresByDate(String date) async {
+    final cacheKey = 'scores:$date';
+
+    if (!_storage.isCacheExpired(cacheKey, ttlMinutes: 2)) {
+      final cached = _storage.getString('cache:$cacheKey');
+      if (cached != null) {
+        final dto = ScoresDto.fromJson(
+          jsonDecode(cached) as Map<String, dynamic>,
+        );
+        return dto.toGames();
+      }
+    }
+
+    final dto = await _webApiClient.getScoresByDate(date);
 
     await _storage.setString('cache:$cacheKey', jsonEncode(dto.toJson()));
     await _storage.setCacheTimestamp(cacheKey);

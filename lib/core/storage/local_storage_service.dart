@@ -82,6 +82,20 @@ class LocalStorageService {
   /// Notify listeners that watchlist data changed.
   void notifyWatchlistChanged() => _watchlistController.add(null);
 
+  /// Remove all cache entries and their metadata. Returns the count removed.
+  Future<int> clearCache() async {
+    final cacheKeys = getKeysWithPrefix('cache:');
+    final metaKeys = getKeysWithPrefix('cache_meta:');
+    final allKeys = {...cacheKeys, ...metaKeys};
+    for (final key in allKeys) {
+      await _prefs.remove(key);
+    }
+    return allKeys.length;
+  }
+
+  /// Count of active cache entries.
+  int getCacheEntryCount() => getKeysWithPrefix('cache:').length;
+
   void dispose() => _watchlistController.close();
 }
 
