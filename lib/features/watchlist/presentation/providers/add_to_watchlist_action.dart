@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/utils/extensions.dart';
 import '../../../player/domain/entities/player.dart';
 import '../../domain/entities/watchlist.dart';
 import '../../providers.dart';
@@ -18,7 +19,7 @@ Future<void> addToWatchlist(
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${player.fullName} already in "${existing.name}"'),
+        content: Text(context.l10n.watchlistAlreadyIn(player.fullName, existing.name)),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -34,7 +35,7 @@ Future<void> addToWatchlist(
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${player.fullName} added to "${updated.first.name}"'),
+        content: Text(context.l10n.watchlistAddedTo(player.fullName, updated.first.name)),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -46,7 +47,7 @@ Future<void> addToWatchlist(
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${player.fullName} added to "${watchlists.first.name}"'),
+        content: Text(context.l10n.watchlistAddedTo(player.fullName, watchlists.first.name)),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -68,7 +69,7 @@ Future<void> addToWatchlist(
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${player.fullName} added to "${chosen.name}"'),
+        content: Text(context.l10n.watchlistAddedTo(player.fullName, chosen.name)),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -99,7 +100,7 @@ class _AddToWatchlistSheet extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Text(
-              'Add $playerName to...',
+              context.l10n.addPlayerTo(playerName),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
@@ -107,7 +108,7 @@ class _AddToWatchlistSheet extends StatelessWidget {
             (wl) => ListTile(
               leading: const Icon(Icons.list_alt),
               title: Text(wl.name),
-              subtitle: Text('${wl.playerIds.length} players'),
+              subtitle: Text(context.l10n.commonPlayers(wl.playerIds.length)),
               onTap: () => Navigator.pop(context, wl),
             ),
           ),

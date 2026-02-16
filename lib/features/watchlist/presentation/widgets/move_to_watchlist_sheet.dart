@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/watchlist.dart';
 
 class MoveToWatchlistSheet extends StatelessWidget {
@@ -27,21 +28,21 @@ class MoveToWatchlistSheet extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Text(
-              'Move $playerName to...',
+              context.l10n.movePlayerTo(playerName),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           if (targets.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('No other watchlists available. Create one first.'),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(context.l10n.movePlayerNoOther),
             )
           else
             ...targets.map(
               (wl) => ListTile(
                 leading: const Icon(Icons.list_alt),
                 title: Text(wl.name),
-                subtitle: Text('${wl.playerIds.length} players'),
+                subtitle: Text(context.l10n.commonPlayers(wl.playerIds.length)),
                 onTap: () => Navigator.pop(context, wl),
               ),
             ),

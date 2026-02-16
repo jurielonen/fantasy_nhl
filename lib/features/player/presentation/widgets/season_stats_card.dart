@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/player_detail.dart';
 
 class SeasonStatsCard extends StatelessWidget {
@@ -11,15 +12,17 @@ class SeasonStatsCard extends StatelessWidget {
   const SeasonStatsCard({
     super.key,
     required this.stats,
-    this.title = 'Season Stats',
+    this.title = '',
   });
 
   @override
   Widget build(BuildContext context) {
+    final displayTitle = title.isEmpty ? context.l10n.seasonStatsTitle : title;
+
     if (stats == null) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Text('No stats available', style: AppTextStyles.bodyMedium),
+        child: Text(context.l10n.seasonStatsEmpty, style: AppTextStyles.bodyMedium),
       );
     }
 
@@ -34,7 +37,7 @@ class SeasonStatsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: AppTextStyles.titleMedium),
+          Text(displayTitle, style: AppTextStyles.titleMedium),
           const SizedBox(height: 12),
           switch (stats!) {
             SkaterSeasonStats s => _SkaterStatsGrid(stats: s),

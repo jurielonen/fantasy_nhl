@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/router/app_router.dart';
@@ -34,6 +35,8 @@ class FantasyNhlApp extends ConsumerWidget {
       themeMode: themeMode,
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

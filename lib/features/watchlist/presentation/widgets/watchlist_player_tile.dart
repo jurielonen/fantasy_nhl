@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../../../core/utils/stat_formatter.dart';
 import '../../../player/domain/entities/game_log_entry.dart';
 import '../../../schedule/domain/entities/schedule_game.dart';
@@ -30,11 +31,11 @@ class WatchlistPlayerTile extends StatelessWidget {
         motion: const BehindMotion(),
         children: [
           SlidableAction(
-            onPressed: (_) => onMove(),
+            onPressed: (ctx) => onMove(),
             backgroundColor: AppColors.accent,
             foregroundColor: Colors.white,
             icon: Icons.drive_file_move_outlined,
-            label: 'Move',
+            label: context.l10n.watchlistMove,
           ),
         ],
       ),
@@ -43,11 +44,11 @@ class WatchlistPlayerTile extends StatelessWidget {
         dismissible: DismissiblePane(onDismissed: onRemove),
         children: [
           SlidableAction(
-            onPressed: (_) => onRemove(),
+            onPressed: (ctx) => onRemove(),
             backgroundColor: AppColors.error,
             foregroundColor: Colors.white,
             icon: Icons.delete_outline,
-            label: 'Remove',
+            label: context.l10n.watchlistRemove,
           ),
         ],
       ),
@@ -157,18 +158,18 @@ class _GameStatusWidget extends StatelessWidget {
     final game = info.todayGame;
 
     if (game == null) {
-      return _noGameWidget();
+      return _noGameWidget(context);
     }
 
     return switch (game.gameState) {
-      GameState.live => _liveGameWidget(game),
-      GameState.final_ => _finalGameWidget(game),
+      GameState.live => _liveGameWidget(context, game),
+      GameState.final_ => _finalGameWidget(context, game),
       GameState.future => _futureGameWidget(game),
-      GameState.off => _noGameWidget(),
+      GameState.off => _noGameWidget(context),
     };
   }
 
-  Widget _liveGameWidget(ScheduleGame game) {
+  Widget _liveGameWidget(BuildContext context, ScheduleGame game) {
     final score = '${game.awayTeamAbbrev} ${game.awayScore ?? 0} - '
         '${game.homeScore ?? 0} ${game.homeTeamAbbrev}';
     return Column(
@@ -181,9 +182,9 @@ class _GameStatusWidget extends StatelessWidget {
             color: AppColors.success.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: const Text(
-            'LIVE',
-            style: TextStyle(
+          child: Text(
+            context.l10n.watchlistLive,
+            style: const TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.bold,
               color: AppColors.success,
@@ -203,7 +204,7 @@ class _GameStatusWidget extends StatelessWidget {
     );
   }
 
-  Widget _finalGameWidget(ScheduleGame game) {
+  Widget _finalGameWidget(BuildContext context, ScheduleGame game) {
     final score = '${game.awayTeamAbbrev} ${game.awayScore ?? 0} - '
         '${game.homeScore ?? 0} ${game.homeTeamAbbrev}';
     final log = info.lastGameLog;
@@ -212,7 +213,7 @@ class _GameStatusWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          'Final: $score',
+          context.l10n.watchlistFinalScore(score),
           style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
         ),
         if (log != null)
@@ -255,15 +256,15 @@ class _GameStatusWidget extends StatelessWidget {
     );
   }
 
-  Widget _noGameWidget() {
+  Widget _noGameWidget(BuildContext context) {
     final log = info.lastGameLog;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        const Text(
-          'No game today',
-          style: TextStyle(fontSize: 11, color: AppColors.textTertiary),
+        Text(
+          context.l10n.watchlistNoGameToday,
+          style: const TextStyle(fontSize: 11, color: AppColors.textTertiary),
         ),
         if (log != null)
           Text(

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/shimmer_loader.dart';
 import '../../watchlist/presentation/providers/add_to_watchlist_action.dart';
@@ -63,10 +64,10 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
         loading: () => _buildLoadingState(),
         error: (error, _) => CustomScrollView(
           slivers: [
-            const SliverAppBar(title: Text('Player Detail')),
+            SliverAppBar(title: Text(context.l10n.playerDetailTitle)),
             SliverFillRemaining(
               child: AppErrorWidget(
-                message: 'Failed to load player',
+                message: context.l10n.playerDetailFailedToLoad,
                 onRetry: _refresh,
               ),
             ),
@@ -111,11 +112,11 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                     indicatorColor: AppColors.accent,
                     dividerColor: AppColors.border,
                     labelStyle: AppTextStyles.labelLarge,
-                    tabs: const [
-                      Tab(text: 'Overview'),
-                      Tab(text: 'Game Log'),
-                      Tab(text: 'Schedule'),
-                      Tab(text: 'Career'),
+                    tabs: [
+                      Tab(text: context.l10n.playerDetailTabOverview),
+                      Tab(text: context.l10n.playerDetailTabGameLog),
+                      Tab(text: context.l10n.playerDetailTabSchedule),
+                      Tab(text: context.l10n.playerDetailTabCareer),
                     ],
                   ),
                 ),
@@ -172,10 +173,10 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                           onRetry: _refresh,
                         )
                       else
-                        const SliverFillRemaining(
+                        SliverFillRemaining(
                           child: Center(
                             child: Text(
-                              'No team assigned',
+                              context.l10n.playerDetailNoTeam,
                               style: TextStyle(color: AppColors.textSecondary),
                             ),
                           ),
@@ -205,7 +206,7 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
   Widget _buildLoadingState() {
     return CustomScrollView(
       slivers: [
-        const SliverAppBar(title: Text('Loading...')),
+        SliverAppBar(title: Text(context.l10n.playerDetailLoading)),
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -258,11 +259,11 @@ class _StatTrendSection extends ConsumerWidget {
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: ShimmerLoader(height: 250),
       ),
-      error: (_, _) => const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      error: (_, _) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Text(
-          'Could not load trend data',
-          style: TextStyle(color: AppColors.textSecondary),
+          context.l10n.playerDetailTrendError,
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
       ),
       data: (entries) => StatTrendChart(
@@ -292,7 +293,7 @@ class _WatchlistButton extends ConsumerWidget {
             isInWatchlist ? Icons.bookmark_added : Icons.bookmark_add_outlined,
             color: isInWatchlist ? AppColors.accent : null,
           ),
-          tooltip: isInWatchlist ? 'In watchlist' : 'Add to watchlist',
+          tooltip: isInWatchlist ? context.l10n.commonInWatchlist : context.l10n.commonAddToWatchlist,
           onPressed: () async {
             if (isInWatchlist) {
               final repo = ref.read(watchlistRepositoryProvider);
@@ -304,7 +305,7 @@ class _WatchlistButton extends ConsumerWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        '${player.fullName} removed from "${wl.name}"',
+                        context.l10n.watchlistRemovedFrom(player.fullName, wl.name),
                       ),
                       behavior: SnackBarBehavior.floating,
                     ),

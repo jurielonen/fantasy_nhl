@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/player_card.dart';
 import '../../../../shared/widgets/section_header.dart';
 import '../providers/explore_providers.dart';
@@ -17,14 +18,14 @@ class SpotlightCarousel extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SectionHeader(title: 'Player Spotlight'),
+        SectionHeader(title: context.l10n.exploreSpotlight),
         SizedBox(
           height: 200,
           child: spotlightAsync.when(
             data: (players) {
               if (players.isEmpty) {
-                return const Center(
-                  child: Text('No spotlight players available'),
+                return Center(
+                  child: Text(context.l10n.exploreSpotlightEmpty),
                 );
               }
               return ListView.builder(
@@ -47,7 +48,7 @@ class SpotlightCarousel extends ConsumerWidget {
               itemBuilder: (context, index) => const ShimmerPlayerCard(),
             ),
             error: (error, stack) => Center(
-              child: Text('Failed to load spotlight: $error'),
+              child: Text(context.l10n.exploreSpotlightError(error.toString())),
             ),
           ),
         ),

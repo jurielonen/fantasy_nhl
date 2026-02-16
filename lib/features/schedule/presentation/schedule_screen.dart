@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/shimmer_loader.dart';
@@ -16,7 +17,7 @@ class ScheduleScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Schedule')),
+      appBar: AppBar(title: Text(context.l10n.scheduleTitle)),
       body: Column(
         children: [
           const DateSelector(),
@@ -36,15 +37,15 @@ class _GameList extends ConsumerWidget {
     return gamesAsync.when(
       loading: () => _buildShimmer(),
       error: (err, _) => AppErrorWidget(
-        message: 'Failed to load schedule',
+        message: context.l10n.scheduleFailedToLoad,
         onRetry: () => ref.invalidate(scheduleGamesWithScoresProvider),
       ),
       data: (games) {
         if (games.isEmpty) {
-          return const EmptyState(
+          return EmptyState(
             icon: Icons.calendar_today,
-            title: 'No games scheduled',
-            subtitle: 'Try a different date',
+            title: context.l10n.scheduleNoGames,
+            subtitle: context.l10n.scheduleNoGamesHint,
           );
         }
 

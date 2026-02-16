@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/schedule_game.dart';
 
 class ScheduleGameCard extends StatelessWidget {
@@ -118,15 +119,15 @@ class _GameStatusCenter extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: switch (game.gameState) {
-        GameState.live => _buildLive(),
-        GameState.final_ => _buildFinal(),
-        GameState.future => _buildFuture(),
-        GameState.off => _buildFuture(),
+        GameState.live => _buildLive(context),
+        GameState.final_ => _buildFinal(context),
+        GameState.future => _buildFuture(context),
+        GameState.off => _buildFuture(context),
       },
     );
   }
 
-  Widget _buildLive() {
+  Widget _buildLive(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -135,9 +136,9 @@ class _GameStatusCenter extends StatelessWidget {
             color: AppColors.success.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: const Text(
-            'LIVE',
-            style: TextStyle(
+          child: Text(
+            context.l10n.scheduleLive,
+            style: const TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.bold,
               color: AppColors.success,
@@ -157,12 +158,12 @@ class _GameStatusCenter extends StatelessWidget {
     );
   }
 
-  Widget _buildFinal() {
+  Widget _buildFinal(BuildContext context) {
     return Column(
       children: [
-        const Text(
-          'Final',
-          style: TextStyle(
+        Text(
+          context.l10n.scheduleFinal,
+          style: const TextStyle(
             fontSize: 11,
             color: AppColors.textTertiary,
           ),
@@ -180,9 +181,9 @@ class _GameStatusCenter extends StatelessWidget {
     );
   }
 
-  Widget _buildFuture() {
+  Widget _buildFuture(BuildContext context) {
     return Text(
-      _formatTime(game.startTimeUtc),
+      _formatTime(context, game.startTimeUtc),
       style: const TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w600,
@@ -191,8 +192,8 @@ class _GameStatusCenter extends StatelessWidget {
     );
   }
 
-  String _formatTime(String? utcTime) {
-    if (utcTime == null) return 'TBD';
+  String _formatTime(BuildContext context, String? utcTime) {
+    if (utcTime == null) return context.l10n.scheduleTbd;
     try {
       final dt = DateTime.parse(utcTime).toLocal();
       final hour =
@@ -201,7 +202,7 @@ class _GameStatusCenter extends StatelessWidget {
       final period = dt.hour >= 12 ? 'PM' : 'AM';
       return '$hour:$minute $period';
     } catch (_) {
-      return 'TBD';
+      return context.l10n.scheduleTbd;
     }
   }
 }

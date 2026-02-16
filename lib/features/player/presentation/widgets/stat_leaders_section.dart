@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/section_header.dart';
 import '../../../../shared/widgets/shimmer_loader.dart';
 import '../../../../shared/widgets/stat_leader_row.dart';
@@ -40,8 +41,8 @@ class _SkaterLeaders extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'Skater Leaders',
-          actionText: showAll ? 'Show Less' : 'See All',
+          title: context.l10n.exploreSkaterLeaders,
+          actionText: showAll ? context.l10n.exploreShowLess : context.l10n.exploreSeeAll,
           onAction: () =>
               ref.read(showAllSkaterLeadersProvider.notifier).toggle(),
         ),
@@ -77,7 +78,7 @@ class _SkaterLeaders extends ConsumerWidget {
           ),
           error: (error, stack) => Padding(
             padding: const EdgeInsets.all(16),
-            child: Text('Failed to load: $error'),
+            child: Text(context.l10n.exploreFailedToLoad(error.toString())),
           ),
         ),
       ],
@@ -100,8 +101,8 @@ class _GoalieLeaders extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'Goalie Leaders',
-          actionText: showAll ? 'Show Less' : 'See All',
+          title: context.l10n.exploreGoalieLeaders,
+          actionText: showAll ? context.l10n.exploreShowLess : context.l10n.exploreSeeAll,
           onAction: () =>
               ref.read(showAllGoalieLeadersProvider.notifier).toggle(),
         ),
@@ -137,7 +138,7 @@ class _GoalieLeaders extends ConsumerWidget {
           ),
           error: (error, stack) => Padding(
             padding: const EdgeInsets.all(16),
-            child: Text('Failed to load: $error'),
+            child: Text(context.l10n.exploreFailedToLoad(error.toString())),
           ),
         ),
       ],

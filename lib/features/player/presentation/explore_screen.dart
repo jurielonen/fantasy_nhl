@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/extensions.dart';
 import 'providers/explore_providers.dart';
 import 'widgets/browse_by_team.dart';
 import 'widgets/search_results_list.dart';
@@ -65,7 +66,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             SliverAppBar(
               floating: true,
               snap: true,
-              title: const Text('Explore'),
+              title: Text(context.l10n.exploreTitle),
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(56),
                 child: Padding(
@@ -77,7 +78,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     onChanged: _onSearchChanged,
                     style: const TextStyle(color: AppColors.textPrimary),
                     decoration: InputDecoration(
-                      hintText: 'Search players...',
+                      hintText: context.l10n.exploreSearchHint,
                       prefixIcon: const Icon(Icons.search, size: 20),
                       suffixIcon: _isSearching
                           ? IconButton(

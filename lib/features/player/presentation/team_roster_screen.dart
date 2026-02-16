@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/player_list_tile.dart';
 import '../../watchlist/presentation/providers/add_to_watchlist_action.dart';
@@ -17,11 +18,11 @@ class TeamRosterScreen extends ConsumerWidget {
     final rosterAsync = ref.watch(teamRosterProvider(teamAbbrev));
 
     return Scaffold(
-      appBar: AppBar(title: Text('$teamAbbrev Roster')),
+      appBar: AppBar(title: Text(context.l10n.teamRosterTitle(teamAbbrev))),
       body: rosterAsync.when(
         data: (players) {
           if (players.isEmpty) {
-            return const Center(child: Text('No players found'));
+            return Center(child: Text(context.l10n.teamRosterEmpty));
           }
           return RefreshIndicator(
             onRefresh: () async {
@@ -50,7 +51,7 @@ class TeamRosterScreen extends ConsumerWidget {
           itemBuilder: (context, index) => const ShimmerPlayerListTile(),
         ),
         error: (error, stack) => AppErrorWidget(
-          message: 'Failed to load roster: $error',
+          message: context.l10n.teamRosterError(error.toString()),
           onRetry: () => ref.invalidate(teamRosterProvider(teamAbbrev)),
         ),
       ),

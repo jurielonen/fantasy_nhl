@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/game_log_entry.dart';
 
 class StatTrendChart extends StatelessWidget {
@@ -26,11 +27,11 @@ class StatTrendChart extends StatelessWidget {
     if (gameLog.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Text('No game data available', style: AppTextStyles.bodyMedium),
+        child: Text(context.l10n.statTrendEmpty, style: AppTextStyles.bodyMedium),
       );
     }
 
-    final metrics = isGoalie ? _goalieMetrics : _skaterMetrics;
+    final metrics = isGoalie ? _goalieMetrics : _skaterMetrics(context);
     // Take last 25 games, reversed to show oldest first
     final entries = gameLog.take(25).toList().reversed.toList();
     final values = entries.map((e) => _extractMetric(e, selectedMetric)).toList();
@@ -47,7 +48,7 @@ class StatTrendChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Stat Trend', style: AppTextStyles.titleMedium),
+          Text(context.l10n.statTrendTitle, style: AppTextStyles.titleMedium),
           const SizedBox(height: 12),
           // Metric toggle chips
           Wrap(
@@ -245,11 +246,11 @@ class StatTrendChart extends StatelessWidget {
   }
 }
 
-const _skaterMetrics = {
-  'points': 'Points',
-  'goals': 'Goals',
-  'assists': 'Assists',
-  'shots': 'Shots',
+Map<String, String> _skaterMetrics(BuildContext context) => {
+  'points': context.l10n.statTrendPoints,
+  'goals': context.l10n.statTrendGoals,
+  'assists': context.l10n.statTrendAssists,
+  'shots': context.l10n.statTrendShots,
 };
 
 const _goalieMetrics = {

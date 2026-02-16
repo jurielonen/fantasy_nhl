@@ -1,0 +1,327 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Fantasy NHL",
+
+  "commonRetry": "Retry",
+  "commonCancel": "Cancel",
+  "commonDelete": "Delete",
+  "commonRename": "Rename",
+  "commonCreate": "Create",
+  "commonClear": "Clear",
+  "commonNew": "New",
+  "commonToday": "Today",
+  "commonVersion": "Version",
+  "commonPlayers": "{count, plural, =0{0 players} =1{1 player} other{{count} players}}",
+  "@commonPlayers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonAddToWatchlist": "Add to watchlist",
+  "commonInWatchlist": "In watchlist",
+
+  "navWatchlist": "Watchlist",
+  "navExplore": "Explore",
+  "navSchedule": "Schedule",
+  "navSettings": "Settings",
+
+  "watchlistTitle": "Watchlist",
+  "watchlistSortBy": "Sort by",
+  "watchlistSortCustom": "Custom Order",
+  "watchlistSortName": "Name",
+  "watchlistSortPosition": "Position",
+  "watchlistSortPoints": "Points (Season)",
+  "watchlistSortRecentForm": "Recent Form",
+  "watchlistSortGameTime": "Game Time",
+  "watchlistFailedToLoad": "Failed to load watchlist",
+  "watchlistPlayerRemoved": "Player removed",
+  "watchlistUndo": "Undo",
+  "watchlistCreateAnother": "Create another watchlist first",
+  "watchlistMovedTo": "Moved to \"{watchlistName}\"",
+  "@watchlistMovedTo": {
+    "placeholders": {
+      "watchlistName": {
+        "type": "String"
+      }
+    }
+  },
+  "watchlistEmptyTitle": "No players yet",
+  "watchlistEmptySubtitle": "Search and add players to your watchlist to track their stats and games.",
+  "watchlistEmptyAction": "Find Players",
+  "watchlistRenameTitle": "Rename Watchlist",
+  "watchlistNameHint": "Watchlist name",
+  "watchlistDeleteTitle": "Delete Watchlist",
+  "watchlistDeleteConfirm": "Delete \"{watchlistName}\" and its {count} players? This cannot be undone.",
+  "@watchlistDeleteConfirm": {
+    "placeholders": {
+      "watchlistName": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "watchlistNewTitle": "New Watchlist",
+  "watchlistMove": "Move",
+  "watchlistRemove": "Remove",
+  "watchlistNoGameToday": "No game today",
+  "watchlistFinalScore": "Final: {score}",
+  "@watchlistFinalScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "watchlistLive": "LIVE",
+  "watchlistAlreadyIn": "{playerName} already in \"{watchlistName}\"",
+  "@watchlistAlreadyIn": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      },
+      "watchlistName": {
+        "type": "String"
+      }
+    }
+  },
+  "watchlistAddedTo": "{playerName} added to \"{watchlistName}\"",
+  "@watchlistAddedTo": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      },
+      "watchlistName": {
+        "type": "String"
+      }
+    }
+  },
+  "watchlistRemovedFrom": "{playerName} removed from \"{watchlistName}\"",
+  "@watchlistRemovedFrom": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      },
+      "watchlistName": {
+        "type": "String"
+      }
+    }
+  },
+  "movePlayerTo": "Move {playerName} to...",
+  "@movePlayerTo": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      }
+    }
+  },
+  "movePlayerNoOther": "No other watchlists available. Create one first.",
+  "addPlayerTo": "Add {playerName} to...",
+  "@addPlayerTo": {
+    "placeholders": {
+      "playerName": {
+        "type": "String"
+      }
+    }
+  },
+
+  "exploreTitle": "Explore",
+  "exploreSearchHint": "Search players...",
+  "exploreSpotlight": "Player Spotlight",
+  "exploreSpotlightEmpty": "No spotlight players available",
+  "exploreSpotlightError": "Failed to load spotlight: {error}",
+  "@exploreSpotlightError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exploreSkaterLeaders": "Skater Leaders",
+  "exploreGoalieLeaders": "Goalie Leaders",
+  "exploreSeeAll": "See All",
+  "exploreShowLess": "Show Less",
+  "exploreFailedToLoad": "Failed to load: {error}",
+  "@exploreFailedToLoad": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exploreBrowseByTeam": "Browse by Team",
+  "exploreSearchNoResults": "No players found",
+  "exploreSearchNoResultsHint": "Try a different search term",
+  "exploreSearchFailed": "Search failed: {error}",
+  "@exploreSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "teamRosterTitle": "{teamAbbrev} Roster",
+  "@teamRosterTitle": {
+    "placeholders": {
+      "teamAbbrev": {
+        "type": "String"
+      }
+    }
+  },
+  "teamRosterEmpty": "No players found",
+  "teamRosterError": "Failed to load roster: {error}",
+  "@teamRosterError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "playerDetailTitle": "Player Detail",
+  "playerDetailLoading": "Loading...",
+  "playerDetailFailedToLoad": "Failed to load player",
+  "playerDetailNoTeam": "No team assigned",
+  "playerDetailTrendError": "Could not load trend data",
+  "playerDetailTabOverview": "Overview",
+  "playerDetailTabGameLog": "Game Log",
+  "playerDetailTabSchedule": "Schedule",
+  "playerDetailTabCareer": "Career",
+  "playerDetailAge": "Age {age}",
+  "@playerDetailAge": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "playerDetailWeight": "{weight} lbs",
+  "@playerDetailWeight": {
+    "placeholders": {
+      "weight": {
+        "type": "int"
+      }
+    }
+  },
+  "playerDetailShootsLeft": "Left",
+  "playerDetailShootsRight": "Right",
+  "playerDetailDraftLabel": "Draft: {details}",
+  "@playerDetailDraftLabel": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "playerDetailDraftRound": "Round {round}",
+  "@playerDetailDraftRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "playerDetailDraftPick": "Pick {pick}",
+  "@playerDetailDraftPick": {
+    "placeholders": {
+      "pick": {
+        "type": "int"
+      }
+    }
+  },
+  "playerDetailDraftOverall": "#{overall} overall",
+  "@playerDetailDraftOverall": {
+    "placeholders": {
+      "overall": {
+        "type": "int"
+      }
+    }
+  },
+  "playerDetailDraftBy": "by {team}",
+  "@playerDetailDraftBy": {
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
+  },
+
+  "seasonStatsTitle": "Season Stats",
+  "seasonStatsEmpty": "No stats available",
+
+  "careerStatsTitle": "Career Stats",
+  "careerStatsEmpty": "No career stats available",
+  "careerStatsNhlOnly": "NHL Only",
+  "careerStatsColumnSeason": "Season",
+  "careerStatsColumnTeam": "Team",
+
+  "gameLogFailedToLoad": "Failed to load game log",
+  "gameLogEmpty": "No games played yet",
+  "gameLogDate": "Date",
+  "gameLogOpp": "Opp",
+  "gameLogDec": "Dec",
+
+  "scheduleTitle": "Schedule",
+  "scheduleFailedToLoad": "Failed to load schedule",
+  "scheduleNoGames": "No games scheduled",
+  "scheduleNoGamesHint": "Try a different date",
+  "scheduleUpcomingEmpty": "No upcoming games scheduled",
+  "scheduleUpcomingError": "Failed to load schedule",
+  "scheduleBackToBack": "B2B",
+  "schedulePreviousDay": "Previous day",
+  "scheduleNextDay": "Next day",
+  "scheduleDateDisplay": "{date}",
+  "@scheduleDateDisplay": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "E, MMM d",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "scheduleLive": "LIVE",
+  "scheduleFinal": "Final",
+  "scheduleTbd": "TBD",
+
+  "settingsTitle": "Settings",
+  "settingsAppearance": "Appearance",
+  "settingsData": "Data",
+  "settingsAbout": "About",
+  "settingsTheme": "Theme",
+  "settingsThemeDark": "Dark",
+  "settingsThemeLight": "Light",
+  "settingsThemeSystem": "System",
+  "settingsVersion": "Version",
+  "settingsDisclaimer": "Disclaimer",
+  "settingsDisclaimerText": "This app uses unofficial NHL API data. Not affiliated with or endorsed by the NHL.",
+  "settingsClearCache": "Clear Cache",
+  "settingsCacheCount": "{count} cached entries",
+  "@settingsCacheCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsCacheCleared": "Cleared {count} cache entries",
+  "@settingsCacheCleared": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "statTrendTitle": "Stat Trend",
+  "statTrendEmpty": "No game data available",
+  "statTrendPoints": "Points",
+  "statTrendGoals": "Goals",
+  "statTrendAssists": "Assists",
+  "statTrendShots": "Shots"
+}

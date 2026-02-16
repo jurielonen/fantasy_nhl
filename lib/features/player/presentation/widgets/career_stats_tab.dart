@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/player_detail.dart';
 
 class CareerStatsTab extends StatefulWidget {
@@ -25,7 +26,7 @@ class _CareerStatsTabState extends State<CareerStatsTab> {
     if (widget.seasons.isEmpty) {
       return SliverFillRemaining(
         child: Center(
-          child: Text('No career stats available', style: AppTextStyles.bodyMedium),
+          child: Text(context.l10n.careerStatsEmpty, style: AppTextStyles.bodyMedium),
         ),
       );
     }
@@ -42,11 +43,11 @@ class _CareerStatsTabState extends State<CareerStatsTab> {
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: Row(
               children: [
-                Text('Career Stats', style: AppTextStyles.titleMedium),
+                Text(context.l10n.careerStatsTitle, style: AppTextStyles.titleMedium),
                 const Spacer(),
                 if (widget.seasons.any((s) => s.leagueAbbrev != 'NHL'))
                   FilterChip(
-                    label: const Text('NHL Only'),
+                    label: Text(context.l10n.careerStatsNhlOnly),
                     selected: _nhlOnly,
                     onSelected: (v) => setState(() => _nhlOnly = v),
                     selectedColor: AppColors.accent.withValues(alpha: 0.2),
@@ -92,15 +93,15 @@ class _SkaterTable extends StatelessWidget {
       horizontalMargin: 0,
       headingTextStyle: _headerStyle,
       dataTextStyle: _dataStyle,
-      columns: const [
-        DataColumn(label: Text('Season')),
-        DataColumn(label: Text('Team')),
-        DataColumn(label: Text('GP'), numeric: true),
-        DataColumn(label: Text('G'), numeric: true),
-        DataColumn(label: Text('A'), numeric: true),
-        DataColumn(label: Text('P'), numeric: true),
-        DataColumn(label: Text('+/-'), numeric: true),
-        DataColumn(label: Text('PIM'), numeric: true),
+      columns: [
+        DataColumn(label: Text(context.l10n.careerStatsColumnSeason)),
+        DataColumn(label: Text(context.l10n.careerStatsColumnTeam)),
+        const DataColumn(label: Text('GP'), numeric: true),
+        const DataColumn(label: Text('G'), numeric: true),
+        const DataColumn(label: Text('A'), numeric: true),
+        const DataColumn(label: Text('P'), numeric: true),
+        const DataColumn(label: Text('+/-'), numeric: true),
+        const DataColumn(label: Text('PIM'), numeric: true),
       ],
       rows: seasons.map((record) {
         final s = record.stats as SkaterSeasonStats;
@@ -150,16 +151,16 @@ class _GoalieTable extends StatelessWidget {
       horizontalMargin: 0,
       headingTextStyle: _headerStyle,
       dataTextStyle: _dataStyle,
-      columns: const [
-        DataColumn(label: Text('Season')),
-        DataColumn(label: Text('Team')),
-        DataColumn(label: Text('GP'), numeric: true),
-        DataColumn(label: Text('W'), numeric: true),
-        DataColumn(label: Text('L'), numeric: true),
-        DataColumn(label: Text('OTL'), numeric: true),
-        DataColumn(label: Text('GAA'), numeric: true),
-        DataColumn(label: Text('SV%'), numeric: true),
-        DataColumn(label: Text('SO'), numeric: true),
+      columns: [
+        DataColumn(label: Text(context.l10n.careerStatsColumnSeason)),
+        DataColumn(label: Text(context.l10n.careerStatsColumnTeam)),
+        const DataColumn(label: Text('GP'), numeric: true),
+        const DataColumn(label: Text('W'), numeric: true),
+        const DataColumn(label: Text('L'), numeric: true),
+        const DataColumn(label: Text('OTL'), numeric: true),
+        const DataColumn(label: Text('GAA'), numeric: true),
+        const DataColumn(label: Text('SV%'), numeric: true),
+        const DataColumn(label: Text('SO'), numeric: true),
       ],
       rows: seasons.map((record) {
         final s = record.stats as GoalieSeasonStats;

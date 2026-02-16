@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/extensions.dart';
 import '../../features/player/domain/entities/player.dart';
 
 class PlayerListTile extends StatelessWidget {
@@ -106,7 +107,7 @@ class PlayerListTile extends StatelessWidget {
                 icon: const Icon(Icons.add_circle_outline, size: 22),
                 color: AppColors.accent,
                 onPressed: onAddToWatchlist,
-                tooltip: 'Add to watchlist',
+                tooltip: context.l10n.commonAddToWatchlist,
                 visualDensity: VisualDensity.compact,
               ),
           ],

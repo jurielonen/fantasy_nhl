@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/app_error_widget.dart';
 import '../../../../shared/widgets/shimmer_loader.dart';
 import '../../domain/entities/game_log_entry.dart';
@@ -31,16 +32,16 @@ class GameLogTab extends StatelessWidget {
       ),
       error: (error, _) => SliverFillRemaining(
         child: AppErrorWidget(
-          message: 'Failed to load game log',
+          message: context.l10n.gameLogFailedToLoad,
           onRetry: onRetry,
         ),
       ),
       data: (entries) {
         if (entries.isEmpty) {
-          return const SliverFillRemaining(
+          return SliverFillRemaining(
             child: Center(
               child: Text(
-                'No games played yet',
+                context.l10n.gameLogEmpty,
                 style: TextStyle(color: AppColors.textSecondary),
               ),
             ),
@@ -79,10 +80,10 @@ class _GameLogHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const SizedBox(width: 80, child: Text('Date', style: _headerStyle)),
-          const SizedBox(width: 56, child: Text('Opp', style: _headerStyle)),
+          SizedBox(width: 80, child: Text(context.l10n.gameLogDate, style: _headerStyle)),
+          SizedBox(width: 56, child: Text(context.l10n.gameLogOpp, style: _headerStyle)),
           if (isGoalie) ...[
-            const SizedBox(width: 32, child: Text('Dec', style: _headerStyle)),
+            SizedBox(width: 32, child: Text(context.l10n.gameLogDec, style: _headerStyle)),
             const SizedBox(width: 32, child: Text('GA', style: _headerStyle)),
             const SizedBox(width: 32, child: Text('SV', style: _headerStyle)),
             const Expanded(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/app_error_widget.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/player_list_tile.dart';
@@ -22,10 +23,10 @@ class SearchResultsList extends ConsumerWidget {
     return resultsAsync.when(
       data: (players) {
         if (players.isEmpty) {
-          return const EmptyState(
+          return EmptyState(
             icon: Icons.search_off,
-            title: 'No players found',
-            subtitle: 'Try a different search term',
+            title: context.l10n.exploreSearchNoResults,
+            subtitle: context.l10n.exploreSearchNoResultsHint,
           );
         }
         return ListView.builder(
@@ -50,7 +51,7 @@ class SearchResultsList extends ConsumerWidget {
         ),
       ),
       error: (error, stack) => AppErrorWidget(
-        message: 'Search failed: $error',
+        message: context.l10n.exploreSearchFailed(error.toString()),
         onRetry: () => ref.invalidate(searchResultsProvider),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/shimmer_loader.dart';
 import '../../schedule/domain/entities/schedule_game.dart';
@@ -31,11 +32,11 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Watchlist'),
+        title: Text(context.l10n.watchlistTitle),
         actions: [
           PopupMenuButton<WatchlistSortType>(
             icon: const Icon(Icons.sort),
-            tooltip: 'Sort by',
+            tooltip: context.l10n.watchlistSortBy,
             onSelected: (type) {
               ref.read(watchlistSortProvider.notifier).select(type);
               if (selectedWatchlist != null) {
@@ -43,14 +44,14 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                     watchlistPlayersProvider(selectedWatchlist.id));
               }
             },
-            itemBuilder: (_) => [
-              _sortItem(WatchlistSortType.custom, 'Custom Order', sortType),
-              _sortItem(WatchlistSortType.name, 'Name', sortType),
-              _sortItem(WatchlistSortType.position, 'Position', sortType),
-              _sortItem(WatchlistSortType.points, 'Points (Season)', sortType),
+            itemBuilder: (ctx) => [
+              _sortItem(WatchlistSortType.custom, ctx.l10n.watchlistSortCustom, sortType),
+              _sortItem(WatchlistSortType.name, ctx.l10n.watchlistSortName, sortType),
+              _sortItem(WatchlistSortType.position, ctx.l10n.watchlistSortPosition, sortType),
+              _sortItem(WatchlistSortType.points, ctx.l10n.watchlistSortPoints, sortType),
               _sortItem(
-                  WatchlistSortType.recentPerformance, 'Recent Form', sortType),
-              _sortItem(WatchlistSortType.gameTime, 'Game Time', sortType),
+                  WatchlistSortType.recentPerformance, ctx.l10n.watchlistSortRecentForm, sortType),
+              _sortItem(WatchlistSortType.gameTime, ctx.l10n.watchlistSortGameTime, sortType),
             ],
           ),
         ],
@@ -99,7 +100,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
         itemBuilder: (_, _) => const _ShimmerTile(),
       ),
       error: (error, _) => AppErrorWidget(
-        message: 'Failed to load watchlist',
+        message: context.l10n.watchlistFailedToLoad,
         onRetry: () =>
             ref.invalidate(watchlistPlayersProvider(selectedWatchlist.id)),
       ),
@@ -143,10 +144,10 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('Player removed'),
+        content: Text(context.l10n.watchlistPlayerRemoved),
         behavior: SnackBarBehavior.floating,
         action: SnackBarAction(
-          label: 'Undo',
+          label: context.l10n.watchlistUndo,
           onPressed: () async {
             await repo.addPlayer(watchlist.id, playerId);
             ref.invalidate(watchlistPlayersProvider(watchlist.id));
@@ -162,8 +163,8 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
 
     if (allWatchlists.length < 2) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Create another watchlist first'),
+        SnackBar(
+          content: Text(context.l10n.watchlistCreateAnother),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -195,7 +196,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Moved to "${target.name}"'),
+          content: Text(context.l10n.watchlistMovedTo(target.name)),
           behavior: SnackBarBehavior.floating,
         ),
       );

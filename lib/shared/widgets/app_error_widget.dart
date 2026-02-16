@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/utils/extensions.dart';
+
 class AppErrorWidget extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
@@ -34,7 +36,7 @@ class AppErrorWidget extends StatelessWidget {
               FilledButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                label: Text(context.l10n.commonRetry),
               ),
             ],
           ],

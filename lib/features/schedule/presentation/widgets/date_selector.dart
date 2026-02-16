@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/extensions.dart';
 import '../providers/schedule_providers.dart';
 
 class DateSelector extends ConsumerWidget {
@@ -22,12 +23,12 @@ class DateSelector extends ConsumerWidget {
             icon: const Icon(Icons.chevron_left),
             onPressed: () =>
                 ref.read(selectedDateProvider.notifier).previousDay(),
-            tooltip: 'Previous day',
+            tooltip: context.l10n.schedulePreviousDay,
           ),
           Expanded(
             child: Center(
               child: Text(
-                _formatDisplay(date, isToday),
+                _formatDisplay(context, date, isToday),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -39,27 +40,20 @@ class DateSelector extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.chevron_right),
             onPressed: () => ref.read(selectedDateProvider.notifier).nextDay(),
-            tooltip: 'Next day',
+            tooltip: context.l10n.scheduleNextDay,
           ),
           if (!isToday)
             TextButton(
               onPressed: () => ref.read(selectedDateProvider.notifier).today(),
-              child: const Text('Today'),
+              child: Text(context.l10n.commonToday),
             ),
         ],
       ),
     );
   }
 
-  String _formatDisplay(DateTime date, bool isToday) {
-    if (isToday) return 'Today';
-    const months = [
-      '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-    ];
-    const weekdays = [
-      '', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-    ];
-    return '${weekdays[date.weekday]}, ${months[date.month]} ${date.day}';
+  String _formatDisplay(BuildContext context, DateTime date, bool isToday) {
+    if (isToday) return context.l10n.commonToday;
+    return context.l10n.scheduleDateDisplay(date);
   }
 }

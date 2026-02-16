@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/storage/local_storage_service.dart';
+import '../../core/utils/extensions.dart';
 import 'providers/settings_providers.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -12,27 +13,26 @@ class SettingsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(context.l10n.settingsTitle)),
       body: ListView(
         children: [
-          _SectionHeader('Appearance', theme),
+          _SectionHeader(context.l10n.settingsAppearance, theme),
           _ThemeTile(ref: ref, theme: theme),
           const Divider(height: 1),
-          _SectionHeader('Data', theme),
+          _SectionHeader(context.l10n.settingsData, theme),
           _CacheTile(ref: ref, theme: theme),
           const Divider(height: 1),
-          _SectionHeader('About', theme),
+          _SectionHeader(context.l10n.settingsAbout, theme),
           ListTile(
             leading: const Icon(Icons.info_outline),
-            title: const Text('Version'),
+            title: Text(context.l10n.settingsVersion),
             subtitle: const Text('1.0.0'),
           ),
           ListTile(
             leading: const Icon(Icons.warning_amber_outlined),
-            title: const Text('Disclaimer'),
+            title: Text(context.l10n.settingsDisclaimer),
             subtitle: Text(
-              'This app uses unofficial NHL API data. '
-              'Not affiliated with or endorsed by the NHL.',
+              context.l10n.settingsDisclaimerText,
               style: theme.textTheme.bodySmall,
             ),
           ),
@@ -74,25 +74,25 @@ class _ThemeTile extends StatelessWidget {
 
     return ListTile(
       leading: const Icon(Icons.palette_outlined),
-      title: const Text('Theme'),
+      title: Text(context.l10n.settingsTheme),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: SegmentedButton<AppThemeMode>(
-          segments: const [
+          segments: [
             ButtonSegment(
               value: AppThemeMode.dark,
-              label: Text('Dark'),
-              icon: Icon(Icons.dark_mode),
+              label: Text(context.l10n.settingsThemeDark),
+              icon: const Icon(Icons.dark_mode),
             ),
             ButtonSegment(
               value: AppThemeMode.light,
-              label: Text('Light'),
-              icon: Icon(Icons.light_mode),
+              label: Text(context.l10n.settingsThemeLight),
+              icon: const Icon(Icons.light_mode),
             ),
             ButtonSegment(
               value: AppThemeMode.system,
-              label: Text('System'),
-              icon: Icon(Icons.settings_brightness),
+              label: Text(context.l10n.settingsThemeSystem),
+              icon: const Icon(Icons.settings_brightness),
             ),
           ],
           selected: {currentMode},
@@ -118,20 +118,19 @@ class _CacheTile extends StatelessWidget {
 
     return ListTile(
       leading: const Icon(Icons.cached),
-      title: const Text('Clear Cache'),
-      subtitle: Text('$count cached entries'),
+      title: Text(context.l10n.settingsClearCache),
+      subtitle: Text(context.l10n.settingsCacheCount(count)),
       trailing: FilledButton.tonal(
         onPressed: () async {
           final cleared = await storage.clearCache();
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Cleared $cleared cache entries')),
+              SnackBar(content: Text(context.l10n.settingsCacheCleared(cleared))),
             );
-            // Force rebuild to update count
             ref.invalidate(themeModeProvider);
           }
         },
-        child: const Text('Clear'),
+        child: Text(context.l10n.commonClear),
       ),
     );
   }

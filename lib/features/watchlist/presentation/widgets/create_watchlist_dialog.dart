@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/extensions.dart';
 
 class CreateWatchlistDialog extends StatefulWidget {
   const CreateWatchlistDialog({super.key});
@@ -21,13 +22,13 @@ class _CreateWatchlistDialogState extends State<CreateWatchlistDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('New Watchlist'),
+      title: Text(context.l10n.watchlistNewTitle),
       content: TextField(
         controller: _controller,
         autofocus: true,
         style: const TextStyle(color: AppColors.textPrimary),
-        decoration: const InputDecoration(
-          hintText: 'Watchlist name',
+        decoration: InputDecoration(
+          hintText: context.l10n.watchlistNameHint,
           filled: true,
           fillColor: AppColors.surfaceVariant,
         ),
@@ -36,11 +37,11 @@ class _CreateWatchlistDialogState extends State<CreateWatchlistDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.commonCancel),
         ),
         TextButton(
           onPressed: _submit,
-          child: const Text('Create'),
+          child: Text(context.l10n.commonCreate),
         ),
       ],
     );

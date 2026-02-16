@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/watchlist.dart';
 import '../../providers.dart';
 import '../providers/watchlist_providers.dart';
@@ -40,7 +41,7 @@ class WatchlistSelector extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: ActionChip(
                 avatar: const Icon(Icons.add, size: 18),
-                label: const Text('New'),
+                label: Text(context.l10n.commonNew),
                 onPressed: () => _createWatchlist(context, ref),
               ),
             ),
@@ -73,7 +74,7 @@ class WatchlistSelector extends ConsumerWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.edit),
-              title: const Text('Rename'),
+              title: Text(ctx.l10n.commonRename),
               onTap: () {
                 Navigator.pop(ctx);
                 _renameWatchlist(context, ref, wl);
@@ -82,7 +83,7 @@ class WatchlistSelector extends ConsumerWidget {
             ListTile(
               leading: const Icon(Icons.delete, color: AppColors.error),
               title:
-                  const Text('Delete', style: TextStyle(color: AppColors.error)),
+                  Text(context.l10n.commonDelete, style: const TextStyle(color: AppColors.error)),
               onTap: () {
                 Navigator.pop(ctx);
                 _confirmDelete(context, ref, wl);
@@ -103,13 +104,13 @@ class WatchlistSelector extends ConsumerWidget {
     final newName = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Rename Watchlist'),
+        title: Text(context.l10n.watchlistRenameTitle),
         content: TextField(
           controller: controller,
           autofocus: true,
           style: const TextStyle(color: AppColors.textPrimary),
-          decoration: const InputDecoration(
-            hintText: 'Watchlist name',
+          decoration: InputDecoration(
+            hintText: context.l10n.watchlistNameHint,
             filled: true,
             fillColor: AppColors.surfaceVariant,
           ),
@@ -118,11 +119,11 @@ class WatchlistSelector extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.commonCancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: const Text('Rename'),
+            child: Text(context.l10n.commonRename),
           ),
         ],
       ),
@@ -141,18 +142,18 @@ class WatchlistSelector extends ConsumerWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Watchlist'),
+        title: Text(context.l10n.watchlistDeleteTitle),
         content: Text(
-          'Delete "${wl.name}" and its ${wl.playerIds.length} players? This cannot be undone.',
+          context.l10n.watchlistDeleteConfirm(wl.name, wl.playerIds.length),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.commonCancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Delete', style: TextStyle(color: AppColors.error)),
+            child: Text(context.l10n.commonDelete, style: const TextStyle(color: AppColors.error)),
           ),
         ],
       ),

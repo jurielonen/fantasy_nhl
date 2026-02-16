@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/app_error_widget.dart';
 import '../../../../shared/widgets/shimmer_loader.dart';
 import '../../../schedule/domain/entities/schedule_game.dart';
@@ -33,7 +34,7 @@ class UpcomingScheduleTab extends StatelessWidget {
       ),
       error: (error, _) => SliverFillRemaining(
         child: AppErrorWidget(
-          message: 'Failed to load schedule',
+          message: context.l10n.scheduleUpcomingError,
           onRetry: onRetry,
         ),
       ),
@@ -44,10 +45,10 @@ class UpcomingScheduleTab extends StatelessWidget {
             .toList();
 
         if (upcoming.isEmpty) {
-          return const SliverFillRemaining(
+          return SliverFillRemaining(
             child: Center(
               child: Text(
-                'No upcoming games scheduled',
+                context.l10n.scheduleUpcomingEmpty,
                 style: TextStyle(color: AppColors.textSecondary),
               ),
             ),
@@ -156,8 +157,8 @@ class _ScheduleRow extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(color: AppColors.warning.withValues(alpha: 0.5)),
               ),
-              child: const Text(
-                'B2B',
+              child: Text(
+                context.l10n.scheduleBackToBack,
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,

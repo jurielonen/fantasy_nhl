@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/extensions.dart';
 
 class WatchlistEmptyState extends StatelessWidget {
   const WatchlistEmptyState({super.key});
@@ -21,12 +22,12 @@ class WatchlistEmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'No players yet',
+              context.l10n.watchlistEmptyTitle,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             Text(
-              'Search and add players to your watchlist to track their stats and games.',
+              context.l10n.watchlistEmptySubtitle,
               textAlign: TextAlign.center,
               style: TextStyle(color: AppColors.textSecondary),
             ),
@@ -34,7 +35,7 @@ class WatchlistEmptyState extends StatelessWidget {
             FilledButton.icon(
               onPressed: () => context.go('/explore'),
               icon: const Icon(Icons.explore),
-              label: const Text('Find Players'),
+              label: Text(context.l10n.watchlistEmptyAction),
             ),
           ],
         ),

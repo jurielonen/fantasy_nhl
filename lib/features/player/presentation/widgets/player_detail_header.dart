@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/player.dart';
 import '../../domain/entities/player_detail.dart';
 
@@ -175,16 +176,16 @@ class _BioRow extends StatelessWidget {
 
     if (bio.birthDate != null) {
       final age = _calculateAge(bio.birthDate!);
-      if (age != null) items.add('Age $age');
+      if (age != null) items.add(context.l10n.playerDetailAge(age));
     }
     if (bio.heightInInches != null) {
       items.add(_formatHeight(bio.heightInInches!));
     }
     if (bio.weightInPounds != null) {
-      items.add('${bio.weightInPounds} lbs');
+      items.add(context.l10n.playerDetailWeight(bio.weightInPounds!));
     }
     if (bio.shootsCatches != null) {
-      items.add(bio.shootsCatches == 'L' ? 'Left' : 'Right');
+      items.add(bio.shootsCatches == 'L' ? context.l10n.playerDetailShootsLeft : context.l10n.playerDetailShootsRight);
     }
     if (bio.birthCity != null) {
       final location = [bio.birthCity, bio.birthCountry]
@@ -236,13 +237,13 @@ class _DraftInfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final parts = <String>[
-      'Round ${draft.round}',
-      'Pick ${draft.pickInRound}',
-      '(#${draft.overallPick} overall)',
+      context.l10n.playerDetailDraftRound(draft.round),
+      context.l10n.playerDetailDraftPick(draft.pickInRound),
+      context.l10n.playerDetailDraftOverall(draft.overallPick),
       '${draft.year}',
     ];
     if (draft.teamAbbrev != null) {
-      parts.add('by ${draft.teamAbbrev}');
+      parts.add(context.l10n.playerDetailDraftBy(draft.teamAbbrev!));
     }
 
     return Padding(
@@ -252,7 +253,7 @@ class _DraftInfoRow extends StatelessWidget {
           const Icon(Icons.sports_hockey, size: 14, color: AppColors.textTertiary),
           const SizedBox(width: 6),
           Text(
-            'Draft: ${parts.join(' · ')}',
+            context.l10n.playerDetailDraftLabel(parts.join(' · ')),
             style: AppTextStyles.labelSmall,
           ),
         ],

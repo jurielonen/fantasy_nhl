@@ -7,6 +7,7 @@ import '../../features/player/presentation/team_roster_screen.dart';
 import '../../features/schedule/presentation/schedule_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/watchlist/presentation/watchlist_screen.dart';
+import '../utils/extensions.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -88,26 +89,26 @@ class AppShell extends StatelessWidget {
                   selectedIndex: navigationShell.currentIndex,
                   onDestinationSelected: navigationShell.goBranch,
                   labelType: NavigationRailLabelType.all,
-                  destinations: const [
+                  destinations: [
                     NavigationRailDestination(
-                      icon: Icon(Icons.list_alt),
-                      selectedIcon: Icon(Icons.list_alt_rounded),
-                      label: Text('Watchlist'),
+                      icon: const Icon(Icons.list_alt),
+                      selectedIcon: const Icon(Icons.list_alt_rounded),
+                      label: Text(context.l10n.navWatchlist),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.explore_outlined),
-                      selectedIcon: Icon(Icons.explore),
-                      label: Text('Explore'),
+                      icon: const Icon(Icons.explore_outlined),
+                      selectedIcon: const Icon(Icons.explore),
+                      label: Text(context.l10n.navExplore),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.calendar_today_outlined),
-                      selectedIcon: Icon(Icons.calendar_today),
-                      label: Text('Schedule'),
+                      icon: const Icon(Icons.calendar_today_outlined),
+                      selectedIcon: const Icon(Icons.calendar_today),
+                      label: Text(context.l10n.navSchedule),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.settings_outlined),
-                      selectedIcon: Icon(Icons.settings),
-                      label: Text('Settings'),
+                      icon: const Icon(Icons.settings_outlined),
+                      selectedIcon: const Icon(Icons.settings),
+                      label: Text(context.l10n.navSettings),
                     ),
                   ],
                 ),
@@ -123,26 +124,26 @@ class AppShell extends StatelessWidget {
           bottomNavigationBar: NavigationBar(
             selectedIndex: navigationShell.currentIndex,
             onDestinationSelected: navigationShell.goBranch,
-            destinations: const [
+            destinations: [
               NavigationDestination(
-                icon: Icon(Icons.list_alt),
-                selectedIcon: Icon(Icons.list_alt_rounded),
-                label: 'Watchlist',
+                icon: const Icon(Icons.list_alt),
+                selectedIcon: const Icon(Icons.list_alt_rounded),
+                label: context.l10n.navWatchlist,
               ),
               NavigationDestination(
-                icon: Icon(Icons.explore_outlined),
-                selectedIcon: Icon(Icons.explore),
-                label: 'Explore',
+                icon: const Icon(Icons.explore_outlined),
+                selectedIcon: const Icon(Icons.explore),
+                label: context.l10n.navExplore,
               ),
               NavigationDestination(
-                icon: Icon(Icons.calendar_today_outlined),
-                selectedIcon: Icon(Icons.calendar_today),
-                label: 'Schedule',
+                icon: const Icon(Icons.calendar_today_outlined),
+                selectedIcon: const Icon(Icons.calendar_today),
+                label: context.l10n.navSchedule,
               ),
               NavigationDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: 'Settings',
+                icon: const Icon(Icons.settings_outlined),
+                selectedIcon: const Icon(Icons.settings),
+                label: context.l10n.navSettings,
               ),
             ],
           ),
