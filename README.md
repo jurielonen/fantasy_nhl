@@ -1,6 +1,6 @@
 # fantasy_nhl
 
-A new Flutter project.
+A cross-platform Flutter app for fantasy NHL players to discover, track, and evaluate NHL players across their watchlists — and a playground for testing Claude Sonnet 4.6.
 
 ## Getting Started
 
