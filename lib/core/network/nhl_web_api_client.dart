@@ -10,7 +10,7 @@ import '../../features/player/data/dtos/roster_dto.dart';
 import '../../features/schedule/data/dtos/standings_dto.dart';
 import '../../features/schedule/data/dtos/schedule_dto.dart';
 import '../../features/schedule/data/dtos/club_week_schedule_dto.dart';
-import '../../features/schedule/data/dtos/scores_dto.dart';
+import '../../features/schedule/data/dtos/game_day_dto.dart';
 import '../../features/schedule/data/dtos/scoreboard_dto.dart';
 
 part 'nhl_web_api_client.g.dart';
@@ -67,9 +67,6 @@ abstract class NhlWebApiClient {
   @GET('/v1/schedule/now')
   Future<ScheduleDto> getTodaySchedule();
 
-  @GET('/v1/schedule/{date}')
-  Future<ScheduleDto> getScheduleByDate(@Path('date') String date);
-
   @GET('/v1/club-schedule/{team}/week/now')
   Future<ClubWeekScheduleDto> getClubWeekSchedule(
     @Path('team') String team,
@@ -77,10 +74,10 @@ abstract class NhlWebApiClient {
 
   // Scores
   @GET('/v1/score/now')
-  Future<ScoresDto> getTodayScores();
+  Future<GameDayResponseDto> getTodayScores();
 
   @GET('/v1/score/{date}')
-  Future<ScoresDto> getScoresByDate(@Path('date') String date);
+  Future<GameDayResponseDto> getScoresByDate(@Path('date') String date);
 
   @GET('/v1/scoreboard/now')
   Future<ScoreboardDto> getScoreboard();

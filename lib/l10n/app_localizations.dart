@@ -712,23 +712,17 @@ abstract class AppLocalizations {
   /// **'B2B'**
   String get scheduleBackToBack;
 
-  /// No description provided for @schedulePreviousDay.
+  /// No description provided for @schedulePreviousWeek.
   ///
   /// In en, this message translates to:
-  /// **'Previous day'**
-  String get schedulePreviousDay;
+  /// **'Previous week'**
+  String get schedulePreviousWeek;
 
-  /// No description provided for @scheduleNextDay.
+  /// No description provided for @scheduleNextWeek.
   ///
   /// In en, this message translates to:
-  /// **'Next day'**
-  String get scheduleNextDay;
-
-  /// No description provided for @scheduleDateDisplay.
-  ///
-  /// In en, this message translates to:
-  /// **'{date}'**
-  String scheduleDateDisplay(DateTime date);
+  /// **'Next week'**
+  String get scheduleNextWeek;
 
   /// No description provided for @scheduleLive.
   ///
@@ -742,11 +736,53 @@ abstract class AppLocalizations {
   /// **'Final'**
   String get scheduleFinal;
 
+  /// No description provided for @scheduleFinalWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Final/{periodType}'**
+  String scheduleFinalWith(String periodType);
+
   /// No description provided for @scheduleTbd.
   ///
   /// In en, this message translates to:
   /// **'TBD'**
   String get scheduleTbd;
+
+  /// No description provided for @scheduleIntermission.
+  ///
+  /// In en, this message translates to:
+  /// **'INT'**
+  String get scheduleIntermission;
+
+  /// No description provided for @schedulePeriodFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'1st'**
+  String get schedulePeriodFirst;
+
+  /// No description provided for @schedulePeriodSecond.
+  ///
+  /// In en, this message translates to:
+  /// **'2nd'**
+  String get schedulePeriodSecond;
+
+  /// No description provided for @schedulePeriodThird.
+  ///
+  /// In en, this message translates to:
+  /// **'3rd'**
+  String get schedulePeriodThird;
+
+  /// No description provided for @scheduleGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get scheduleGoals;
+
+  /// No description provided for @scheduleUnassisted.
+  ///
+  /// In en, this message translates to:
+  /// **'Unassisted'**
+  String get scheduleUnassisted;
 
   /// No description provided for @settingsTitle.
   ///

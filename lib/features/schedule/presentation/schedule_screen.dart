@@ -16,6 +16,9 @@ class ScheduleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Activate auto-refresh when live games are detected
+    ref.watch(liveAutoRefreshProvider);
+
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.scheduleTitle)),
       body: Column(
@@ -32,15 +35,17 @@ class ScheduleScreen extends ConsumerWidget {
 class _GameList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gamesAsync = ref.watch(scheduleGamesWithScoresProvider);
+    final gameDayAsync = ref.watch(gameDayProvider);
 
-    return gamesAsync.when(
+    return gameDayAsync.when(
       loading: () => _buildShimmer(),
       error: (err, _) => AppErrorWidget(
         message: context.l10n.scheduleFailedToLoad,
-        onRetry: () => ref.invalidate(scheduleGamesWithScoresProvider),
+        onRetry: () => ref.invalidate(gameDayProvider),
       ),
-      data: (games) {
+      data: (gameDay) {
+        final games = gameDay.games;
+
         if (games.isEmpty) {
           return EmptyState(
             icon: Icons.calendar_today,
@@ -49,14 +54,12 @@ class _GameList extends ConsumerWidget {
           );
         }
 
-        // Gather watchlist player names per team
         final watchlistNames = _getWatchlistTeamNames(ref);
 
         return RefreshIndicator(
           onRefresh: () async {
-            ref.invalidate(scheduleDateGamesProvider);
-            ref.invalidate(scheduleDateScoresProvider);
-            await ref.read(scheduleGamesWithScoresProvider.future);
+            ref.invalidate(gameDayProvider);
+            await ref.read(gameDayProvider.future);
           },
           child: ListView.builder(
             padding: const EdgeInsets.only(top: 8, bottom: 16),
@@ -77,13 +80,9 @@ class _GameList extends ConsumerWidget {
     );
   }
 
-  /// Cross-references watchlist players with team abbreviations
-  /// Returns a map of teamAbbrev → list of player names on watchlist
   Map<String, List<String>> _getWatchlistTeamNames(WidgetRef ref) {
     final watchlistsAsync = ref.watch(watchlistsProvider);
-    final playerRepo = ref.read(
-      playerRepositoryProvider,
-    );
+    final playerRepo = ref.read(playerRepositoryProvider);
 
     final result = <String, List<String>>{};
 
@@ -110,7 +109,7 @@ class _GameList extends ConsumerWidget {
     return ListView.builder(
       padding: const EdgeInsets.only(top: 8, bottom: 16),
       itemCount: 6,
-      itemBuilder: (_, _) => const Padding(
+      itemBuilder: (context, index) => const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         child: ShimmerLoader(height: 80),
       ),

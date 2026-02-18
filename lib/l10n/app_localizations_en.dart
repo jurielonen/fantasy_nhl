@@ -369,21 +369,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scheduleBackToBack => 'B2B';
 
   @override
-  String get schedulePreviousDay => 'Previous day';
+  String get schedulePreviousWeek => 'Previous week';
 
   @override
-  String get scheduleNextDay => 'Next day';
-
-  @override
-  String scheduleDateDisplay(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat(
-      'E, MMM d',
-      localeName,
-    );
-    final String dateString = dateDateFormat.format(date);
-
-    return '$dateString';
-  }
+  String get scheduleNextWeek => 'Next week';
 
   @override
   String get scheduleLive => 'LIVE';
@@ -392,7 +381,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scheduleFinal => 'Final';
 
   @override
+  String scheduleFinalWith(String periodType) {
+    return 'Final/$periodType';
+  }
+
+  @override
   String get scheduleTbd => 'TBD';
+
+  @override
+  String get scheduleIntermission => 'INT';
+
+  @override
+  String get schedulePeriodFirst => '1st';
+
+  @override
+  String get schedulePeriodSecond => '2nd';
+
+  @override
+  String get schedulePeriodThird => '3rd';
+
+  @override
+  String get scheduleGoals => 'Goals';
+
+  @override
+  String get scheduleUnassisted => 'Unassisted';
 
   @override
   String get settingsTitle => 'Settings';

@@ -273,21 +273,25 @@
   "scheduleUpcomingEmpty": "No upcoming games scheduled",
   "scheduleUpcomingError": "Failed to load schedule",
   "scheduleBackToBack": "B2B",
-  "schedulePreviousDay": "Previous day",
-  "scheduleNextDay": "Next day",
-  "scheduleDateDisplay": "{date}",
-  "@scheduleDateDisplay": {
+  "schedulePreviousWeek": "Previous week",
+  "scheduleNextWeek": "Next week",
+  "scheduleLive": "LIVE",
+  "scheduleFinal": "Final",
+  "scheduleFinalWith": "Final/{periodType}",
+  "@scheduleFinalWith": {
     "placeholders": {
-      "date": {
-        "type": "DateTime",
-        "format": "E, MMM d",
-        "isCustomDateFormat": "true"
+      "periodType": {
+        "type": "String"
       }
     }
   },
-  "scheduleLive": "LIVE",
-  "scheduleFinal": "Final",
   "scheduleTbd": "TBD",
+  "scheduleIntermission": "INT",
+  "schedulePeriodFirst": "1st",
+  "schedulePeriodSecond": "2nd",
+  "schedulePeriodThird": "3rd",
+  "scheduleGoals": "Goals",
+  "scheduleUnassisted": "Unassisted",
 
   "settingsTitle": "Settings",
   "settingsAppearance": "Appearance",

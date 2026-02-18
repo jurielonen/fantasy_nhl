@@ -1,58 +1,49 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/entities/game_day.dart';
 import '../../domain/entities/schedule_game.dart';
 import '../../providers.dart';
 
-// ── Selected date ────────────────────────────────────────────────────────────
+// ── Selected date (null = today) ─────────────────────────────────────────────
 
-class SelectedDateNotifier extends Notifier<DateTime> {
+class SelectedDateNotifier extends Notifier<String?> {
   @override
-  DateTime build() => DateTime.now();
+  String? build() => null;
 
-  void selectDate(DateTime date) => state = date;
-
-  void nextDay() => state = state.add(const Duration(days: 1));
-
-  void previousDay() => state = state.subtract(const Duration(days: 1));
-
-  void today() => state = DateTime.now();
+  void select(String? date) => state = date;
 }
 
-final selectedDateProvider = NotifierProvider<SelectedDateNotifier, DateTime>(
+final selectedDateProvider = NotifierProvider<SelectedDateNotifier, String?>(
   SelectedDateNotifier.new,
 );
 
-// ── Format helper ────────────────────────────────────────────────────────────
+// ── Game day data for selected date ──────────────────────────────────────────
 
-String _formatDate(DateTime dt) =>
-    '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}';
-
-// ── Schedule games for selected date ─────────────────────────────────────────
-
-final scheduleDateGamesProvider = FutureProvider<List<ScheduleGame>>((ref) {
+final gameDayProvider = FutureProvider<GameDay>((ref) {
   final date = ref.watch(selectedDateProvider);
-  final formatted = _formatDate(date);
-  return ref.read(scheduleRepositoryProvider).getScheduleByDate(formatted);
+  return ref.read(scheduleRepositoryProvider).getGameDay(date);
 });
 
-// ── Scores for selected date ─────────────────────────────────────────────────
+// ── Auto-refresh timer for live games ────────────────────────────────────────
 
-final scheduleDateScoresProvider = FutureProvider<List<ScheduleGame>>((ref) {
-  final date = ref.watch(selectedDateProvider);
-  final formatted = _formatDate(date);
-  return ref.read(scheduleRepositoryProvider).getScoresByDate(formatted);
+final _liveRefreshProvider = Provider.autoDispose<void>((ref) {
+  final gameDayAsync = ref.watch(gameDayProvider);
+  final hasLive = gameDayAsync.whenOrNull(
+    data: (gd) => gd.games.any((g) => g.gameState == GameState.live),
+  );
+
+  if (hasLive == true) {
+    final timer = Timer.periodic(const Duration(seconds: 60), (_) {
+      ref.invalidate(gameDayProvider);
+    });
+    ref.onDispose(timer.cancel);
+  }
 });
 
-// ── Merged games with scores ─────────────────────────────────────────────────
-
-final scheduleGamesWithScoresProvider =
-    FutureProvider<List<ScheduleGame>>((ref) async {
-  final games = await ref.watch(scheduleDateGamesProvider.future);
-  final scores = await ref
-      .watch(scheduleDateScoresProvider.future)
-      .catchError((_) => <ScheduleGame>[]);
-
-  final scoreMap = {for (final s in scores) s.gameId: s};
-
-  return games.map((g) => scoreMap[g.gameId] ?? g).toList();
+/// Watch this from the schedule screen to activate auto-refresh
+/// when live games are detected.
+final liveAutoRefreshProvider = Provider.autoDispose<void>((ref) {
+  ref.watch(_liveRefreshProvider);
 });
