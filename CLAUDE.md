@@ -4,14 +4,14 @@
 
 ## Prompt
 
-Build a cross-platform mobile and web application using **Flutter** for fantasy NHL league players. The app helps users discover, track, and evaluate NHL players they may want to pick up, trade for, or monitor in their fantasy leagues.
+Build a cross-platform mobile application using **Flutter** for fantasy NHL league players. The app helps users discover, track, and evaluate NHL players they may want to pick up, trade for, or monitor in their fantasy leagues.
 
 ---
 
 ## Project Overview
 
 **App Name:** (TBD — suggest a name)  
-**Platform:** Flutter (iOS, Android, Web)  
+**Platform:** Flutter (iOS, Android)
 **Primary Data Source:** NHL Official API (`https://api-web.nhle.com/`)  
 **Target User:** Experienced fantasy hockey players who want a fast, clean way to track players of interest across the NHL.
 
@@ -156,7 +156,7 @@ Create Retrofit client: `NhlStatsApiClient`
 
 ### UI / UX Guidelines
 - **Design system:** Material 3 with a dark theme by default (hockey vibes — dark background, ice-blue accents, white text)
-- Responsive layout: single-column on mobile, multi-pane on tablet/web
+- Responsive layout: single-column on mobile, multi-pane on tablet
 - Use `CachedNetworkImage` for player headshots
 - Skeleton/shimmer loading states for all async content
 - Pull-to-refresh on all list screens
