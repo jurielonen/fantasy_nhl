@@ -36,7 +36,7 @@ class PlayerCard extends StatelessWidget {
             // Headshot
             Positioned.fill(
               child: Hero(
-                tag: 'player_card_${player.id}',
+                tag: 'player_${player.id}',
                 child: player.headshot != null
                     ? CachedNetworkImage(
                         imageUrl: player.headshot!,

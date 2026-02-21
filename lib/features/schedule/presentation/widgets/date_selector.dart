@@ -27,11 +27,15 @@ class _DateSelectorState extends ConsumerState<DateSelector> {
   @override
   Widget build(BuildContext context) {
     final gameDayAsync = ref.watch(gameDayProvider);
-
+    // During reloads, .value holds the previous GameDay — use it to avoid
+    // shimmer when switching days; weekDays structure is stable within a week.
+    final gameDay = gameDayAsync.value;
+    if (gameDay != null) return _buildDaySelector(context, gameDay);
+    // First load only — no previous data available yet.
     return gameDayAsync.when(
       loading: () => _buildShimmer(),
-      error: (error, stack) => const SizedBox(height: 72),
-      data: (gameDay) => _buildDaySelector(context, gameDay),
+      error: (_, _) => const SizedBox(height: 72),
+      data: (gd) => _buildDaySelector(context, gd),
     );
   }
 

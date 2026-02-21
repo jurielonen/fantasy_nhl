@@ -77,6 +77,24 @@ Future<void> addToWatchlist(
   }
 }
 
+Future<void> removeFromWatchlist(
+  WidgetRef ref,
+  BuildContext context,
+  Player player,
+) async {
+  final repo = ref.read(watchlistRepositoryProvider);
+  final wl = await repo.findWatchlistContainingPlayer(player.id);
+  if (wl == null) return;
+  await repo.removePlayer(wl.id, player.id);
+  if (!context.mounted) return;
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(context.l10n.watchlistRemovedFrom(player.fullName, wl.name)),
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
+}
+
 void _invalidateWatchlistPlayers(WidgetRef ref, String watchlistId) {
   ref.invalidate(watchlistPlayersProvider(watchlistId));
 }

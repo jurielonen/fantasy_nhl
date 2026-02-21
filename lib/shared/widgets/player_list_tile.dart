@@ -1,16 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/extensions.dart';
 import '../../features/player/domain/entities/player.dart';
+import '../../features/watchlist/presentation/providers/watchlist_providers.dart';
 
-class PlayerListTile extends StatelessWidget {
+class PlayerListTile extends ConsumerWidget {
   final Player player;
   final String? trailingStat;
   final String? trailingLabel;
   final VoidCallback? onTap;
   final VoidCallback? onAddToWatchlist;
+  final VoidCallback? onRemoveFromWatchlist;
 
   const PlayerListTile({
     super.key,
@@ -19,10 +22,16 @@ class PlayerListTile extends StatelessWidget {
     this.trailingLabel,
     this.onTap,
     this.onAddToWatchlist,
+    this.onRemoveFromWatchlist,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showWatchlistButton = onAddToWatchlist != null;
+    final isInWatchlist = showWatchlistButton
+        ? ref.watch(isPlayerInWatchlistProvider(player.id)).value ?? false
+        : false;
+
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -102,12 +111,19 @@ class PlayerListTile extends StatelessWidget {
               ),
               const SizedBox(width: 8),
             ],
-            if (onAddToWatchlist != null)
+            if (showWatchlistButton)
               IconButton(
-                icon: const Icon(Icons.add_circle_outline, size: 22),
-                color: AppColors.accent,
-                onPressed: onAddToWatchlist,
-                tooltip: context.l10n.commonAddToWatchlist,
+                icon: Icon(
+                  isInWatchlist
+                      ? Icons.bookmark_added
+                      : Icons.add_circle_outline,
+                  size: 22,
+                  color: AppColors.accent,
+                ),
+                onPressed: isInWatchlist ? onRemoveFromWatchlist : onAddToWatchlist,
+                tooltip: isInWatchlist
+                    ? context.l10n.commonInWatchlist
+                    : context.l10n.commonAddToWatchlist,
                 visualDensity: VisualDensity.compact,
               ),
           ],
