@@ -21,6 +21,17 @@ final watchlistsProvider = StreamProvider<List<Watchlist>>((ref) async* {
   yield* repo.watchlistChanges;
 });
 
+// ── Is player in any watchlist (reactive) ────────────────────────────────────
+
+/// Re-evaluates whenever watchlistsProvider emits (Drift stream → DB write).
+final isPlayerInWatchlistProvider =
+    FutureProvider.family.autoDispose<bool, int>((ref, playerId) async {
+  ref.watch(watchlistsProvider); // subscribe for reactivity
+  final repo = ref.read(watchlistRepositoryProvider);
+  final wl = await repo.findWatchlistContainingPlayer(playerId);
+  return wl != null;
+});
+
 // ── Selected watchlist ───────────────────────────────────────────────────────
 
 class SelectedWatchlistIdNotifier extends Notifier<String?> {

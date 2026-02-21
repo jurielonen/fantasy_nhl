@@ -7,7 +7,7 @@ import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/shimmer_loader.dart';
 import '../../watchlist/presentation/providers/add_to_watchlist_action.dart';
-import '../../watchlist/providers.dart';
+import '../../watchlist/presentation/providers/watchlist_providers.dart';
 import '../domain/entities/player.dart';
 import 'providers/player_detail_providers.dart';
 import 'widgets/career_stats_tab.dart';
@@ -284,48 +284,24 @@ class _WatchlistButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<bool>(
-      future: _isInWatchlist(ref),
-      builder: (context, snapshot) {
-        final isInWatchlist = snapshot.data ?? false;
-        return IconButton(
-          icon: Icon(
-            isInWatchlist ? Icons.bookmark_added : Icons.bookmark_add_outlined,
-            color: isInWatchlist ? AppColors.accent : null,
-          ),
-          tooltip: isInWatchlist ? context.l10n.commonInWatchlist : context.l10n.commonAddToWatchlist,
-          onPressed: () async {
-            if (isInWatchlist) {
-              final repo = ref.read(watchlistRepositoryProvider);
-              final wl =
-                  await repo.findWatchlistContainingPlayer(player.id);
-              if (wl != null) {
-                await repo.removePlayer(wl.id, player.id);
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.l10n.watchlistRemovedFrom(player.fullName, wl.name),
-                      ),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              }
-            } else {
-              await addToWatchlist(ref, context, player);
-            }
-          },
-        );
+    final isInWatchlist =
+        ref.watch(isPlayerInWatchlistProvider(player.id)).value ?? false;
+    return IconButton(
+      icon: Icon(
+        isInWatchlist ? Icons.bookmark_added : Icons.bookmark_add_outlined,
+        color: isInWatchlist ? AppColors.accent : null,
+      ),
+      tooltip: isInWatchlist
+          ? context.l10n.commonInWatchlist
+          : context.l10n.commonAddToWatchlist,
+      onPressed: () async {
+        if (isInWatchlist) {
+          await removeFromWatchlist(ref, context, player);
+        } else {
+          await addToWatchlist(ref, context, player);
+        }
       },
     );
-  }
-
-  Future<bool> _isInWatchlist(WidgetRef ref) async {
-    final wl = await ref
-        .read(watchlistRepositoryProvider)
-        .findWatchlistContainingPlayer(player.id);
-    return wl != null;
   }
 }
 

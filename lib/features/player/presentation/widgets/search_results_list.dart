@@ -40,6 +40,8 @@ class SearchResultsList extends ConsumerWidget {
               onTap: () => onPlayerTap?.call(player.id),
               onAddToWatchlist: () =>
                   addToWatchlist(ref, context, player),
+              onRemoveFromWatchlist: () =>
+                  removeFromWatchlist(ref, context, player),
             );
           },
         );

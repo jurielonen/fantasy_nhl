@@ -41,6 +41,8 @@ class TeamRosterScreen extends ConsumerWidget {
                   onTap: () => context.push('/player/${player.id}'),
                   onAddToWatchlist: () =>
                       addToWatchlist(ref, context, player),
+                  onRemoveFromWatchlist: () =>
+                      removeFromWatchlist(ref, context, player),
                 );
               },
             ),
