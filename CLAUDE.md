@@ -248,3 +248,15 @@ This project uses Flutter's built-in localization with ARB files. **Every user-f
 - **Use ICU plural format** for count-dependent strings: `"{count, plural, =0{No players} =1{1 player} other{{count} players}}"`
 - **Do NOT localize**: stat abbreviations (GP, G, A, P, +/-, PIM, PPG, etc.), team abbreviations, player names, API-sourced data values
 - **Use `intl` `DateFormat`** with the current locale for date/time formatting — never hardcode date formats
+
+---
+
+## Git Workflow
+
+**Always create a new branch before making any code changes.**
+
+- Before writing, editing, or deleting any file, check the current branch with `git branch --show-current`
+- If you are on `main` (or any branch that is not a dedicated feature/fix branch for the current task), create and switch to a new branch first
+- Branch naming convention: `<type>/<short-description>` — e.g., `feat/player-search`, `fix/watchlist-crash`, `refactor/drift-migration`
+- Never commit directly to `main`
+- This rule applies to every task, no matter how small — a one-line fix still requires its own branch
