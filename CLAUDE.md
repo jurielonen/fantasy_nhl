@@ -28,7 +28,7 @@ Build a cross-platform mobile application using **Flutter** for fantasy NHL leag
 
 2. **Watchlist Management**
     - Add/remove players to a personal watchlist with a single tap
-    - Persist watchlist locally (Hive, Isar, or SharedPreferences — recommend the best option)
+    - Persist watchlist locally using **Drift** (SQLite)
     - Support multiple named watchlists (e.g., "Trade Targets", "Waiver Wire", "Keep an Eye On")
     - Reorder players within a watchlist via drag-and-drop
 
@@ -134,7 +134,7 @@ Create Retrofit client: `NhlStatsApiClient`
 - Use `@Path`, `@Query`, and `@Queries` annotations as needed
 - Season format is always `YYYYYYYY` (e.g., `20242025`) in the Web API and `seasonId=20242025` as a cayenne expression in the Stats API
 - The Stats API uses a Cayenne expression query language for filtering — document common expressions as constants (e.g., `"seasonId=20242025 and gameTypeId=2"`)
-- Implement a caching layer (in-memory + SharedPreferences persistence) to avoid redundant API calls
+- Implement a caching layer backed by the Drift `ApiCache` table to avoid redundant API calls
 - Handle API rate limits gracefully; add retry logic with exponential backoff via a Dio interceptor
 - Both APIs are unofficial/undocumented — add defensive JSON parsing and null-safety throughout all DTOs
 
@@ -145,14 +145,19 @@ Create Retrofit client: `NhlStatsApiClient`
 - `Schedule` — game ID, teams, date/time, venue
 - `TeamRoster` — team info, list of players
 
-### Local Storage (SharedPreferences)
-- Use **SharedPreferences** as the local persistence layer for all storage needs
-- Store data as JSON-encoded strings under well-structured keys (e.g., `watchlist:{id}`, `cache:player:{playerId}`, `cache_meta:{key}`)
-- Create a `LocalStorageService` abstraction over SharedPreferences that provides typed get/set/delete methods and handles JSON serialization/deserialization
-- Map between stored JSON and domain entities via dedicated mappers (keep storage concerns out of domain layer)
-- Store last-fetched timestamps per entity/endpoint under `cache_meta:{key}` keys to implement smart cache invalidation (e.g., refresh stats no more than every 15 minutes)
-- Since SharedPreferences is synchronous after initialization, wrap it in a Riverpod provider that initializes once at app startup and is available synchronously thereafter
-- For reactive UI updates on watchlist changes, use a `StreamController` inside the storage service that emits events when watchlist data is modified
+### Local Storage (Drift / SQLite)
+- Use **Drift** (`drift` + `drift_flutter`) as the local persistence layer for all storage needs
+- The single `AppDatabase` instance is created at app startup and provided via `appDatabaseProvider` (overridden in `main.dart`); all DAO providers derive from it
+- Database tables:
+  - `Watchlists` — id (PK), name, sortOrder, createdAt
+  - `WatchlistPlayers` — auto-increment PK, watchlistId (FK → Watchlists with cascade delete), playerId, position; unique on (watchlistId, playerId)
+  - `CachedPlayers` — id (PK), firstName, lastName, teamAbbrev, teamName, position, sweaterNumber, headshot, isActive
+  - `ApiCache` — cacheKey (PK), data (JSON string), fetchedAt (ISO-8601), ttlMinutes; expiry checked via `ApiCacheDao.isExpired()`
+  - `Settings` — key (PK), value; used for simple key-value settings (e.g., theme mode stored under `settings:theme_mode`)
+- DAOs live in `lib/core/database/daos/` and are exposed via Riverpod providers in `lib/core/database/database_provider.dart`
+- `WatchlistDao.watchAllWatchlists()` returns a reactive `Stream<List<Watchlist>>` using a `customSelect('SELECT 1', readsFrom: {watchlists, watchlistPlayers})` trigger pattern — re-emits via `asyncMap` whenever either table changes
+- Store API response JSON as strings in `ApiCache`; always check `isExpired()` before using a cached entry (default TTL: 15 minutes)
+- Map between Drift row types and domain entities in the repository layer; DAOs return row types, repositories return domain entities
 
 ### UI / UX Guidelines
 - **Design system:** Material 3 with a dark theme by default (hockey vibes — dark background, ice-blue accents, white text)
@@ -171,7 +176,8 @@ lib/
 │   ├── constants/
 │   ├── theme/
 │   ├── utils/
-│   └── network/          # Dio client setup, interceptors, Retrofit API clients
+│   ├── network/          # Dio client setup, interceptors, Retrofit API clients
+│   └── database/         # Drift AppDatabase, table definitions, DAOs, database_provider.dart
 ├── features/
 │   ├── player/
 │   │   ├── data/         # DTOs, data sources, repository impl
@@ -192,7 +198,8 @@ lib/
 - `flutter_riverpod` / `riverpod_annotation` — state management
 - `dio` — HTTP client (underlying transport for Retrofit)
 - `retrofit` / `retrofit_generator` — code-generated, type-safe API clients
-- `shared_preferences` — local key-value persistence for watchlists and caching
+- `drift` / `drift_flutter` — SQLite-backed local persistence (watchlists, player cache, API cache, settings)
+- `drift_dev` — code generation for Drift tables and DAOs (run via `build_runner`)
 - `freezed` / `json_serializable` — data models & DTOs
 - `fl_chart` — stat trend charts
 - `go_router` — declarative routing

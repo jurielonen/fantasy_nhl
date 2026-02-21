@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/storage/local_storage_service.dart';
+import '../../../core/database/database_provider.dart';
 
 enum AppThemeMode { dark, light, system }
+
+/// Seeded at app startup with the stored theme string (or null).
+/// Overridden in main() before runApp().
+final initialThemeModeProvider = Provider<String?>((_) => null);
 
 class ThemeModeNotifier extends Notifier<AppThemeMode> {
   static const _storageKey = 'settings:theme_mode';
 
   @override
   AppThemeMode build() {
-    final storage = ref.read(localStorageProvider);
-    final stored = storage.getString(_storageKey);
+    final stored = ref.watch(initialThemeModeProvider);
     return switch (stored) {
       'light' => AppThemeMode.light,
       'system' => AppThemeMode.system,
@@ -19,10 +22,9 @@ class ThemeModeNotifier extends Notifier<AppThemeMode> {
     };
   }
 
-  void select(AppThemeMode mode) {
+  Future<void> select(AppThemeMode mode) async {
     state = mode;
-    final storage = ref.read(localStorageProvider);
-    storage.setString(_storageKey, mode.name);
+    await ref.read(settingsDaoProvider).setValue(_storageKey, mode.name);
   }
 }
 

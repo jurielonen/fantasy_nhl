@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/storage/local_storage_service.dart';
+import '../../core/database/database_provider.dart';
 import '../../core/utils/extensions.dart';
 import 'providers/settings_providers.dart';
 
@@ -20,7 +20,7 @@ class SettingsScreen extends ConsumerWidget {
           _ThemeTile(ref: ref, theme: theme),
           const Divider(height: 1),
           _SectionHeader(context.l10n.settingsData, theme),
-          _CacheTile(ref: ref, theme: theme),
+          const _CacheTile(),
           const Divider(height: 1),
           _SectionHeader(context.l10n.settingsAbout, theme),
           ListTile(
@@ -105,16 +105,19 @@ class _ThemeTile extends StatelessWidget {
   }
 }
 
-class _CacheTile extends StatelessWidget {
-  final WidgetRef ref;
-  final ThemeData theme;
+// ── Cache management tile ─────────────────────────────────────────────────────
 
-  const _CacheTile({required this.ref, required this.theme});
+final _cacheCountProvider = FutureProvider.autoDispose<int>((ref) {
+  return ref.watch(apiCacheDaoProvider).count();
+});
+
+class _CacheTile extends ConsumerWidget {
+  const _CacheTile();
 
   @override
-  Widget build(BuildContext context) {
-    final storage = ref.read(localStorageProvider);
-    final count = storage.getCacheEntryCount();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final countAsync = ref.watch(_cacheCountProvider);
+    final count = countAsync.asData?.value ?? 0;
 
     return ListTile(
       leading: const Icon(Icons.cached),
@@ -122,12 +125,14 @@ class _CacheTile extends StatelessWidget {
       subtitle: Text(context.l10n.settingsCacheCount(count)),
       trailing: FilledButton.tonal(
         onPressed: () async {
-          final cleared = await storage.clearCache();
+          final dao = ref.read(apiCacheDaoProvider);
+          await dao.deleteAll();
+          ref.invalidate(_cacheCountProvider);
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(context.l10n.settingsCacheCleared(cleared))),
+              SnackBar(
+                  content: Text(context.l10n.settingsCacheCleared(count))),
             );
-            ref.invalidate(themeModeProvider);
           }
         },
         child: Text(context.l10n.commonClear),

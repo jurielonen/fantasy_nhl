@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../player/domain/entities/game_log_entry.dart';
@@ -15,29 +13,12 @@ import '../../providers.dart';
 
 enum WatchlistSortType { custom, name, position, points, recentPerformance, gameTime }
 
-// ── All watchlists (reactive via stream) ─────────────────────────────────────
+// ── All watchlists (reactive via Drift stream) ───────────────────────────────
 
-final watchlistsProvider = StreamProvider<List<Watchlist>>((ref) {
+final watchlistsProvider = StreamProvider<List<Watchlist>>((ref) async* {
   final repo = ref.watch(watchlistRepositoryProvider);
-
-  repo.ensureDefaultWatchlist();
-
-  final controller = StreamController<List<Watchlist>>();
-
-  Future<void> fetch() async {
-    final lists = await repo.getWatchlists();
-    if (!controller.isClosed) controller.add(lists);
-  }
-
-  fetch();
-  final sub = repo.watchlistChanges.listen((_) => fetch());
-
-  ref.onDispose(() {
-    sub.cancel();
-    controller.close();
-  });
-
-  return controller.stream;
+  await repo.ensureDefaultWatchlist();
+  yield* repo.watchlistChanges;
 });
 
 // ── Selected watchlist ───────────────────────────────────────────────────────

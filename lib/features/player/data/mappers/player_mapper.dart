@@ -1,3 +1,6 @@
+import 'package:drift/drift.dart';
+
+import '../../../../core/database/app_database.dart';
 import '../../domain/entities/player.dart';
 import '../../domain/entities/player_detail.dart';
 import '../dtos/player_landing_dto.dart';
@@ -5,7 +8,6 @@ import '../dtos/player_stats_dto.dart';
 import '../dtos/roster_dto.dart';
 import '../dtos/spotlight_player_dto.dart';
 import '../dtos/stats_player_search_dto.dart';
-import '../models/cached_player_model.dart';
 
 // -- PlayerLandingDto → Player / PlayerDetail --
 
@@ -174,9 +176,9 @@ extension StatsPlayerDtoMapper on StatsPlayerDto {
       );
 }
 
-// -- CachedPlayerModel ↔ Player --
+// -- CachedPlayerRow ↔ Player (Drift) --
 
-extension CachedPlayerModelMapper on CachedPlayerModel {
+extension CachedPlayerRowMapper on CachedPlayerRow {
   Player toPlayer() => Player(
         id: id,
         firstName: firstName,
@@ -191,15 +193,15 @@ extension CachedPlayerModelMapper on CachedPlayerModel {
 }
 
 extension PlayerToStorage on Player {
-  CachedPlayerModel toCachedModel() => CachedPlayerModel(
-        id: id,
+  CachedPlayersCompanion toCachedCompanion() => CachedPlayersCompanion.insert(
+        id: Value(id),
         firstName: firstName,
         lastName: lastName,
-        teamAbbrev: teamAbbrev,
-        teamName: teamName,
+        teamAbbrev: Value(teamAbbrev),
+        teamName: Value(teamName),
         position: position,
-        sweaterNumber: sweaterNumber,
-        headshot: headshot,
-        isActive: isActive,
+        sweaterNumber: Value(sweaterNumber),
+        headshot: Value(headshot),
+        isActive: Value(isActive),
       );
 }

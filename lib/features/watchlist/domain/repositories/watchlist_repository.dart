@@ -12,5 +12,5 @@ abstract class WatchlistRepository {
   Future<void> reorderPlayers(String watchlistId, List<int> playerIds);
   Future<Watchlist?> findWatchlistContainingPlayer(int playerId);
   Future<void> ensureDefaultWatchlist();
-  Stream<void> get watchlistChanges;
+  Stream<List<Watchlist>> get watchlistChanges;
 }

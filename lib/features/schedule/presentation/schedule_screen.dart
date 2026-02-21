@@ -5,8 +5,6 @@ import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/shimmer_loader.dart';
-import '../../player/providers.dart';
-import '../../watchlist/presentation/providers/watchlist_providers.dart';
 import 'providers/schedule_providers.dart';
 import 'widgets/date_selector.dart';
 import 'widgets/schedule_game_card.dart';
@@ -36,6 +34,9 @@ class _GameList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameDayAsync = ref.watch(gameDayProvider);
+    // Use empty map while loading — watchlist names are best-effort overlays
+    final watchlistNames =
+        ref.watch(watchlistTeamNamesProvider).asData?.value ?? const {};
 
     return gameDayAsync.when(
       loading: () => _buildShimmer(),
@@ -53,8 +54,6 @@ class _GameList extends ConsumerWidget {
             subtitle: context.l10n.scheduleNoGamesHint,
           );
         }
-
-        final watchlistNames = _getWatchlistTeamNames(ref);
 
         return RefreshIndicator(
           onRefresh: () async {
@@ -78,31 +77,6 @@ class _GameList extends ConsumerWidget {
         );
       },
     );
-  }
-
-  Map<String, List<String>> _getWatchlistTeamNames(WidgetRef ref) {
-    final watchlistsAsync = ref.watch(watchlistsProvider);
-    final playerRepo = ref.read(playerRepositoryProvider);
-
-    final result = <String, List<String>>{};
-
-    final watchlists = watchlistsAsync.value;
-    if (watchlists == null) return result;
-
-    for (final wl in watchlists) {
-      for (final playerId in wl.playerIds) {
-        final player = playerRepo.getCachedPlayer(playerId);
-        if (player == null) continue;
-        final team = player.teamAbbrev;
-        if (team == null) continue;
-        result.putIfAbsent(team, () => []);
-        if (!result[team]!.contains(player.fullName)) {
-          result[team]!.add(player.fullName);
-        }
-      }
-    }
-
-    return result;
   }
 
   Widget _buildShimmer() {

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../player/providers.dart';
+import '../../../watchlist/presentation/providers/watchlist_providers.dart';
 import '../../domain/entities/game_day.dart';
 import '../../domain/entities/schedule_game.dart';
 import '../../providers.dart';
@@ -46,4 +48,31 @@ final _liveRefreshProvider = Provider.autoDispose<void>((ref) {
 /// when live games are detected.
 final liveAutoRefreshProvider = Provider.autoDispose<void>((ref) {
   ref.watch(_liveRefreshProvider);
+});
+
+// ── Watchlisted players grouped by team abbreviation ─────────────────────────
+
+final watchlistTeamNamesProvider = FutureProvider<Map<String, List<String>>>((
+  ref,
+) async {
+  final watchlistsAsync = ref.watch(watchlistsProvider);
+  final playerRepo = ref.read(playerRepositoryProvider);
+
+  final watchlists = watchlistsAsync.value;
+  if (watchlists == null) return {};
+
+  final result = <String, List<String>>{};
+  for (final wl in watchlists) {
+    for (final playerId in wl.playerIds) {
+      final player = await playerRepo.getCachedPlayer(playerId);
+      if (player == null) continue;
+      final team = player.teamAbbrev;
+      if (team == null) continue;
+      result.putIfAbsent(team, () => []);
+      if (!result[team]!.contains(player.fullName)) {
+        result[team]!.add(player.fullName);
+      }
+    }
+  }
+  return result;
 });
