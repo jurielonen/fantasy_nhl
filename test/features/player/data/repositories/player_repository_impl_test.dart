@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:fantasy_nhl/core/database/app_database.dart';
+import 'package:fantasy_nhl/core/database/daos/api_cache_dao.dart';
+import 'package:fantasy_nhl/core/database/daos/player_cache_dao.dart';
 import 'package:fantasy_nhl/core/network/nhl_stats_api_client.dart';
 import 'package:fantasy_nhl/core/network/nhl_web_api_client.dart';
-import 'package:fantasy_nhl/core/storage/local_storage_service.dart';
 import 'package:fantasy_nhl/features/player/data/dtos/player_landing_dto.dart';
 import 'package:fantasy_nhl/features/player/data/dtos/player_stats_dto.dart';
 import 'package:fantasy_nhl/features/player/data/repositories/player_repository_impl.dart';
@@ -15,23 +17,33 @@ class MockNhlWebApiClient extends Mock implements NhlWebApiClient {}
 
 class MockNhlStatsApiClient extends Mock implements NhlStatsApiClient {}
 
-class MockLocalStorageService extends Mock implements LocalStorageService {}
+class MockApiCacheDao extends Mock implements ApiCacheDao {}
+
+class MockPlayerCacheDao extends Mock implements PlayerCacheDao {}
+
+class FakeCachedPlayersCompanion extends Fake implements CachedPlayersCompanion {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(FakeCachedPlayersCompanion());
+  });
   late PlayerRepositoryImpl repository;
   late MockNhlWebApiClient mockWebClient;
   late MockNhlStatsApiClient mockStatsClient;
-  late MockLocalStorageService mockStorage;
+  late MockApiCacheDao mockApiCacheDao;
+  late MockPlayerCacheDao mockPlayerCacheDao;
 
   setUp(() {
     mockWebClient = MockNhlWebApiClient();
     mockStatsClient = MockNhlStatsApiClient();
-    mockStorage = MockLocalStorageService();
+    mockApiCacheDao = MockApiCacheDao();
+    mockPlayerCacheDao = MockPlayerCacheDao();
 
     repository = PlayerRepositoryImpl(
       webApiClient: mockWebClient,
       statsApiClient: mockStatsClient,
-      storage: mockStorage,
+      playerCacheDao: mockPlayerCacheDao,
+      apiCacheDao: mockApiCacheDao,
     );
   });
 
@@ -72,13 +84,23 @@ void main() {
     ),
   );
 
+  // Helper: build a fresh (non-expired) ApiCacheRow
+  ApiCacheRow freshCacheRow(String key, Map<String, dynamic> data) =>
+      ApiCacheRow(
+        cacheKey: key,
+        data: jsonEncode(data),
+        fetchedAt: DateTime.now().toIso8601String(),
+        ttlMinutes: 15,
+      );
+
   group('getPlayerDetail', () {
     test('returns cached data when cache is fresh', () async {
-      // Arrange: cache is not expired, and has data
-      when(() => mockStorage.isCacheExpired('player_detail:8478402'))
-          .thenReturn(false);
-      when(() => mockStorage.getString('cache:player_detail:8478402'))
-          .thenReturn(jsonEncode(testDto.toJson()));
+      // Arrange
+      final cacheRow =
+          freshCacheRow('player_detail:8478402', testDto.toJson());
+      when(() => mockApiCacheDao.get('player_detail:8478402'))
+          .thenAnswer((_) async => cacheRow);
+      when(() => mockApiCacheDao.isExpired(cacheRow)).thenReturn(false);
 
       // Act
       final result = await repository.getPlayerDetail(8478402);
@@ -96,18 +118,16 @@ void main() {
       expect(stats.points, 55);
     });
 
-    test('fetches from API and caches when cache is expired', () async {
-      // Arrange: cache is expired
-      when(() => mockStorage.isCacheExpired('player_detail:8478402'))
-          .thenReturn(true);
+    test('fetches from API and caches when no cached data', () async {
+      // Arrange: no cache entry
+      when(() => mockApiCacheDao.get('player_detail:8478402'))
+          .thenAnswer((_) async => null);
       when(() => mockWebClient.getPlayerLanding(8478402))
           .thenAnswer((_) async => testDto);
-      when(() => mockStorage.setString(any(), any()))
-          .thenAnswer((_) async => true);
-      when(() => mockStorage.setCacheTimestamp(any()))
+      when(() => mockApiCacheDao.set(any(), any(), any()))
           .thenAnswer((_) async {});
-      when(() => mockStorage.setJson(any(), any()))
-          .thenAnswer((_) async => true);
+      when(() => mockPlayerCacheDao.upsert(any()))
+          .thenAnswer((_) async {});
 
       // Act
       final result = await repository.getPlayerDetail(8478402);
@@ -115,19 +135,12 @@ void main() {
       // Assert: API was called
       verify(() => mockWebClient.getPlayerLanding(8478402)).called(1);
 
-      // Assert: result cached
-      verify(() => mockStorage.setString(
-            'cache:player_detail:8478402',
-            any(),
-          )).called(1);
-      verify(() => mockStorage.setCacheTimestamp('player_detail:8478402'))
+      // Assert: result cached in api_cache
+      verify(() => mockApiCacheDao.set('player_detail:8478402', any(), 15))
           .called(1);
 
       // Assert: basic player info also cached
-      verify(() => mockStorage.setJson(
-            'cache:player:8478402',
-            any(),
-          )).called(1);
+      verify(() => mockPlayerCacheDao.upsert(any())).called(1);
 
       expect(result.player.id, 8478402);
       expect(result.player.fullName, 'Auston Matthews');
@@ -135,20 +148,24 @@ void main() {
       expect(result.bio.draftInfo?.overallPick, 1);
     });
 
-    test('fetches from API when cache has no data', () async {
-      // Arrange: cache not expired but returns null
-      when(() => mockStorage.isCacheExpired('player_detail:8478402'))
-          .thenReturn(false);
-      when(() => mockStorage.getString('cache:player_detail:8478402'))
-          .thenReturn(null);
+    test('fetches from API when cache is expired', () async {
+      // Arrange: expired cache entry
+      final expiredRow = ApiCacheRow(
+        cacheKey: 'player_detail:8478402',
+        data: jsonEncode(testDto.toJson()),
+        fetchedAt:
+            DateTime.now().subtract(const Duration(hours: 1)).toIso8601String(),
+        ttlMinutes: 15,
+      );
+      when(() => mockApiCacheDao.get('player_detail:8478402'))
+          .thenAnswer((_) async => expiredRow);
+      when(() => mockApiCacheDao.isExpired(expiredRow)).thenReturn(true);
       when(() => mockWebClient.getPlayerLanding(8478402))
           .thenAnswer((_) async => testDto);
-      when(() => mockStorage.setString(any(), any()))
-          .thenAnswer((_) async => true);
-      when(() => mockStorage.setCacheTimestamp(any()))
+      when(() => mockApiCacheDao.set(any(), any(), any()))
           .thenAnswer((_) async {});
-      when(() => mockStorage.setJson(any(), any()))
-          .thenAnswer((_) async => true);
+      when(() => mockPlayerCacheDao.upsert(any()))
+          .thenAnswer((_) async {});
 
       // Act
       final result = await repository.getPlayerDetail(8478402);

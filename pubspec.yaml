@@ -9,6 +9,8 @@ environment:
 dependencies:
   cached_network_image: ^3.4.1
   dio: ^5.9.1
+  drift: ^2.21.0
+  drift_flutter: ^0.2.4
   fl_chart: ^1.1.1
   flutter:
     sdk: flutter
@@ -22,13 +24,13 @@ dependencies:
   json_annotation: ^4.9.0
   retrofit: ^4.9.2
   riverpod_annotation: ^4.0.0
-  shared_preferences: ^2.5.4
   shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  drift_dev: ^2.21.0
   freezed: ^3.2.3
   json_serializable: ^6.11.2
   build_runner: ^2.11.1

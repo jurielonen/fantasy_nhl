@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import '../../../../core/database/daos/api_cache_dao.dart';
+import '../../../../core/database/daos/player_cache_dao.dart';
 import '../../../../core/network/nhl_stats_api_client.dart';
 import '../../../../core/network/nhl_web_api_client.dart';
-import '../../../../core/storage/local_storage_service.dart';
 import '../../domain/entities/game_log_entry.dart';
 import '../../domain/entities/player.dart';
 import '../../domain/entities/player_detail.dart';
@@ -17,20 +18,22 @@ import '../dtos/spotlight_player_dto.dart';
 import '../mappers/game_log_mapper.dart';
 import '../mappers/player_mapper.dart';
 import '../mappers/stat_leader_mapper.dart';
-import '../models/cached_player_model.dart';
 
 class PlayerRepositoryImpl implements PlayerRepository {
   final NhlWebApiClient _webApiClient;
   final NhlStatsApiClient _statsApiClient;
-  final LocalStorageService _storage;
+  final PlayerCacheDao _playerCacheDao;
+  final ApiCacheDao _apiCacheDao;
 
   PlayerRepositoryImpl({
     required NhlWebApiClient webApiClient,
     required NhlStatsApiClient statsApiClient,
-    required LocalStorageService storage,
+    required PlayerCacheDao playerCacheDao,
+    required ApiCacheDao apiCacheDao,
   })  : _webApiClient = webApiClient,
         _statsApiClient = statsApiClient,
-        _storage = storage;
+        _playerCacheDao = playerCacheDao,
+        _apiCacheDao = apiCacheDao;
 
   @override
   Future<List<Player>> searchPlayers(String query) async {
@@ -46,25 +49,19 @@ class PlayerRepositoryImpl implements PlayerRepository {
   Future<PlayerDetail> getPlayerDetail(int id) async {
     final cacheKey = 'player_detail:$id';
 
-    if (!_storage.isCacheExpired(cacheKey)) {
-      final cached = _storage.getString('cache:$cacheKey');
-      if (cached != null) {
-        final dto = PlayerLandingDto.fromJson(
-          jsonDecode(cached) as Map<String, dynamic>,
-        );
-        return dto.toPlayerDetail();
-      }
+    final cached = await _apiCacheDao.get(cacheKey);
+    if (cached != null && !_apiCacheDao.isExpired(cached)) {
+      final dto = PlayerLandingDto.fromJson(
+        jsonDecode(cached.data) as Map<String, dynamic>,
+      );
+      return dto.toPlayerDetail();
     }
 
     final dto = await _webApiClient.getPlayerLanding(id);
 
-    // Cache the full DTO for detail views
-    await _storage.setString('cache:$cacheKey', jsonEncode(dto.toJson()));
-    await _storage.setCacheTimestamp(cacheKey);
-
+    await _apiCacheDao.set(cacheKey, jsonEncode(dto.toJson()), 15);
     // Also cache basic player info for quick lookups
-    final model = dto.toPlayer().toCachedModel();
-    await _storage.setJson('cache:player:$id', model.toJson());
+    await _playerCacheDao.upsert(dto.toPlayer().toCachedCompanion());
 
     return dto.toPlayerDetail();
   }
@@ -73,24 +70,20 @@ class PlayerRepositoryImpl implements PlayerRepository {
   Future<List<GameLogEntry>> getGameLog(int id) async {
     final cacheKey = 'game_log:$id';
 
-    if (!_storage.isCacheExpired(cacheKey, ttlMinutes: 30)) {
-      final cached = _storage.getString('cache:$cacheKey');
-      if (cached != null) {
-        final json = jsonDecode(cached) as Map<String, dynamic>;
-        return (json['gameLog'] as List?)
-                ?.map((e) =>
-                    GameLogEntryDto.fromJson(e as Map<String, dynamic>)
-                        .toEntity())
-                .toList() ??
-            [];
-      }
+    final cached = await _apiCacheDao.get(cacheKey);
+    if (cached != null && !_apiCacheDao.isExpired(cached)) {
+      final json = jsonDecode(cached.data) as Map<String, dynamic>;
+      return (json['gameLog'] as List?)
+              ?.map((e) =>
+                  GameLogEntryDto.fromJson(e as Map<String, dynamic>)
+                      .toEntity())
+              .toList() ??
+          [];
     }
 
     final dto = await _webApiClient.getCurrentGameLog(id);
 
-    await _storage.setString('cache:$cacheKey', jsonEncode(dto.toJson()));
-    await _storage.setCacheTimestamp(cacheKey);
-
+    await _apiCacheDao.set(cacheKey, jsonEncode(dto.toJson()), 30);
     return dto.toEntities();
   }
 
@@ -98,21 +91,16 @@ class PlayerRepositoryImpl implements PlayerRepository {
   Future<List<Player>> getTeamRoster(String teamAbbrev) async {
     final cacheKey = 'roster:$teamAbbrev';
 
-    if (!_storage.isCacheExpired(cacheKey, ttlMinutes: 60)) {
-      final cached = _storage.getString('cache:$cacheKey');
-      if (cached != null) {
-        final dto = RosterDto.fromJson(
-          jsonDecode(cached) as Map<String, dynamic>,
-        );
-        return _flattenRoster(dto);
-      }
+    final cached = await _apiCacheDao.get(cacheKey);
+    if (cached != null && !_apiCacheDao.isExpired(cached)) {
+      final dto = RosterDto.fromJson(
+        jsonDecode(cached.data) as Map<String, dynamic>,
+      );
+      return _flattenRoster(dto);
     }
 
     final dto = await _webApiClient.getRoster(teamAbbrev);
-
-    await _storage.setString('cache:$cacheKey', jsonEncode(dto.toJson()));
-    await _storage.setCacheTimestamp(cacheKey);
-
+    await _apiCacheDao.set(cacheKey, jsonEncode(dto.toJson()), 60);
     return _flattenRoster(dto);
   }
 
@@ -129,14 +117,12 @@ class PlayerRepositoryImpl implements PlayerRepository {
   }) async {
     final cacheKey = 'skater_leaders:$category:${limit ?? -1}';
 
-    if (!_storage.isCacheExpired(cacheKey)) {
-      final cached = _storage.getString('cache:$cacheKey');
-      if (cached != null) {
-        // Re-parse from cached raw JSON
-        final json = jsonDecode(cached) as Map<String, dynamic>;
-        final dto = SkaterLeadersDto.fromJson(json);
-        return dto.toLeaders(category);
-      }
+    final cached = await _apiCacheDao.get(cacheKey);
+    if (cached != null && !_apiCacheDao.isExpired(cached)) {
+      final dto = SkaterLeadersDto.fromJson(
+        jsonDecode(cached.data) as Map<String, dynamic>,
+      );
+      return dto.toLeaders(category);
     }
 
     final dto = await _webApiClient.getSkaterLeaders(
@@ -144,9 +130,7 @@ class PlayerRepositoryImpl implements PlayerRepository {
       limit: limit,
     );
 
-    await _storage.setString('cache:$cacheKey', jsonEncode(dto.toJson()));
-    await _storage.setCacheTimestamp(cacheKey);
-
+    await _apiCacheDao.set(cacheKey, jsonEncode(dto.toJson()), 15);
     return dto.toLeaders(category);
   }
 
@@ -157,13 +141,12 @@ class PlayerRepositoryImpl implements PlayerRepository {
   }) async {
     final cacheKey = 'goalie_leaders:$category:${limit ?? -1}';
 
-    if (!_storage.isCacheExpired(cacheKey)) {
-      final cached = _storage.getString('cache:$cacheKey');
-      if (cached != null) {
-        final json = jsonDecode(cached) as Map<String, dynamic>;
-        final dto = GoalieLeadersDto.fromJson(json);
-        return dto.toLeaders(category);
-      }
+    final cached = await _apiCacheDao.get(cacheKey);
+    if (cached != null && !_apiCacheDao.isExpired(cached)) {
+      final dto = GoalieLeadersDto.fromJson(
+        jsonDecode(cached.data) as Map<String, dynamic>,
+      );
+      return dto.toLeaders(category);
     }
 
     final dto = await _webApiClient.getGoalieLeaders(
@@ -171,49 +154,41 @@ class PlayerRepositoryImpl implements PlayerRepository {
       limit: limit,
     );
 
-    await _storage.setString('cache:$cacheKey', jsonEncode(dto.toJson()));
-    await _storage.setCacheTimestamp(cacheKey);
-
+    await _apiCacheDao.set(cacheKey, jsonEncode(dto.toJson()), 15);
     return dto.toLeaders(category);
   }
 
   @override
   Future<List<Player>> getSpotlightPlayers() async {
-    final cacheKey = 'spotlight';
+    const cacheKey = 'spotlight';
 
-    if (!_storage.isCacheExpired(cacheKey, ttlMinutes: 60)) {
-      final cached = _storage.getString('cache:$cacheKey');
-      if (cached != null) {
-        final list = jsonDecode(cached) as List;
-        return list
-            .map((e) =>
-                SpotlightPlayerDto.fromJson(e as Map<String, dynamic>)
-                    .toPlayer())
-            .toList();
-      }
+    final cached = await _apiCacheDao.get(cacheKey);
+    if (cached != null && !_apiCacheDao.isExpired(cached)) {
+      final list = jsonDecode(cached.data) as List;
+      return list
+          .map((e) =>
+              SpotlightPlayerDto.fromJson(e as Map<String, dynamic>).toPlayer())
+          .toList();
     }
 
     final dtos = await _webApiClient.getPlayerSpotlight();
-
-    await _storage.setString(
-      'cache:$cacheKey',
+    await _apiCacheDao.set(
+      cacheKey,
       jsonEncode(dtos.map((d) => d.toJson()).toList()),
+      60,
     );
-    await _storage.setCacheTimestamp(cacheKey);
-
     return dtos.map((d) => d.toPlayer()).toList();
   }
 
   @override
-  Player? getCachedPlayer(int id) {
-    final json = _storage.getJson('cache:player:$id');
-    if (json == null) return null;
-    return CachedPlayerModel.fromJson(json).toPlayer();
+  Future<Player?> getCachedPlayer(int id) async {
+    final row = await _playerCacheDao.getById(id);
+    return row?.toPlayer();
   }
 
   @override
   Future<Player> getPlayerBasicInfo(int id) async {
-    final cached = getCachedPlayer(id);
+    final cached = await getCachedPlayer(id);
     if (cached != null) return cached;
 
     final detail = await getPlayerDetail(id);
