@@ -49,7 +49,22 @@ Build a cross-platform mobile application using **Flutter** for fantasy NHL leag
 
 ### Architecture & State Management
 - Use **clean architecture** with clear separation: `data` → `domain` → `presentation` layers
-- State management: **Riverpod** (recommend `riverpod` with `code_generation` or `flutter_riverpod` with `StateNotifier`/`AsyncNotifier`)
+- State management: **Riverpod with code generation** (`riverpod_annotation` +
+  `riverpod_generator`). Do not write manual `Provider(...)`, `NotifierProvider(...)`,
+  `FutureProvider(...)`, etc. — always use `@riverpod` annotations.
+- All providers must be declared with `@riverpod` (autoDispose by default) or
+  `@Riverpod(keepAlive: true)` (for infrastructure/DI providers that must persist).
+- Simple function providers: `@riverpod T myProvider(Ref ref) { ... }`
+- Async providers: `@riverpod Future<T> myProvider(Ref ref) { ... }`
+- Stream providers: `@riverpod Stream<T> myProvider(Ref ref) { ... }`
+- Family providers: add parameters after `ref` in the function signature.
+- Notifier providers: `@riverpod class MyNotifier extends _$MyNotifier { T build() {...} }`
+- Async notifiers: `@riverpod class MyNotifier extends _$MyNotifier { Future<T> build() {...} }`
+- keepAlive notifiers: `@Riverpod(keepAlive: true) class MyNotifier extends _$MyNotifier`
+- Each provider file must include `part 'filename.g.dart';` and the corresponding
+  import of `riverpod_annotation`.
+- After adding or changing any provider, regenerate with:
+    `fvm dart run build_runner build -d`
 - Repository pattern for all data access
 - Use `freezed` for immutable data models and union types
 - Use `dio` as the HTTP client with interceptors for logging, error handling, and cache headers
