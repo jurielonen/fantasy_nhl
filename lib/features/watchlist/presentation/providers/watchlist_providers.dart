@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../player/domain/entities/game_log_entry.dart';
 import '../../../player/domain/entities/player_detail.dart';
@@ -9,17 +9,20 @@ import '../../domain/entities/watchlist.dart';
 import '../../domain/entities/watchlist_player_info.dart';
 import '../../providers.dart';
 
+part 'watchlist_providers.g.dart';
+
 // ── Sort type ────────────────────────────────────────────────────────────────
 
 enum WatchlistSortType { custom, name, position, points, recentPerformance, gameTime }
 
 // ── All watchlists (reactive via Drift stream) ───────────────────────────────
 
-final watchlistsProvider = StreamProvider<List<Watchlist>>((ref) async* {
+@Riverpod(keepAlive: true)
+Stream<List<Watchlist>> watchlists(Ref ref) async* {
   final repo = ref.watch(watchlistRepositoryProvider);
   await repo.ensureDefaultWatchlist();
   yield* repo.watchlistChanges;
-});
+}
 
 // ── Is player in any watchlist (reactive) ────────────────────────────────────
 
@@ -34,19 +37,16 @@ final isPlayerInWatchlistProvider =
 
 // ── Selected watchlist ───────────────────────────────────────────────────────
 
-class SelectedWatchlistIdNotifier extends Notifier<String?> {
+@Riverpod(keepAlive: true)
+class SelectedWatchlistId extends _$SelectedWatchlistId {
   @override
   String? build() => null;
 
   void select(String? id) => state = id;
 }
 
-final selectedWatchlistIdProvider =
-    NotifierProvider<SelectedWatchlistIdNotifier, String?>(
-  SelectedWatchlistIdNotifier.new,
-);
-
-final selectedWatchlistProvider = Provider<Watchlist?>((ref) {
+@riverpod
+Watchlist? selectedWatchlist(Ref ref) {
   final watchlistsAsync = ref.watch(watchlistsProvider);
   final selectedId = ref.watch(selectedWatchlistIdProvider);
 
@@ -65,105 +65,104 @@ final selectedWatchlistProvider = Provider<Watchlist?>((ref) {
       return watchlists.first;
     },
   );
-});
+}
 
 // ── Today's schedule & scores ────────────────────────────────────────────────
 
-final todayScheduleProvider = FutureProvider<List<ScheduleGame>>((ref) {
+@riverpod
+Future<List<ScheduleGame>> todaySchedule(Ref ref) {
   return ref.read(scheduleRepositoryProvider).getTodaySchedule();
-});
+}
 
-final todayScoresProvider = FutureProvider<List<ScheduleGame>>((ref) {
+@riverpod
+Future<List<ScheduleGame>> todayScores(Ref ref) {
   return ref.read(scheduleRepositoryProvider).getTodayScores();
-});
+}
 
 // ── Sort preference ──────────────────────────────────────────────────────────
 
-class WatchlistSortNotifier extends Notifier<WatchlistSortType> {
+@Riverpod(keepAlive: true)
+class WatchlistSort extends _$WatchlistSort {
   @override
   WatchlistSortType build() => WatchlistSortType.custom;
 
   void select(WatchlistSortType type) => state = type;
 }
 
-final watchlistSortProvider =
-    NotifierProvider<WatchlistSortNotifier, WatchlistSortType>(
-  WatchlistSortNotifier.new,
-);
-
 // ── Watchlist players (enriched) ─────────────────────────────────────────────
 
-final watchlistPlayersProvider =
-    FutureProvider.family<List<WatchlistPlayerInfo>, String>(
-  (ref, watchlistId) async {
-    final repo = ref.watch(watchlistRepositoryProvider);
-    final playerRepo = ref.read(playerRepositoryProvider);
-    final watchlist = await repo.getWatchlist(watchlistId);
-    if (watchlist == null) return [];
+@riverpod
+Future<List<WatchlistPlayerInfo>> watchlistPlayers(
+  Ref ref,
+  String watchlistId,
+) async {
+  final repo = ref.watch(watchlistRepositoryProvider);
+  final playerRepo = ref.read(playerRepositoryProvider);
+  final watchlist = await repo.getWatchlist(watchlistId);
+  if (watchlist == null) return [];
 
-    final scheduleGames = await ref
-        .read(todayScheduleProvider.future)
-        .catchError((_) => <ScheduleGame>[]);
-    final scoreGames = await ref
-        .read(todayScoresProvider.future)
-        .catchError((_) => <ScheduleGame>[]);
+  final scheduleGames = await ref
+      .read(todayScheduleProvider.future)
+      .catchError((_) => <ScheduleGame>[]);
+  final scoreGames = await ref
+      .read(todayScoresProvider.future)
+      .catchError((_) => <ScheduleGame>[]);
 
-    // Merge scores into schedule (scores have updated gameState/scores)
-    final gamesWithScores = <ScheduleGame>[];
-    for (final sg in scheduleGames) {
-      final scoreMatch = scoreGames.where((s) => s.gameId == sg.gameId);
-      gamesWithScores.add(scoreMatch.isNotEmpty ? scoreMatch.first : sg);
+  // Merge scores into schedule (scores have updated gameState/scores)
+  final gamesWithScores = <ScheduleGame>[];
+  for (final sg in scheduleGames) {
+    final scoreMatch = scoreGames.where((s) => s.gameId == sg.gameId);
+    gamesWithScores.add(scoreMatch.isNotEmpty ? scoreMatch.first : sg);
+  }
+
+  final results = <WatchlistPlayerInfo>[];
+  for (final playerId in watchlist.playerIds) {
+    final player = await playerRepo.getPlayerBasicInfo(playerId);
+    final todayGame = findGameForTeam(player.teamAbbrev, gamesWithScores);
+
+    GameLogEntry? lastLog;
+    int? seasonPts;
+    double? recentAvg;
+    try {
+      final logs = await playerRepo.getGameLog(playerId);
+      if (logs.isNotEmpty) {
+        lastLog = logs.first;
+        final recent = logs.take(5).toList();
+        if (!logs.first.isGoalie) {
+          recentAvg = recent.isEmpty
+              ? null
+              : recent.fold<int>(0, (sum, e) => sum + (e.points ?? 0)) /
+                  recent.length;
+        }
+      }
+    } catch (_) {
+      // Game log not available/cached — skip
     }
 
-    final results = <WatchlistPlayerInfo>[];
-    for (final playerId in watchlist.playerIds) {
-      final player = await playerRepo.getPlayerBasicInfo(playerId);
-      final todayGame = findGameForTeam(player.teamAbbrev, gamesWithScores);
-
-      GameLogEntry? lastLog;
-      int? seasonPts;
-      double? recentAvg;
-      try {
-        final logs = await playerRepo.getGameLog(playerId);
-        if (logs.isNotEmpty) {
-          lastLog = logs.first;
-          final recent = logs.take(5).toList();
-          if (!logs.first.isGoalie) {
-            recentAvg = recent.isEmpty
-                ? null
-                : recent.fold<int>(0, (sum, e) => sum + (e.points ?? 0)) /
-                    recent.length;
-          }
-        }
-      } catch (_) {
-        // Game log not available/cached — skip
+    try {
+      final detail = await playerRepo.getPlayerDetail(playerId);
+      final stats = detail.currentSeasonStats;
+      if (stats is SkaterSeasonStats) {
+        seasonPts = stats.points;
       }
-
-      try {
-        final detail = await playerRepo.getPlayerDetail(playerId);
-        final stats = detail.currentSeasonStats;
-        if (stats is SkaterSeasonStats) {
-          seasonPts = stats.points;
-        }
-      } catch (_) {
-        // Detail not available/cached — skip
-      }
-
-      results.add(WatchlistPlayerInfo(
-        player: player,
-        todayGame: todayGame,
-        lastGameLog: lastLog,
-        seasonPoints: seasonPts,
-        recentAvgPoints: recentAvg,
-      ));
+    } catch (_) {
+      // Detail not available/cached — skip
     }
 
-    final sortType = ref.read(watchlistSortProvider);
-    _sortPlayers(results, sortType);
+    results.add(WatchlistPlayerInfo(
+      player: player,
+      todayGame: todayGame,
+      lastGameLog: lastLog,
+      seasonPoints: seasonPts,
+      recentAvgPoints: recentAvg,
+    ));
+  }
 
-    return results;
-  },
-);
+  final sortType = ref.read(watchlistSortProvider);
+  _sortPlayers(results, sortType);
+
+  return results;
+}
 
 void _sortPlayers(List<WatchlistPlayerInfo> players, WatchlistSortType sort) {
   switch (sort) {

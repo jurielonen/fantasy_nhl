@@ -107,16 +107,12 @@ class _ThemeTile extends StatelessWidget {
 
 // ── Cache management tile ─────────────────────────────────────────────────────
 
-final _cacheCountProvider = FutureProvider.autoDispose<int>((ref) {
-  return ref.watch(apiCacheDaoProvider).count();
-});
-
 class _CacheTile extends ConsumerWidget {
   const _CacheTile();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final countAsync = ref.watch(_cacheCountProvider);
+    final countAsync = ref.watch(cacheCountProvider);
     final count = countAsync.asData?.value ?? 0;
 
     return ListTile(
@@ -127,7 +123,7 @@ class _CacheTile extends ConsumerWidget {
         onPressed: () async {
           final dao = ref.read(apiCacheDaoProvider);
           await dao.deleteAll();
-          ref.invalidate(_cacheCountProvider);
+          ref.invalidate(cacheCountProvider);
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
