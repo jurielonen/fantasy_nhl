@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/player/presentation/explore_screen.dart';
 import '../../features/player/presentation/player_detail_screen.dart';
 import '../../features/player/presentation/team_roster_screen.dart';
+import '../../shared/widgets/player_hero_context.dart';
 import '../../features/schedule/presentation/schedule_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/watchlist/presentation/watchlist_screen.dart';
@@ -65,9 +66,14 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/player/:playerId',
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => PlayerDetailScreen(
-        playerId: int.parse(state.pathParameters['playerId']!),
-      ),
+      builder: (context, state) {
+        final extra = state.extra as PlayerDetailExtra?;
+        return PlayerDetailScreen(
+          playerId: int.parse(state.pathParameters['playerId']!),
+          playerDetailExtra: extra ??
+              const PlayerDetailExtra(heroContext: PlayerHeroContext.watchlist),
+        );
+      },
     ),
   ],
 );

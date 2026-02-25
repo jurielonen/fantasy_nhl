@@ -6,10 +6,21 @@ import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/section_header.dart';
 import '../../../../shared/widgets/shimmer_loader.dart';
 import '../../../../shared/widgets/stat_leader_row.dart';
+import '../../domain/entities/player.dart';
+import '../../domain/entities/stat_leader.dart';
 import '../providers/explore_providers.dart';
 
+Player _playerFromLeader(StatLeader l) => Player(
+      id: l.playerId,
+      firstName: l.firstName,
+      lastName: l.lastName,
+      teamAbbrev: l.teamAbbrev,
+      position: l.position ?? '',
+      headshot: l.headshot,
+    );
+
 class StatLeadersSection extends ConsumerWidget {
-  final void Function(int playerId)? onPlayerTap;
+  final void Function(Player)? onPlayerTap;
 
   const StatLeadersSection({super.key, this.onPlayerTap});
 
@@ -27,7 +38,7 @@ class StatLeadersSection extends ConsumerWidget {
 }
 
 class _SkaterLeaders extends ConsumerWidget {
-  final void Function(int playerId)? onPlayerTap;
+  final void Function(Player)? onPlayerTap;
 
   const _SkaterLeaders({this.onPlayerTap});
 
@@ -62,7 +73,7 @@ class _SkaterLeaders extends ConsumerWidget {
                   StatLeaderRow(
                     rank: i + 1,
                     leader: visible[i],
-                    onTap: () => onPlayerTap?.call(visible[i].playerId),
+                    onTap: () => onPlayerTap?.call(_playerFromLeader(visible[i])),
                   ),
               ],
             );
@@ -87,7 +98,7 @@ class _SkaterLeaders extends ConsumerWidget {
 }
 
 class _GoalieLeaders extends ConsumerWidget {
-  final void Function(int playerId)? onPlayerTap;
+  final void Function(Player)? onPlayerTap;
 
   const _GoalieLeaders({this.onPlayerTap});
 
@@ -122,7 +133,7 @@ class _GoalieLeaders extends ConsumerWidget {
                   StatLeaderRow(
                     rank: i + 1,
                     leader: visible[i],
-                    onTap: () => onPlayerTap?.call(visible[i].playerId),
+                    onTap: () => onPlayerTap?.call(_playerFromLeader(visible[i])),
                   ),
               ],
             );

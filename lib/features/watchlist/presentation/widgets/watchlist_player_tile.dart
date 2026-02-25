@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../core/utils/stat_formatter.dart';
+import '../../../../shared/widgets/player_hero_context.dart';
 import '../../../player/domain/entities/game_log_entry.dart';
 import '../../../schedule/domain/entities/schedule_game.dart';
 import '../../domain/entities/watchlist_player_info.dart';
@@ -58,7 +59,10 @@ class WatchlistPlayerTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Row(
             children: [
-              _Avatar(url: info.player.headshot, name: info.player.firstName),
+              Hero(
+                tag: PlayerHeroContext.watchlist.tag(info.player.id),
+                child: _Avatar(url: info.player.headshot, name: info.player.firstName),
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

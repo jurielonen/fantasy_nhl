@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
+import '../../../shared/widgets/player_hero_context.dart';
 import '../../../shared/widgets/shimmer_loader.dart';
 import '../../watchlist/presentation/providers/add_to_watchlist_action.dart';
 import '../../watchlist/presentation/providers/watchlist_providers.dart';
@@ -19,8 +20,13 @@ import 'widgets/upcoming_schedule_tab.dart';
 
 class PlayerDetailScreen extends ConsumerStatefulWidget {
   final int playerId;
+  final PlayerDetailExtra playerDetailExtra;
 
-  const PlayerDetailScreen({super.key, required this.playerId});
+  const PlayerDetailScreen({
+    super.key,
+    required this.playerId,
+    this.playerDetailExtra = const PlayerDetailExtra(heroContext: PlayerHeroContext.watchlist),
+  });
 
   @override
   ConsumerState<PlayerDetailScreen> createState() => _PlayerDetailScreenState();
@@ -47,10 +53,11 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
     ref.invalidate(playerGameLogProvider(widget.playerId));
     // Schedule provider is invalidated when we know the team
     final detail = ref.read(playerDetailProvider(widget.playerId));
-    if (detail.hasValue && detail.value!.player.teamAbbrev != null) {
-      ref.invalidate(
-        playerUpcomingScheduleProvider(detail.value!.player.teamAbbrev!),
-      );
+    final teamAbbrev = detail.hasValue
+        ? detail.value!.player.teamAbbrev
+        : widget.playerDetailExtra.player?.teamAbbrev;
+    if (teamAbbrev != null) {
+      ref.invalidate(playerUpcomingScheduleProvider(teamAbbrev));
     }
   }
 
@@ -98,6 +105,7 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                 child: PlayerDetailHeader(
                   player: detail.player,
                   bio: detail.bio,
+                  heroContext: widget.playerDetailExtra.heroContext,
                 ),
               ),
               SliverPersistentHeader(
@@ -204,37 +212,62 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
   }
 
   Widget _buildLoadingState() {
+    final preloaded = widget.playerDetailExtra.player;
     return CustomScrollView(
       slivers: [
-        SliverAppBar(title: Text(context.l10n.playerDetailLoading)),
+        SliverAppBar(
+          title: Text(
+            preloaded != null ? preloaded.fullName : context.l10n.playerDetailLoading,
+          ),
+          actions: preloaded != null
+              ? [_WatchlistButton(player: preloaded)]
+              : null,
+        ),
         SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
+          child: preloaded != null
+              ? Column(
                   children: [
-                    const ShimmerLoader(width: 80, height: 80, borderRadius: 40),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          ShimmerLoader(width: 180, height: 22),
-                          SizedBox(height: 8),
-                          ShimmerLoader(width: 120, height: 16),
-                        ],
-                      ),
+                    PlayerDetailHeader(
+                      player: preloaded,
+                      heroContext: widget.playerDetailExtra.heroContext,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: ShimmerLoader(height: 180),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: ShimmerLoader(height: 250),
                     ),
                   ],
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const ShimmerLoader(width: 80, height: 80, borderRadius: 40),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                ShimmerLoader(width: 180, height: 22),
+                                SizedBox(height: 8),
+                                ShimmerLoader(width: 120, height: 16),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      const ShimmerLoader(height: 180),
+                      const SizedBox(height: 16),
+                      const ShimmerLoader(height: 250),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 24),
-                const ShimmerLoader(height: 180),
-                const SizedBox(height: 16),
-                const ShimmerLoader(height: 250),
-              ],
-            ),
-          ),
         ),
       ],
     );

@@ -6,9 +6,11 @@ import '../../core/theme/app_colors.dart';
 import '../../core/utils/extensions.dart';
 import '../../features/player/domain/entities/player.dart';
 import '../../features/watchlist/presentation/providers/watchlist_providers.dart';
+import 'player_hero_context.dart';
 
 class PlayerListTile extends ConsumerWidget {
   final Player player;
+  final PlayerHeroContext heroContext;
   final String? trailingStat;
   final String? trailingLabel;
   final VoidCallback? onTap;
@@ -18,6 +20,7 @@ class PlayerListTile extends ConsumerWidget {
   const PlayerListTile({
     super.key,
     required this.player,
+    required this.heroContext,
     this.trailingStat,
     this.trailingLabel,
     this.onTap,
@@ -39,7 +42,7 @@ class PlayerListTile extends ConsumerWidget {
         child: Row(
           children: [
             Hero(
-              tag: 'player_${player.id}',
+              tag: heroContext.tag(player.id),
               child: _PlayerAvatar(
                 url: player.headshot,
                 fallback: player.firstName.isNotEmpty
