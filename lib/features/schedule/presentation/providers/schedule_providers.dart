@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../player/providers.dart';
 import '../../../watchlist/presentation/providers/watchlist_providers.dart';
@@ -8,29 +8,30 @@ import '../../domain/entities/game_day.dart';
 import '../../domain/entities/schedule_game.dart';
 import '../../providers.dart';
 
+part 'schedule_providers.g.dart';
+
 // ── Selected date (null = today) ─────────────────────────────────────────────
 
-class SelectedDateNotifier extends Notifier<String?> {
+@riverpod
+class SelectedDate extends _$SelectedDate {
   @override
   String? build() => null;
 
   void select(String? date) => state = date;
 }
 
-final selectedDateProvider = NotifierProvider<SelectedDateNotifier, String?>(
-  SelectedDateNotifier.new,
-);
-
 // ── Game day data for selected date ──────────────────────────────────────────
 
-final gameDayProvider = FutureProvider<GameDay>((ref) {
+@riverpod
+Future<GameDay> gameDay(Ref ref) {
   final date = ref.watch(selectedDateProvider);
   return ref.read(scheduleRepositoryProvider).getGameDay(date);
-});
+}
 
 // ── Auto-refresh timer for live games ────────────────────────────────────────
 
-final _liveRefreshProvider = Provider.autoDispose<void>((ref) {
+@riverpod
+void _liveRefresh(Ref ref) {
   final gameDayAsync = ref.watch(gameDayProvider);
   final hasLive = gameDayAsync.whenOrNull(
     data: (gd) => gd.games.any((g) => g.gameState == GameState.live),
@@ -42,19 +43,19 @@ final _liveRefreshProvider = Provider.autoDispose<void>((ref) {
     });
     ref.onDispose(timer.cancel);
   }
-});
+}
 
 /// Watch this from the schedule screen to activate auto-refresh
 /// when live games are detected.
-final liveAutoRefreshProvider = Provider.autoDispose<void>((ref) {
+@riverpod
+void liveAutoRefresh(Ref ref) {
   ref.watch(_liveRefreshProvider);
-});
+}
 
 // ── Watchlisted players grouped by team abbreviation ─────────────────────────
 
-final watchlistTeamNamesProvider = FutureProvider<Map<String, List<String>>>((
-  ref,
-) async {
+@riverpod
+Future<Map<String, List<String>>> watchlistTeamNames(Ref ref) async {
   final watchlistsAsync = ref.watch(watchlistsProvider);
   final playerRepo = ref.read(playerRepositoryProvider);
 
@@ -75,4 +76,4 @@ final watchlistTeamNamesProvider = FutureProvider<Map<String, List<String>>>((
     }
   }
   return result;
-});
+}

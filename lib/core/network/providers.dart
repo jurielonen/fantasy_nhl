@@ -1,22 +1,22 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'dio_factory.dart';
 import 'nhl_stats_api_client.dart';
 import 'nhl_web_api_client.dart';
 
-final webApiDioProvider = Provider<Dio>(
-  (ref) => DioFactory.createWebApiDio(),
-);
+part 'providers.g.dart';
 
-final statsApiDioProvider = Provider<Dio>(
-  (ref) => DioFactory.createStatsApiDio(),
-);
+@Riverpod(keepAlive: true)
+Dio webApiDio(Ref ref) => DioFactory.createWebApiDio();
 
-final nhlWebApiClientProvider = Provider<NhlWebApiClient>(
-  (ref) => NhlWebApiClient(ref.watch(webApiDioProvider)),
-);
+@Riverpod(keepAlive: true)
+Dio statsApiDio(Ref ref) => DioFactory.createStatsApiDio();
 
-final nhlStatsApiClientProvider = Provider<NhlStatsApiClient>(
-  (ref) => NhlStatsApiClient(ref.watch(statsApiDioProvider)),
-);
+@Riverpod(keepAlive: true)
+NhlWebApiClient nhlWebApiClient(Ref ref) =>
+    NhlWebApiClient(ref.watch(webApiDioProvider));
+
+@Riverpod(keepAlive: true)
+NhlStatsApiClient nhlStatsApiClient(Ref ref) =>
+    NhlStatsApiClient(ref.watch(statsApiDioProvider));

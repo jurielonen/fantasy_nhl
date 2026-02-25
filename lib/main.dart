@@ -18,8 +18,8 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
-        appDatabaseProvider.overrideWithValue(db),
-        initialThemeModeProvider.overrideWithValue(initialTheme),
+        appDatabaseProvider.overrideWith((ref) => db),
+        initialThemeModeProvider.overrideWith((ref) => initialTheme),
       ],
       child: const FantasyNhlApp(),
     ),
