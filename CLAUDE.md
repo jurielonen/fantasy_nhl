@@ -266,6 +266,21 @@ This project uses Flutter's built-in localization with ARB files. **Every user-f
 
 ---
 
+## Routing (typed go_router only)
+- Use **typed go_router** with code generation (`go_router_builder`). Do not add untyped `GoRoute(...)` definitions.
+- Routes must be `GoRouteData` classes using:
+    - `class XRoute extends GoRouteData with $XRoute`
+    - `static const String path = ...`
+- Router must use generated routes:
+    - `GoRouter(routes: $appRoutes, ...)`
+- Navigation must be typed only:
+    - `const HomeRoute().go(context);`
+    - `ListDetailRoute(listId).push(context);`
+- When adding new screens, add a typed route class + update the annotated route tree in `lib/core/router/app_router.dart`, then regenerate:
+    - `fvm dart run build_runner build -d`
+
+---
+
 ## Git Workflow
 
 **Always create a new branch before making any code changes.**

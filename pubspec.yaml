@@ -37,6 +37,13 @@ dev_dependencies:
   riverpod_generator: ^4.0.0+1
   retrofit_generator: ^10.2.1
   mocktail: ^1.0.4
+  go_router_builder: ^4.2.0
+  build_verify: ^3.1.1
+
+dependency_overrides:
+  # go_router_builder 4.2.0 constrains go_router to ^16.2.0; override to allow 17.x.
+  # The only change in go_router 17 (notifyRootObserver) does not affect typed routing.
+  go_router: ^17.1.0
 
 flutter:
   generate: true
