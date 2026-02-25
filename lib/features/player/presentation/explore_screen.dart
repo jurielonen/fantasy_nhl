@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import '../../../core/router/app_router.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/extensions.dart';
@@ -45,14 +45,14 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   }
 
   void _navigateToPlayer(Player? player, int playerId, PlayerHeroContext heroContext) {
-    context.push(
-      '/player/$playerId',
-      extra: PlayerDetailExtra(heroContext: heroContext, player: player),
-    );
+    PlayerDetailRoute(
+      playerId: playerId,
+      $extra: PlayerDetailExtra(heroContext: heroContext, player: player),
+    ).push(context);
   }
 
   void _navigateToTeam(String teamAbbrev) {
-    context.push('/explore/team/$teamAbbrev');
+    TeamRosterRoute(teamAbbrev: teamAbbrev).push(context);
   }
 
   @override

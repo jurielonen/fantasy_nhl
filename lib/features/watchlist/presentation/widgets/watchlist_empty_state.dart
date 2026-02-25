@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import '../../../../core/router/app_router.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
@@ -33,7 +33,7 @@ class WatchlistEmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             FilledButton.icon(
-              onPressed: () => context.go('/explore'),
+              onPressed: () => const ExploreRoute().go(context),
               icon: const Icon(Icons.explore),
               label: Text(context.l10n.watchlistEmptyAction),
             ),

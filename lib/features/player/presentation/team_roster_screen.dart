@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import '../../../core/router/app_router.dart';
 
 import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
@@ -40,13 +40,13 @@ class TeamRosterScreen extends ConsumerWidget {
                   trailingLabel: player.sweaterNumber != null
                       ? '#${player.sweaterNumber}'
                       : null,
-                  onTap: () => context.push(
-                    '/player/${player.id}',
-                    extra: PlayerDetailExtra(
+                  onTap: () => PlayerDetailRoute(
+                    playerId: player.id,
+                    $extra: PlayerDetailExtra(
                       heroContext: PlayerHeroContext.teamRoster,
                       player: player,
                     ),
-                  ),
+                  ).push(context),
                   onAddToWatchlist: () =>
                       addToWatchlist(ref, context, player),
                   onRemoveFromWatchlist: () =>
