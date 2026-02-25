@@ -4,10 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/player_card.dart';
 import '../../../../shared/widgets/section_header.dart';
+import '../../domain/entities/player.dart';
 import '../providers/explore_providers.dart';
 
 class SpotlightCarousel extends ConsumerWidget {
-  final void Function(int playerId)? onPlayerTap;
+  final void Function(Player)? onPlayerTap;
 
   const SpotlightCarousel({super.key, this.onPlayerTap});
 
@@ -36,7 +37,7 @@ class SpotlightCarousel extends ConsumerWidget {
                   final player = players[index];
                   return PlayerCard(
                     player: player,
-                    onTap: () => onPlayerTap?.call(player.id),
+                    onTap: () => onPlayerTap?.call(player),
                   );
                 },
               );

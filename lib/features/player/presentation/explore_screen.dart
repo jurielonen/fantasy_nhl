@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/extensions.dart';
+import '../../../shared/widgets/player_hero_context.dart';
+import '../domain/entities/player.dart';
 import 'providers/explore_providers.dart';
 import 'widgets/browse_by_team.dart';
 import 'widgets/search_results_list.dart';
@@ -42,8 +44,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     _searchFocusNode.unfocus();
   }
 
-  void _navigateToPlayer(int playerId) {
-    context.push('/player/$playerId');
+  void _navigateToPlayer(Player? player, int playerId, PlayerHeroContext heroContext) {
+    context.push(
+      '/player/$playerId',
+      extra: PlayerDetailExtra(heroContext: heroContext, player: player),
+    );
   }
 
   void _navigateToTeam(String teamAbbrev) {
@@ -103,14 +108,20 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             ),
             if (_isSearching)
               SliverToBoxAdapter(
-                child: SearchResultsList(onPlayerTap: _navigateToPlayer),
+                child: SearchResultsList(
+                  onPlayerTap: (p) => _navigateToPlayer(p, p.id, PlayerHeroContext.searchResult),
+                ),
               )
             else ...[
               SliverToBoxAdapter(
-                child: SpotlightCarousel(onPlayerTap: _navigateToPlayer),
+                child: SpotlightCarousel(
+                  onPlayerTap: (p) => _navigateToPlayer(p, p.id, PlayerHeroContext.spotlight),
+                ),
               ),
               SliverToBoxAdapter(
-                child: StatLeadersSection(onPlayerTap: _navigateToPlayer),
+                child: StatLeadersSection(
+                  onPlayerTap: (p) => _navigateToPlayer(p, p.id, PlayerHeroContext.statLeader),
+                ),
               ),
               SliverToBoxAdapter(
                 child: BrowseByTeam(onTeamTap: _navigateToTeam),

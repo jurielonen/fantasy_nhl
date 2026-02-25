@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../features/player/domain/entities/player.dart';
+import 'player_hero_context.dart';
 
 class PlayerCard extends StatelessWidget {
   final Player player;
@@ -36,7 +37,7 @@ class PlayerCard extends StatelessWidget {
             // Headshot
             Positioned.fill(
               child: Hero(
-                tag: 'player_${player.id}',
+                tag: PlayerHeroContext.spotlight.tag(player.id),
                 child: player.headshot != null
                     ? CachedNetworkImage(
                         imageUrl: player.headshot!,

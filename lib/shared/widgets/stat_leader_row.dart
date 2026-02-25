@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../features/player/domain/entities/stat_leader.dart';
+import 'player_hero_context.dart';
 
 class StatLeaderRow extends StatelessWidget {
   final int rank;
@@ -37,21 +38,24 @@ class StatLeaderRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            CircleAvatar(
-              radius: 18,
-              backgroundColor: AppColors.surfaceVariant,
-              backgroundImage: leader.headshot != null
-                  ? CachedNetworkImageProvider(leader.headshot!)
-                  : null,
-              child: leader.headshot == null
-                  ? Text(
-                      leader.firstName.isNotEmpty ? leader.firstName[0] : '?',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textSecondary,
-                      ),
-                    )
-                  : null,
+            Hero(
+              tag: PlayerHeroContext.statLeader.tag(leader.playerId),
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: AppColors.surfaceVariant,
+                backgroundImage: leader.headshot != null
+                    ? CachedNetworkImageProvider(leader.headshot!)
+                    : null,
+                child: leader.headshot == null
+                    ? Text(
+                        leader.firstName.isNotEmpty ? leader.firstName[0] : '?',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppColors.textSecondary,
+                        ),
+                      )
+                    : null,
+              ),
             ),
             const SizedBox(width: 10),
             Expanded(

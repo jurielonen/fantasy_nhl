@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
+import '../../../shared/widgets/player_hero_context.dart';
+import '../../player/domain/entities/player.dart';
 import '../../../shared/widgets/shimmer_loader.dart';
 import '../../schedule/domain/entities/schedule_game.dart';
 import '../domain/entities/watchlist.dart';
@@ -123,7 +125,13 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
             players: players,
             watchlist: selectedWatchlist,
             hasLiveGames: hasLiveGames,
-            onPlayerTap: (id) => context.push('/player/$id'),
+            onPlayerTap: (player) => context.push(
+              '/player/${player.id}',
+              extra: PlayerDetailExtra(
+                heroContext: PlayerHeroContext.watchlist,
+                player: player,
+              ),
+            ),
             onRemovePlayer: (playerId) =>
                 _removePlayer(selectedWatchlist, playerId),
             onMovePlayer: (playerId) =>
@@ -225,7 +233,7 @@ class _PlayerList extends StatelessWidget {
   final List<WatchlistPlayerInfo> players;
   final Watchlist watchlist;
   final bool hasLiveGames;
-  final void Function(int playerId) onPlayerTap;
+  final void Function(Player player) onPlayerTap;
   final void Function(int playerId) onRemovePlayer;
   final void Function(int playerId) onMovePlayer;
   final void Function(int oldIndex, int newIndex) onReorder;
@@ -258,7 +266,7 @@ class _PlayerList extends StatelessWidget {
         return WatchlistPlayerTile(
           key: ValueKey(info.player.id),
           info: info,
-          onTap: () => onPlayerTap(info.player.id),
+          onTap: () => onPlayerTap(info.player),
           onRemove: () => onRemovePlayer(info.player.id),
           onMove: () => onMovePlayer(info.player.id),
         );

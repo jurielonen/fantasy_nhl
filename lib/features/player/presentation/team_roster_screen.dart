@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
+import '../../../shared/widgets/player_hero_context.dart';
 import '../../../shared/widgets/player_list_tile.dart';
 import '../../watchlist/presentation/providers/add_to_watchlist_action.dart';
 import 'providers/explore_providers.dart';
@@ -34,11 +35,18 @@ class TeamRosterScreen extends ConsumerWidget {
                 final player = players[index];
                 return PlayerListTile(
                   player: player,
+                  heroContext: PlayerHeroContext.teamRoster,
                   trailingStat: player.position,
                   trailingLabel: player.sweaterNumber != null
                       ? '#${player.sweaterNumber}'
                       : null,
-                  onTap: () => context.push('/player/${player.id}'),
+                  onTap: () => context.push(
+                    '/player/${player.id}',
+                    extra: PlayerDetailExtra(
+                      heroContext: PlayerHeroContext.teamRoster,
+                      player: player,
+                    ),
+                  ),
                   onAddToWatchlist: () =>
                       addToWatchlist(ref, context, player),
                   onRemoveFromWatchlist: () =>

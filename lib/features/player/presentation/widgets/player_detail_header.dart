@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/extensions.dart';
+import '../../../../shared/widgets/player_hero_context.dart';
 import '../../domain/entities/player.dart';
 import '../../domain/entities/player_detail.dart';
 
 class PlayerDetailHeader extends StatelessWidget {
   final Player player;
-  final PlayerBio bio;
+  final PlayerBio? bio;
+  final PlayerHeroContext heroContext;
 
   const PlayerDetailHeader({
     super.key,
     required this.player,
-    required this.bio,
+    this.bio,
+    required this.heroContext,
   });
 
   @override
@@ -27,7 +30,7 @@ class PlayerDetailHeader extends StatelessWidget {
           children: [
             const SizedBox(width: 16),
             Hero(
-              tag: 'player_${player.id}',
+              tag: heroContext.tag(player.id),
               child: _Headshot(url: player.headshot, fallback: player.firstName),
             ),
             const SizedBox(width: 16),
@@ -58,13 +61,15 @@ class PlayerDetailHeader extends StatelessWidget {
             const SizedBox(width: 16),
           ],
         ),
-        const SizedBox(height: 16),
-        // Bio row
-        _BioRow(bio: bio),
-        // Draft info
-        if (bio.draftInfo != null) ...[
-          const SizedBox(height: 8),
-          _DraftInfoRow(draft: bio.draftInfo!),
+        if (bio != null) ...[
+          const SizedBox(height: 16),
+          // Bio row
+          _BioRow(bio: bio!),
+          // Draft info
+          if (bio!.draftInfo != null) ...[
+            const SizedBox(height: 8),
+            _DraftInfoRow(draft: bio!.draftInfo!),
+          ],
         ],
         const SizedBox(height: 12),
       ],
