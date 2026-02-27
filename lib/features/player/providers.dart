@@ -9,8 +9,8 @@ part 'providers.g.dart';
 
 @Riverpod(keepAlive: true)
 PlayerRepository playerRepository(Ref ref) => PlayerRepositoryImpl(
-      webApiClient: ref.watch(nhlWebApiClientProvider),
-      statsApiClient: ref.watch(nhlStatsApiClientProvider),
-      playerCacheDao: ref.watch(playerCacheDaoProvider),
-      apiCacheDao: ref.watch(apiCacheDaoProvider),
-    );
+  webApiClient: ref.watch(nhlWebApiClientProvider),
+  statsApiClient: ref.watch(nhlStatsApiClientProvider),
+  playerCacheDao: ref.watch(playerCacheDaoProvider),
+  apiCacheDao: ref.watch(apiCacheDaoProvider),
+);

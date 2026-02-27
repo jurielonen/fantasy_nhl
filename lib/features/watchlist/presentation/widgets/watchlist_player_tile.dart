@@ -61,7 +61,10 @@ class WatchlistPlayerTile extends StatelessWidget {
             children: [
               Hero(
                 tag: PlayerHeroContext.watchlist.tag(info.player.id),
-                child: _Avatar(url: info.player.headshot, name: info.player.firstName),
+                child: _Avatar(
+                  url: info.player.headshot,
+                  name: info.player.firstName,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -174,7 +177,8 @@ class _GameStatusWidget extends StatelessWidget {
   }
 
   Widget _liveGameWidget(BuildContext context, ScheduleGame game) {
-    final score = '${game.awayTeamAbbrev} ${game.awayScore ?? 0} - '
+    final score =
+        '${game.awayTeamAbbrev} ${game.awayScore ?? 0} - '
         '${game.homeScore ?? 0} ${game.homeTeamAbbrev}';
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -209,7 +213,8 @@ class _GameStatusWidget extends StatelessWidget {
   }
 
   Widget _finalGameWidget(BuildContext context, ScheduleGame game) {
-    final score = '${game.awayTeamAbbrev} ${game.awayScore ?? 0} - '
+    final score =
+        '${game.awayTeamAbbrev} ${game.awayScore ?? 0} - '
         '${game.homeScore ?? 0} ${game.homeTeamAbbrev}';
     final log = info.lastGameLog;
     return Column(
@@ -273,7 +278,10 @@ class _GameStatusWidget extends StatelessWidget {
         if (log != null)
           Text(
             '${log.date}: ${_formatStatLine(log)}',
-            style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+            style: const TextStyle(
+              fontSize: 11,
+              color: AppColors.textSecondary,
+            ),
           ),
       ],
     );

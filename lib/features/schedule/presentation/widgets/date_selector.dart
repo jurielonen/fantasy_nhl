@@ -81,7 +81,8 @@ class _DateSelectorState extends ConsumerState<DateSelector> {
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   itemCount: weekDays.length,
-                  separatorBuilder: (context, index) => const SizedBox(width: 6),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 6),
                   itemBuilder: (context, index) {
                     final day = weekDays[index];
                     final isSelected = day.date == currentDate;
@@ -89,7 +90,9 @@ class _DateSelectorState extends ConsumerState<DateSelector> {
                       day: day,
                       isSelected: isSelected,
                       onTap: () {
-                        ref.read(selectedDateProvider.notifier).select(day.date);
+                        ref
+                            .read(selectedDateProvider.notifier)
+                            .select(day.date);
                         _hasScrolledToSelected = false;
                       },
                     );
@@ -211,8 +214,10 @@ class _DayChip extends StatelessWidget {
               const SizedBox(height: 4),
               if (day.numberOfGames > 0)
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 1,
+                  ),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppColors.background.withValues(alpha: 0.2)
@@ -244,8 +249,18 @@ class _DayChip extends StatelessWidget {
     try {
       final dt = DateTime.parse(isoDate);
       const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
       return '${months[dt.month - 1]} ${dt.day}';
     } catch (_) {

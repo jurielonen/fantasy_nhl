@@ -12,8 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final db = AppDatabase();
-  final initialTheme =
-      await db.settingsDao.getValue('settings:theme_mode');
+  final initialTheme = await db.settingsDao.getValue('settings:theme_mode');
 
   runApp(
     ProviderScope(

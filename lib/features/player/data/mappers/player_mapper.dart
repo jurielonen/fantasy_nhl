@@ -13,60 +13,57 @@ import '../dtos/stats_player_search_dto.dart';
 
 extension PlayerLandingDtoMapper on PlayerLandingDto {
   Player toPlayer() => Player(
-        id: playerId ?? 0,
-        firstName: firstName ?? '',
-        lastName: lastName ?? '',
-        teamAbbrev: currentTeamAbbrev,
-        teamName: fullTeamName,
-        position: position ?? 'C',
-        sweaterNumber: sweaterNumber,
-        headshot: headshot,
-        isActive: isActive ?? true,
-      );
+    id: playerId ?? 0,
+    firstName: firstName ?? '',
+    lastName: lastName ?? '',
+    teamAbbrev: currentTeamAbbrev,
+    teamName: fullTeamName,
+    position: position ?? 'C',
+    sweaterNumber: sweaterNumber,
+    headshot: headshot,
+    isActive: isActive ?? true,
+  );
 
   PlayerDetail toPlayerDetail() => PlayerDetail(
-        player: toPlayer(),
-        bio: PlayerBio(
-          heightInInches: heightInInches,
-          weightInPounds: weightInPounds,
-          birthDate: birthDate,
-          birthCity: birthCity,
-          birthCountry: birthCountry,
-          shootsCatches: shootsCatches,
-          draftInfo: draftDetails?._toDraftInfo(),
-        ),
-        currentSeasonStats: _mapStats(
-          featuredStats?.regularSeason?.subSeason,
-          position,
-        ),
-        careerStats: _mapStats(
-          careerTotals?.regularSeason,
-          position,
-        ),
-        seasonBySeasonStats: (seasonTotals ?? [])
-            .map((s) => s._toSeasonRecord(position))
-            .toList(),
-      );
+    player: toPlayer(),
+    bio: PlayerBio(
+      heightInInches: heightInInches,
+      weightInPounds: weightInPounds,
+      birthDate: birthDate,
+      birthCity: birthCity,
+      birthCountry: birthCountry,
+      shootsCatches: shootsCatches,
+      draftInfo: draftDetails?._toDraftInfo(),
+    ),
+    currentSeasonStats: _mapStats(
+      featuredStats?.regularSeason?.subSeason,
+      position,
+    ),
+    careerStats: _mapStats(careerTotals?.regularSeason, position),
+    seasonBySeasonStats: (seasonTotals ?? [])
+        .map((s) => s._toSeasonRecord(position))
+        .toList(),
+  );
 }
 
 extension on DraftDetailsDto {
   DraftInfo _toDraftInfo() => DraftInfo(
-        year: year ?? 0,
-        teamAbbrev: teamAbbrev,
-        round: round ?? 0,
-        pickInRound: pickInRound ?? 0,
-        overallPick: overallPick ?? 0,
-      );
+    year: year ?? 0,
+    teamAbbrev: teamAbbrev,
+    round: round ?? 0,
+    pickInRound: pickInRound ?? 0,
+    overallPick: overallPick ?? 0,
+  );
 }
 
 extension on SeasonTotalDto {
   PlayerSeasonRecord _toSeasonRecord(String? position) => PlayerSeasonRecord(
-        season: season ?? 0,
-        gameTypeId: gameTypeId ?? 2,
-        leagueAbbrev: leagueAbbrev,
-        teamName: teamName,
-        stats: _mapSeasonTotalStats(position),
-      );
+    season: season ?? 0,
+    gameTypeId: gameTypeId ?? 2,
+    leagueAbbrev: leagueAbbrev,
+    teamName: teamName,
+    stats: _mapSeasonTotalStats(position),
+  );
 
   PlayerSeasonStats _mapSeasonTotalStats(String? position) {
     if (position == 'G') {
@@ -134,13 +131,13 @@ PlayerSeasonStats? _mapStats(SubSeasonStatsDto? stats, String? position) {
 
 extension RosterPlayerDtoMapper on RosterPlayerDto {
   Player toPlayer() => Player(
-        id: id ?? 0,
-        firstName: firstName ?? '',
-        lastName: lastName ?? '',
-        position: positionCode ?? 'C',
-        sweaterNumber: sweaterNumber,
-        headshot: headshot,
-      );
+    id: id ?? 0,
+    firstName: firstName ?? '',
+    lastName: lastName ?? '',
+    position: positionCode ?? 'C',
+    sweaterNumber: sweaterNumber,
+    headshot: headshot,
+  );
 }
 
 // -- SpotlightPlayerDto → Player --
@@ -164,44 +161,44 @@ extension SpotlightPlayerDtoMapper on SpotlightPlayerDto {
 
 extension StatsPlayerDtoMapper on StatsPlayerDto {
   Player toPlayer() => Player(
-        id: playerId ?? 0,
-        firstName: firstName ?? '',
-        lastName: lastName ?? '',
-        teamAbbrev: currentTeamAbbrev,
-        teamName: currentTeamName,
-        position: positionCode ?? 'C',
-        sweaterNumber: sweaterNumber,
-        headshot: headshot,
-        isActive: isActive ?? true,
-      );
+    id: playerId ?? 0,
+    firstName: firstName ?? '',
+    lastName: lastName ?? '',
+    teamAbbrev: currentTeamAbbrev,
+    teamName: currentTeamName,
+    position: positionCode ?? 'C',
+    sweaterNumber: sweaterNumber,
+    headshot: headshot,
+    isActive: isActive ?? true,
+  );
 }
 
 // -- CachedPlayerRow ↔ Player (Drift) --
 
 extension CachedPlayerRowMapper on CachedPlayerRow {
   Player toPlayer() => Player(
-        id: id,
-        firstName: firstName,
-        lastName: lastName,
-        teamAbbrev: teamAbbrev,
-        teamName: teamName,
-        position: position,
-        sweaterNumber: sweaterNumber,
-        headshot: headshot,
-        isActive: isActive,
-      );
+    id: id,
+    firstName: firstName,
+    lastName: lastName,
+    teamAbbrev: teamAbbrev,
+    teamName: teamName,
+    position: position,
+    sweaterNumber: sweaterNumber,
+    headshot: headshot,
+    isActive: isActive,
+  );
 }
 
 extension PlayerToStorage on Player {
   CachedPlayersCompanion toCachedCompanion() => CachedPlayersCompanion.insert(
-        id: Value(id),
-        firstName: firstName,
-        lastName: lastName,
-        teamAbbrev: Value(teamAbbrev),
-        teamName: Value(teamName),
-        position: position,
-        sweaterNumber: Value(sweaterNumber),
-        headshot: Value(headshot),
-        isActive: Value(isActive),
-      );
+    id: Value(id),
+    firstName: firstName,
+    lastName: lastName,
+    teamAbbrev: Value(teamAbbrev),
+    teamName: Value(teamName),
+    position: position,
+    sweaterNumber: Value(sweaterNumber),
+    headshot: Value(headshot),
+    isActive: Value(isActive),
+  );
 }

@@ -31,7 +31,10 @@ class PlayerDetailHeader extends StatelessWidget {
             const SizedBox(width: 16),
             Hero(
               tag: heroContext.tag(player.id),
-              child: _Headshot(url: player.headshot, fallback: player.firstName),
+              child: _Headshot(
+                url: player.headshot,
+                fallback: player.firstName,
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -190,12 +193,17 @@ class _BioRow extends StatelessWidget {
       items.add(context.l10n.playerDetailWeight(bio.weightInPounds!));
     }
     if (bio.shootsCatches != null) {
-      items.add(bio.shootsCatches == 'L' ? context.l10n.playerDetailShootsLeft : context.l10n.playerDetailShootsRight);
+      items.add(
+        bio.shootsCatches == 'L'
+            ? context.l10n.playerDetailShootsLeft
+            : context.l10n.playerDetailShootsRight,
+      );
     }
     if (bio.birthCity != null) {
-      final location = [bio.birthCity, bio.birthCountry]
-          .where((s) => s != null)
-          .join(', ');
+      final location = [
+        bio.birthCity,
+        bio.birthCountry,
+      ].where((s) => s != null).join(', ');
       items.add(location);
     }
 
@@ -255,7 +263,11 @@ class _DraftInfoRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          const Icon(Icons.sports_hockey, size: 14, color: AppColors.textTertiary),
+          const Icon(
+            Icons.sports_hockey,
+            size: 14,
+            color: AppColors.textTertiary,
+          ),
           const SizedBox(width: 6),
           Text(
             context.l10n.playerDetailDraftLabel(parts.join(' · ')),

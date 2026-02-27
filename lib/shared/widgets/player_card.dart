@@ -43,9 +43,8 @@ class PlayerCard extends StatelessWidget {
                         imageUrl: player.headshot!,
                         fit: BoxFit.cover,
                         alignment: Alignment.topCenter,
-                        placeholder: (context, url) => const ColoredBox(
-                          color: AppColors.surfaceVariant,
-                        ),
+                        placeholder: (context, url) =>
+                            const ColoredBox(color: AppColors.surfaceVariant),
                         errorWidget: (context, url, error) => const ColoredBox(
                           color: AppColors.surfaceVariant,
                           child: Icon(

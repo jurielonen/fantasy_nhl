@@ -18,10 +18,7 @@ class WatchlistPlayerInfo {
   });
 }
 
-ScheduleGame? findGameForTeam(
-  String? teamAbbrev,
-  List<ScheduleGame> games,
-) {
+ScheduleGame? findGameForTeam(String? teamAbbrev, List<ScheduleGame> games) {
   if (teamAbbrev == null) return null;
   for (final game in games) {
     if (game.homeTeamAbbrev == teamAbbrev ||

@@ -10,14 +10,13 @@ class SettingsDao extends DatabaseAccessor<AppDatabase>
   SettingsDao(super.db);
 
   Future<String?> getValue(String key) async {
-    final row = await (select(settings)
-          ..where((t) => t.key.equals(key)))
-        .getSingleOrNull();
+    final row = await (select(
+      settings,
+    )..where((t) => t.key.equals(key))).getSingleOrNull();
     return row?.value;
   }
 
-  Future<void> setValue(String key, String value) =>
-      into(settings).insertOnConflictUpdate(
-        SettingsCompanion.insert(key: key, value: value),
-      );
+  Future<void> setValue(String key, String value) => into(
+    settings,
+  ).insertOnConflictUpdate(SettingsCompanion.insert(key: key, value: value));
 }

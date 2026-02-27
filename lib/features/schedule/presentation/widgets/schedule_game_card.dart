@@ -28,13 +28,15 @@ class _ScheduleGameCardState extends State<ScheduleGameCard> {
 
   @override
   Widget build(BuildContext context) {
-    final hasWatchlistPlayers = widget.homeWatchlistNames.isNotEmpty ||
+    final hasWatchlistPlayers =
+        widget.homeWatchlistNames.isNotEmpty ||
         widget.awayWatchlistNames.isNotEmpty;
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      color:
-          hasWatchlistPlayers ? AppColors.accent.withValues(alpha: 0.05) : null,
+      color: hasWatchlistPlayers
+          ? AppColors.accent.withValues(alpha: 0.05)
+          : null,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: game.goals.isNotEmpty
@@ -128,10 +130,14 @@ class _ScheduleGameCardState extends State<ScheduleGameCard> {
 
   Widget _buildWatchlistSection() {
     // Find goal/assist contributions from watchlisted players
-    final awayContributions =
-        _getWatchlistContributions(widget.awayWatchlistNames, game);
-    final homeContributions =
-        _getWatchlistContributions(widget.homeWatchlistNames, game);
+    final awayContributions = _getWatchlistContributions(
+      widget.awayWatchlistNames,
+      game,
+    );
+    final homeContributions = _getWatchlistContributions(
+      widget.homeWatchlistNames,
+      game,
+    );
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,8 +198,9 @@ class _TeamColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: alignEnd
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
       children: [
         if (team?.logoUrl != null)
           Padding(
@@ -317,10 +324,7 @@ class _GameStatusCenter extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 11,
-            color: AppColors.textTertiary,
-          ),
+          style: const TextStyle(fontSize: 11, color: AppColors.textTertiary),
         ),
         const SizedBox(height: 2),
         Text(
@@ -358,8 +362,7 @@ class _GameStatusCenter extends StatelessWidget {
     if (utcTime == null) return context.l10n.scheduleTbd;
     try {
       final dt = DateTime.parse(utcTime).toLocal();
-      final hour =
-          dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
+      final hour = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
       final minute = dt.minute.toString().padLeft(2, '0');
       final period = dt.hour >= 12 ? 'PM' : 'AM';
       return '$hour:$minute $period';
@@ -571,8 +574,7 @@ class _WatchlistNames extends StatelessWidget {
             if (contrib != null) ...[
               const SizedBox(width: 4),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                 decoration: BoxDecoration(
                   color: AppColors.success.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(4),

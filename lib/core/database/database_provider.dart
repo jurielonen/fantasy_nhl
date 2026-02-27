@@ -14,7 +14,8 @@ AppDatabase appDatabase(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
-WatchlistDao watchlistDao(Ref ref) => ref.watch(appDatabaseProvider).watchlistDao;
+WatchlistDao watchlistDao(Ref ref) =>
+    ref.watch(appDatabaseProvider).watchlistDao;
 
 @Riverpod(keepAlive: true)
 PlayerCacheDao playerCacheDao(Ref ref) =>

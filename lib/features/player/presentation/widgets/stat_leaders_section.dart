@@ -11,13 +11,13 @@ import '../../domain/entities/stat_leader.dart';
 import '../providers/explore_providers.dart';
 
 Player _playerFromLeader(StatLeader l) => Player(
-      id: l.playerId,
-      firstName: l.firstName,
-      lastName: l.lastName,
-      teamAbbrev: l.teamAbbrev,
-      position: l.position ?? '',
-      headshot: l.headshot,
-    );
+  id: l.playerId,
+  firstName: l.firstName,
+  lastName: l.lastName,
+  teamAbbrev: l.teamAbbrev,
+  position: l.position ?? '',
+  headshot: l.headshot,
+);
 
 class StatLeadersSection extends ConsumerWidget {
   final void Function(Player)? onPlayerTap;
@@ -53,7 +53,9 @@ class _SkaterLeaders extends ConsumerWidget {
       children: [
         SectionHeader(
           title: context.l10n.exploreSkaterLeaders,
-          actionText: showAll ? context.l10n.exploreShowLess : context.l10n.exploreSeeAll,
+          actionText: showAll
+              ? context.l10n.exploreShowLess
+              : context.l10n.exploreSeeAll,
           onAction: () =>
               ref.read(showAllSkaterLeadersProvider.notifier).toggle(),
         ),
@@ -73,7 +75,8 @@ class _SkaterLeaders extends ConsumerWidget {
                   StatLeaderRow(
                     rank: i + 1,
                     leader: visible[i],
-                    onTap: () => onPlayerTap?.call(_playerFromLeader(visible[i])),
+                    onTap: () =>
+                        onPlayerTap?.call(_playerFromLeader(visible[i])),
                   ),
               ],
             );
@@ -113,7 +116,9 @@ class _GoalieLeaders extends ConsumerWidget {
       children: [
         SectionHeader(
           title: context.l10n.exploreGoalieLeaders,
-          actionText: showAll ? context.l10n.exploreShowLess : context.l10n.exploreSeeAll,
+          actionText: showAll
+              ? context.l10n.exploreShowLess
+              : context.l10n.exploreSeeAll,
           onAction: () =>
               ref.read(showAllGoalieLeadersProvider.notifier).toggle(),
         ),
@@ -133,7 +138,8 @@ class _GoalieLeaders extends ConsumerWidget {
                   StatLeaderRow(
                     rank: i + 1,
                     leader: visible[i],
-                    onTap: () => onPlayerTap?.call(_playerFromLeader(visible[i])),
+                    onTap: () =>
+                        onPlayerTap?.call(_playerFromLeader(visible[i])),
                   ),
               ],
             );
@@ -199,8 +205,9 @@ class _CategoryTabs extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color:
-                      isSelected ? AppColors.accent : AppColors.textSecondary,
+                  color: isSelected
+                      ? AppColors.accent
+                      : AppColors.textSecondary,
                 ),
               ),
             ),

@@ -30,15 +30,16 @@ class PlayerRepositoryImpl implements PlayerRepository {
     required NhlStatsApiClient statsApiClient,
     required PlayerCacheDao playerCacheDao,
     required ApiCacheDao apiCacheDao,
-  })  : _webApiClient = webApiClient,
-        _statsApiClient = statsApiClient,
-        _playerCacheDao = playerCacheDao,
-        _apiCacheDao = apiCacheDao;
+  }) : _webApiClient = webApiClient,
+       _statsApiClient = statsApiClient,
+       _playerCacheDao = playerCacheDao,
+       _apiCacheDao = apiCacheDao;
 
   @override
   Future<List<Player>> searchPlayers(String query) async {
     final dto = await _statsApiClient.searchPlayers(
-      cayenneExp: 'lastName likeIgnoreCase "%$query%" or '
+      cayenneExp:
+          'lastName likeIgnoreCase "%$query%" or '
           'firstName likeIgnoreCase "%$query%"',
       limit: 50,
     );
@@ -74,9 +75,11 @@ class PlayerRepositoryImpl implements PlayerRepository {
     if (cached != null && !_apiCacheDao.isExpired(cached)) {
       final json = jsonDecode(cached.data) as Map<String, dynamic>;
       return (json['gameLog'] as List?)
-              ?.map((e) =>
-                  GameLogEntryDto.fromJson(e as Map<String, dynamic>)
-                      .toEntity())
+              ?.map(
+                (e) => GameLogEntryDto.fromJson(
+                  e as Map<String, dynamic>,
+                ).toEntity(),
+              )
               .toList() ??
           [];
     }
@@ -105,10 +108,10 @@ class PlayerRepositoryImpl implements PlayerRepository {
   }
 
   List<Player> _flattenRoster(RosterDto dto) => [
-        ...(dto.forwards ?? []).map((p) => p.toPlayer()),
-        ...(dto.defensemen ?? []).map((p) => p.toPlayer()),
-        ...(dto.goalies ?? []).map((p) => p.toPlayer()),
-      ];
+    ...(dto.forwards ?? []).map((p) => p.toPlayer()),
+    ...(dto.defensemen ?? []).map((p) => p.toPlayer()),
+    ...(dto.goalies ?? []).map((p) => p.toPlayer()),
+  ];
 
   @override
   Future<List<StatLeader>> getSkaterLeaders(
@@ -166,8 +169,11 @@ class PlayerRepositoryImpl implements PlayerRepository {
     if (cached != null && !_apiCacheDao.isExpired(cached)) {
       final list = jsonDecode(cached.data) as List;
       return list
-          .map((e) =>
-              SpotlightPlayerDto.fromJson(e as Map<String, dynamic>).toPlayer())
+          .map(
+            (e) => SpotlightPlayerDto.fromJson(
+              e as Map<String, dynamic>,
+            ).toPlayer(),
+          )
           .toList();
     }
 

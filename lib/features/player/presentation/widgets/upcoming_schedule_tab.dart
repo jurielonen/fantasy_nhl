@@ -56,18 +56,15 @@ class UpcomingScheduleTab extends StatelessWidget {
         }
 
         return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final game = upcoming[index];
-              final isB2B = _isBackToBack(upcoming, index);
-              return _ScheduleRow(
-                game: game,
-                teamAbbrev: teamAbbrev,
-                isBackToBack: isB2B,
-              );
-            },
-            childCount: upcoming.length,
-          ),
+          delegate: SliverChildBuilderDelegate((context, index) {
+            final game = upcoming[index];
+            final isB2B = _isBackToBack(upcoming, index);
+            return _ScheduleRow(
+              game: game,
+              teamAbbrev: teamAbbrev,
+              isBackToBack: isB2B,
+            );
+          }, childCount: upcoming.length),
         );
       },
     );
@@ -115,9 +112,7 @@ class _ScheduleRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: AppColors.border, width: 0.5),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.border, width: 0.5)),
       ),
       child: Row(
         children: [
@@ -146,16 +141,16 @@ class _ScheduleRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Expanded(
-            child: Text(opponent, style: AppTextStyles.titleMedium),
-          ),
+          Expanded(child: Text(opponent, style: AppTextStyles.titleMedium)),
           if (isBackToBack)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
                 color: AppColors.warning.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: AppColors.warning.withValues(alpha: 0.5)),
+                border: Border.all(
+                  color: AppColors.warning.withValues(alpha: 0.5),
+                ),
               ),
               child: Text(
                 context.l10n.scheduleBackToBack,
@@ -176,8 +171,19 @@ class _ScheduleRow extends StatelessWidget {
       final d = DateTime.parse(date);
       const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       const months = [
-        '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+        '',
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
       return '${weekdays[d.weekday - 1]}, ${months[d.month]} ${d.day}';
     } catch (_) {

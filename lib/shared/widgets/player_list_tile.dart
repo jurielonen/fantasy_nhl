@@ -123,7 +123,9 @@ class PlayerListTile extends ConsumerWidget {
                   size: 22,
                   color: AppColors.accent,
                 ),
-                onPressed: isInWatchlist ? onRemoveFromWatchlist : onAddToWatchlist,
+                onPressed: isInWatchlist
+                    ? onRemoveFromWatchlist
+                    : onAddToWatchlist,
                 tooltip: isInWatchlist
                     ? context.l10n.commonInWatchlist
                     : context.l10n.commonAddToWatchlist,
@@ -148,7 +150,10 @@ class _PlayerAvatar extends StatelessWidget {
       return CircleAvatar(
         radius: 22,
         backgroundColor: AppColors.surfaceVariant,
-        child: Text(fallback, style: const TextStyle(color: AppColors.textSecondary)),
+        child: Text(
+          fallback,
+          style: const TextStyle(color: AppColors.textSecondary),
+        ),
       );
     }
     return CircleAvatar(
@@ -216,7 +221,10 @@ class ShimmerPlayerListTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          const CircleAvatar(radius: 22, backgroundColor: AppColors.surfaceVariant),
+          const CircleAvatar(
+            radius: 22,
+            backgroundColor: AppColors.surfaceVariant,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

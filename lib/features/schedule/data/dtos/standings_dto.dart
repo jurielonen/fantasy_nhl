@@ -7,9 +7,8 @@ part 'standings_dto.g.dart';
 
 @freezed
 abstract class StandingsDto with _$StandingsDto {
-  const factory StandingsDto({
-    List<StandingsTeamDto>? standings,
-  }) = _StandingsDto;
+  const factory StandingsDto({List<StandingsTeamDto>? standings}) =
+      _StandingsDto;
 
   factory StandingsDto.fromJson(Map<String, dynamic> json) =>
       _$StandingsDtoFromJson(json);

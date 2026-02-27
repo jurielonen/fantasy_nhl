@@ -39,10 +39,7 @@ class _CreateWatchlistDialogState extends State<CreateWatchlistDialog> {
           onPressed: () => Navigator.pop(context),
           child: Text(context.l10n.commonCancel),
         ),
-        TextButton(
-          onPressed: _submit,
-          child: Text(context.l10n.commonCreate),
-        ),
+        TextButton(onPressed: _submit, child: Text(context.l10n.commonCreate)),
       ],
     );
   }

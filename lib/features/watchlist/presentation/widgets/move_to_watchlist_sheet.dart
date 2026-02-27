@@ -17,8 +17,9 @@ class MoveToWatchlistSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final targets =
-        watchlists.where((w) => w.id != currentWatchlistId).toList();
+    final targets = watchlists
+        .where((w) => w.id != currentWatchlistId)
+        .toList();
 
     return SafeArea(
       child: Column(

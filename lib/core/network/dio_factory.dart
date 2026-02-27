@@ -8,11 +8,9 @@ import 'retry_interceptor.dart';
 class DioFactory {
   DioFactory._();
 
-  static Dio createWebApiDio() =>
-      _createDio(ApiConstants.nhlWebApiBaseUrl);
+  static Dio createWebApiDio() => _createDio(ApiConstants.nhlWebApiBaseUrl);
 
-  static Dio createStatsApiDio() =>
-      _createDio(ApiConstants.nhlStatsApiBaseUrl);
+  static Dio createStatsApiDio() => _createDio(ApiConstants.nhlStatsApiBaseUrl);
 
   static Dio _createDio(String baseUrl) {
     final dio = Dio(

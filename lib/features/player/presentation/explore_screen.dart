@@ -44,7 +44,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     _searchFocusNode.unfocus();
   }
 
-  void _navigateToPlayer(Player? player, int playerId, PlayerHeroContext heroContext) {
+  void _navigateToPlayer(
+    Player? player,
+    int playerId,
+    PlayerHeroContext heroContext,
+  ) {
     PlayerDetailRoute(
       playerId: playerId,
       $extra: PlayerDetailExtra(heroContext: heroContext, player: player),
@@ -75,8 +79,10 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(56),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: TextField(
                     controller: _searchController,
                     focusNode: _searchFocusNode,
@@ -109,18 +115,24 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             if (_isSearching)
               SliverToBoxAdapter(
                 child: SearchResultsList(
-                  onPlayerTap: (p) => _navigateToPlayer(p, p.id, PlayerHeroContext.searchResult),
+                  onPlayerTap: (p) => _navigateToPlayer(
+                    p,
+                    p.id,
+                    PlayerHeroContext.searchResult,
+                  ),
                 ),
               )
             else ...[
               SliverToBoxAdapter(
                 child: SpotlightCarousel(
-                  onPlayerTap: (p) => _navigateToPlayer(p, p.id, PlayerHeroContext.spotlight),
+                  onPlayerTap: (p) =>
+                      _navigateToPlayer(p, p.id, PlayerHeroContext.spotlight),
                 ),
               ),
               SliverToBoxAdapter(
                 child: StatLeadersSection(
-                  onPlayerTap: (p) => _navigateToPlayer(p, p.id, PlayerHeroContext.statLeader),
+                  onPlayerTap: (p) =>
+                      _navigateToPlayer(p, p.id, PlayerHeroContext.statLeader),
                 ),
               ),
               SliverToBoxAdapter(

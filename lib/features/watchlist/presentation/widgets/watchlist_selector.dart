@@ -23,20 +23,23 @@ class WatchlistSelector extends ConsumerWidget {
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           children: [
-            ...watchlists.map((wl) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: GestureDetector(
-                    onLongPress: () => _showEditSheet(context, ref, wl),
-                    child: ChoiceChip(
-                      label: Text(wl.name),
-                      selected: wl.id == selectedId,
-                      onSelected: (_) {
-                        ref.read(selectedWatchlistIdProvider.notifier).select(
-                            wl.id);
-                      },
-                    ),
+            ...watchlists.map(
+              (wl) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: GestureDetector(
+                  onLongPress: () => _showEditSheet(context, ref, wl),
+                  child: ChoiceChip(
+                    label: Text(wl.name),
+                    selected: wl.id == selectedId,
+                    onSelected: (_) {
+                      ref
+                          .read(selectedWatchlistIdProvider.notifier)
+                          .select(wl.id);
+                    },
                   ),
-                )),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: ActionChip(
@@ -59,8 +62,9 @@ class WatchlistSelector extends ConsumerWidget {
       builder: (_) => const CreateWatchlistDialog(),
     );
     if (name != null && name.isNotEmpty) {
-      final wl =
-          await ref.read(watchlistRepositoryProvider).createWatchlist(name);
+      final wl = await ref
+          .read(watchlistRepositoryProvider)
+          .createWatchlist(name);
       ref.read(selectedWatchlistIdProvider.notifier).select(wl.id);
     }
   }
@@ -82,8 +86,10 @@ class WatchlistSelector extends ConsumerWidget {
             ),
             ListTile(
               leading: const Icon(Icons.delete, color: AppColors.error),
-              title:
-                  Text(context.l10n.commonDelete, style: const TextStyle(color: AppColors.error)),
+              title: Text(
+                context.l10n.commonDelete,
+                style: const TextStyle(color: AppColors.error),
+              ),
               onTap: () {
                 Navigator.pop(ctx);
                 _confirmDelete(context, ref, wl);
@@ -130,7 +136,9 @@ class WatchlistSelector extends ConsumerWidget {
     );
     controller.dispose();
     if (newName != null && newName.isNotEmpty && newName != wl.name) {
-      await ref.read(watchlistRepositoryProvider).renameWatchlist(wl.id, newName);
+      await ref
+          .read(watchlistRepositoryProvider)
+          .renameWatchlist(wl.id, newName);
     }
   }
 
@@ -153,7 +161,10 @@ class WatchlistSelector extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(context.l10n.commonDelete, style: const TextStyle(color: AppColors.error)),
+            child: Text(
+              context.l10n.commonDelete,
+              style: const TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),

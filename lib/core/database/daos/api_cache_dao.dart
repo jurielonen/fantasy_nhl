@@ -9,9 +9,9 @@ class ApiCacheDao extends DatabaseAccessor<AppDatabase>
     with _$ApiCacheDaoMixin {
   ApiCacheDao(super.db);
 
-  Future<ApiCacheRow?> get(String key) =>
-      (select(apiCache)..where((t) => t.cacheKey.equals(key)))
-          .getSingleOrNull();
+  Future<ApiCacheRow?> get(String key) => (select(
+    apiCache,
+  )..where((t) => t.cacheKey.equals(key))).getSingleOrNull();
 
   bool isExpired(ApiCacheRow row) {
     final fetched = DateTime.tryParse(row.fetchedAt);

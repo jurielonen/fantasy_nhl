@@ -34,10 +34,7 @@ class SectionHeader extends StatelessWidget {
               onPressed: onAction,
               child: Text(
                 actionText!,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppColors.accent,
-                ),
+                style: const TextStyle(fontSize: 13, color: AppColors.accent),
               ),
             ),
         ],

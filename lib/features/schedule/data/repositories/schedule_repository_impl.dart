@@ -17,8 +17,8 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   ScheduleRepositoryImpl({
     required NhlWebApiClient webApiClient,
     required ApiCacheDao apiCacheDao,
-  })  : _webApiClient = webApiClient,
-        _apiCacheDao = apiCacheDao;
+  }) : _webApiClient = webApiClient,
+       _apiCacheDao = apiCacheDao;
 
   @override
   Future<GameDay> getGameDay(String? date) async {

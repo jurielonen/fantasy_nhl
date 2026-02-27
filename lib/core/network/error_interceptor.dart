@@ -20,12 +20,16 @@ class ErrorInterceptor extends Interceptor {
     return switch (err.type) {
       DioExceptionType.connectionTimeout ||
       DioExceptionType.sendTimeout ||
-      DioExceptionType.receiveTimeout =>
-        ApiException.timeout(message: err.message),
-      DioExceptionType.connectionError =>
-        ApiException.network(message: err.message),
-      DioExceptionType.badResponse =>
-        _mapStatusCode(err.response?.statusCode, err.message),
+      DioExceptionType.receiveTimeout => ApiException.timeout(
+        message: err.message,
+      ),
+      DioExceptionType.connectionError => ApiException.network(
+        message: err.message,
+      ),
+      DioExceptionType.badResponse => _mapStatusCode(
+        err.response?.statusCode,
+        err.message,
+      ),
       _ => ApiException.unknown(message: err.message, error: err.error),
     };
   }
@@ -34,8 +38,10 @@ class ErrorInterceptor extends Interceptor {
     return switch (statusCode) {
       401 => ApiException.unauthorized(message: message),
       404 => ApiException.notFound(message: message),
-      final code? when code >= 500 =>
-        ApiException.server(statusCode: code, message: message),
+      final code? when code >= 500 => ApiException.server(
+        statusCode: code,
+        message: message,
+      ),
       _ => ApiException.unknown(message: message),
     };
   }

@@ -5,15 +5,15 @@ import '../dtos/goalie_leaders_dto.dart';
 
 extension LeaderEntryDtoMapper on LeaderEntryDto {
   StatLeader toEntity(String category) => StatLeader(
-        playerId: id ?? 0,
-        firstName: firstName ?? '',
-        lastName: lastName ?? '',
-        teamAbbrev: teamAbbrev,
-        headshot: headshot,
-        position: position,
-        statValue: value ?? 0,
-        statCategory: category,
-      );
+    playerId: id ?? 0,
+    firstName: firstName ?? '',
+    lastName: lastName ?? '',
+    teamAbbrev: teamAbbrev,
+    headshot: headshot,
+    position: position,
+    statValue: value ?? 0,
+    statCategory: category,
+  );
 }
 
 extension SkaterLeadersDtoMapper on SkaterLeadersDto {

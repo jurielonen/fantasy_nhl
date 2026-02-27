@@ -25,9 +25,7 @@ class SpotlightCarousel extends ConsumerWidget {
           child: spotlightAsync.when(
             data: (players) {
               if (players.isEmpty) {
-                return Center(
-                  child: Text(context.l10n.exploreSpotlightEmpty),
-                );
+                return Center(child: Text(context.l10n.exploreSpotlightEmpty));
               }
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
