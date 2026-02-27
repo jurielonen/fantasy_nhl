@@ -281,6 +281,27 @@ This project uses Flutter's built-in localization with ARB files. **Every user-f
 
 ---
 
+## Flutter Version Management (FVM)
+
+This project uses **FVM v3** to pin the Flutter SDK version. The pinned version is in `.fvmrc`.
+
+### Setup
+FVM is installed globally. No additional setup needed after cloning.
+
+### Running commands
+Always prefix Flutter/Dart commands with `fvm`:
+- `fvm flutter run`
+- `fvm flutter pub get`
+- `fvm flutter test`
+- `fvm dart run build_runner build -d`
+
+### IDE
+Point your IDE's Flutter SDK path to `.fvm/flutter_sdk/bin/flutter`.
+- **VS Code:** Add `"dart.flutterSdkPath": ".fvm/flutter_sdk"` to `.vscode/settings.json`
+- **Android Studio / IntelliJ:** Settings → Languages & Frameworks → Flutter → SDK path
+
+---
+
 ## Git Workflow
 
 **Always create a new branch before making any code changes.**
