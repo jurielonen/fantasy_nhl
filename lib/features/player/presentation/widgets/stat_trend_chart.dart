@@ -35,7 +35,7 @@ class StatTrendChart extends StatelessWidget {
       );
     }
 
-    final locale = Localizations.localeOf(context).toString();
+    final locale = context.localeName;
     final metrics = isGoalie ? _goalieMetrics : _skaterMetrics(context);
     // Take last 25 games, reversed to show oldest first
     final entries = gameLog.take(25).toList().reversed.toList();
@@ -85,7 +85,9 @@ class StatTrendChart extends StatelessWidget {
           const SizedBox(height: 16),
           SizedBox(
             height: 180,
-            child: LineChart(_buildChartData(values, rollingAvg, entries, locale)),
+            child: LineChart(
+              _buildChartData(values, rollingAvg, entries, locale),
+            ),
           ),
         ],
       ),
@@ -129,13 +131,7 @@ class StatTrendChart extends StatelessWidget {
               if (index < 0 || index >= entries.length) {
                 return const SizedBox.shrink();
               }
-              final date = entries[index].date;
-              String short;
-              try {
-                short = DateFormat.MMMd(locale).format(DateTime.parse(date));
-              } catch (_) {
-                short = date;
-              }
+              final short = DateFormat.MMMd(locale).format(entries[index].date);
               return SideTitleWidget(
                 meta: meta,
                 child: Text(
@@ -177,14 +173,16 @@ class StatTrendChart extends StatelessWidget {
           getTooltipItems: (spots) {
             return spots.map((spot) {
               final index = spot.x.toInt();
-              final date = index < entries.length ? entries[index].date : '';
+              final dateStr = index < entries.length
+                  ? DateFormat.MMMd(locale).format(entries[index].date)
+                  : '';
               final label = _isPercentageMetric(selectedMetric)
                   ? '.${(spot.y * 1000).round()}'
                   : spot.y.toStringAsFixed(
                       spot.y == spot.y.roundToDouble() ? 0 : 2,
                     );
               return LineTooltipItem(
-                '$date\n$label',
+                '$dateStr\n$label',
                 const TextStyle(
                   fontSize: 11,
                   color: AppColors.textPrimary,

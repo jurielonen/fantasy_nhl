@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/network/converters/date_time_converter.dart';
 import '../../../../core/network/converters/localized_string_converter.dart';
 
 part 'schedule_team_dto.freezed.dart';
@@ -30,8 +31,8 @@ abstract class ScheduleGameDto with _$ScheduleGameDto {
     int? id,
     int? season,
     int? gameType,
-    String? gameDate,
-    String? startTimeUTC,
+    @NullableDateTimeConverter() DateTime? gameDate,
+    @NullableDateTimeConverter() DateTime? startTimeUTC,
     String? gameState,
     ScheduleTeamDto? homeTeam,
     ScheduleTeamDto? awayTeam,

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 import '../../l10n/app_localizations.dart';
 
 extension StringX on String {
@@ -8,4 +9,6 @@ extension StringX on String {
 
 extension BuildContextL10n on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
+
+  String get localeName => l10n.localeName;
 }

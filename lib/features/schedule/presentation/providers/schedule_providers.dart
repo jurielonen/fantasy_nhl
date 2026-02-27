@@ -15,9 +15,9 @@ part 'schedule_providers.g.dart';
 @riverpod
 class SelectedDate extends _$SelectedDate {
   @override
-  String? build() => null;
+  DateTime? build() => null;
 
-  void select(String? date) => state = date;
+  void select(DateTime? date) => state = date;
 }
 
 // ── Game day data for selected date ──────────────────────────────────────────

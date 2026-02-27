@@ -1,9 +1,9 @@
 import 'schedule_game.dart';
 
 class GameDay {
-  final String? prevDate;
-  final String currentDate;
-  final String? nextDate;
+  final DateTime? prevDate;
+  final DateTime currentDate;
+  final DateTime? nextDate;
   final List<GameWeekDay> weekDays;
   final List<ScheduleGame> games;
 
@@ -17,7 +17,7 @@ class GameDay {
 }
 
 class GameWeekDay {
-  final String date;
+  final DateTime date;
   final String dayAbbrev;
   final int numberOfGames;
 

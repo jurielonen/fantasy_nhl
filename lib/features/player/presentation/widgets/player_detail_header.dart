@@ -184,7 +184,7 @@ class _BioRow extends StatelessWidget {
 
     if (bio.birthDate != null) {
       final age = _calculateAge(bio.birthDate!);
-      if (age != null) items.add(context.l10n.playerDetailAge(age));
+      items.add(context.l10n.playerDetailAge(age));
     }
     if (bio.heightInInches != null) {
       items.add(_formatHeight(bio.heightInInches!));
@@ -221,19 +221,15 @@ class _BioRow extends StatelessWidget {
     );
   }
 
-  int? _calculateAge(String birthDate) {
-    try {
-      final date = DateTime.parse(birthDate);
-      final now = DateTime.now();
-      var age = now.year - date.year;
-      if (now.month < date.month ||
-          (now.month == date.month && now.day < date.day)) {
-        age--;
-      }
-      return age;
-    } catch (_) {
-      return null;
+  int _calculateAge(DateTime birthDate) {
+    final now = DateTime.now();
+    var age = now.year - birthDate.year;
+    if (now.month < birthDate.month ||
+        (now.month == birthDate.month && now.day < birthDate.day)) {
+      age--;
     }
+
+    return age;
   }
 
   String _formatHeight(int inches) {

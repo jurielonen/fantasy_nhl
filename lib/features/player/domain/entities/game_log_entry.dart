@@ -1,6 +1,6 @@
 class GameLogEntry {
   final int gameId;
-  final String date;
+  final DateTime date;
   final String opponent;
   final String opponentAbbrev;
   final String homeAway;

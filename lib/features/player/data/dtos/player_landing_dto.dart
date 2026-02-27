@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/network/converters/date_time_converter.dart';
 import '../../../../core/network/converters/localized_string_converter.dart';
 import 'player_stats_dto.dart';
 
@@ -23,7 +24,7 @@ abstract class PlayerLandingDto with _$PlayerLandingDto {
     String? heroImage,
     int? heightInInches,
     int? weightInPounds,
-    String? birthDate,
+    @NullableDateTimeConverter() DateTime? birthDate,
     @LocalizedStringConverter() String? birthCity,
     String? birthCountry,
     String? shootsCatches,

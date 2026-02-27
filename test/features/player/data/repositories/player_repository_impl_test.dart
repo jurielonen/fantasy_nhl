@@ -60,7 +60,7 @@ void main() {
     sweaterNumber: 34,
     heightInInches: 75,
     weightInPounds: 220,
-    birthDate: '1997-09-17',
+    birthDate: DateTime(1997, 9, 17),
     birthCity: 'San Ramon',
     birthCountry: 'USA',
     shootsCatches: 'L',

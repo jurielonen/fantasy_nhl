@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/network/converters/date_time_converter.dart';
 import '../../../../core/network/converters/localized_string_converter.dart';
 
 part 'game_day_dto.freezed.dart';
@@ -8,9 +9,9 @@ part 'game_day_dto.g.dart';
 @freezed
 abstract class GameDayResponseDto with _$GameDayResponseDto {
   const factory GameDayResponseDto({
-    String? prevDate,
-    String? currentDate,
-    String? nextDate,
+    @NullableDateTimeConverter() DateTime? prevDate,
+    @NullableDateTimeConverter() DateTime? currentDate,
+    @NullableDateTimeConverter() DateTime? nextDate,
     List<GameWeekDayDto>? gameWeek,
     List<GameDto>? games,
   }) = _GameDayResponseDto;
@@ -22,7 +23,7 @@ abstract class GameDayResponseDto with _$GameDayResponseDto {
 @freezed
 abstract class GameWeekDayDto with _$GameWeekDayDto {
   const factory GameWeekDayDto({
-    String? date,
+    @NullableDateTimeConverter() DateTime? date,
     String? dayAbbrev,
     int? numberOfGames,
   }) = _GameWeekDayDto;
@@ -37,9 +38,9 @@ abstract class GameDto with _$GameDto {
     int? id,
     int? season,
     int? gameType,
-    String? gameDate,
+    @NullableDateTimeConverter() DateTime? gameDate,
     @LocalizedStringConverter() String? venue,
-    String? startTimeUTC,
+    @NullableDateTimeConverter() DateTime? startTimeUTC,
     String? easternUTCOffset,
     String? venueUTCOffset,
     String? gameState,

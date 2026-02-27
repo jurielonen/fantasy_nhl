@@ -4,7 +4,7 @@ import '../dtos/game_log_dto.dart';
 extension GameLogEntryDtoMapper on GameLogEntryDto {
   GameLogEntry toEntity() => GameLogEntry(
     gameId: gameId ?? 0,
-    date: gameDate ?? '',
+    date: gameDate ?? DateTime(0),
     opponent: commonName ?? '',
     opponentAbbrev: opponentAbbrev ?? '',
     homeAway: homeRoadFlg ?? 'H',

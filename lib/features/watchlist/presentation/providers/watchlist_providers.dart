@@ -196,11 +196,11 @@ void _sortPlayers(List<WatchlistPlayerInfo> players, WatchlistSortType sort) {
       );
     case WatchlistSortType.gameTime:
       players.sort((a, b) {
-        final aTime = a.todayGame?.startTimeUtc ?? '';
-        final bTime = b.todayGame?.startTimeUtc ?? '';
-        if (aTime.isEmpty && bTime.isEmpty) return 0;
-        if (aTime.isEmpty) return 1;
-        if (bTime.isEmpty) return -1;
+        final aTime = a.todayGame?.startTimeUtc;
+        final bTime = b.todayGame?.startTimeUtc;
+        if (aTime == null && bTime == null) return 0;
+        if (aTime == null) return 1;
+        if (bTime == null) return -1;
         return aTime.compareTo(bTime);
       });
   }

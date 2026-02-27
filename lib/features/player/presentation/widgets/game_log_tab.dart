@@ -141,7 +141,7 @@ class _GameLogRow extends StatelessWidget {
           SizedBox(
             width: 80,
             child: Text(
-              _formatDate(entry.date, Localizations.localeOf(context).toString()),
+              _formatDate(entry.date, context.localeName),
               style: AppTextStyles.labelSmall,
             ),
           ),
@@ -290,13 +290,8 @@ class _GameLogRow extends StatelessWidget {
     return null;
   }
 
-  String _formatDate(String date, String locale) {
-    try {
-      return DateFormat.MMMd(locale).format(DateTime.parse(date));
-    } catch (_) {
-      return date;
-    }
-  }
+  String _formatDate(DateTime date, String locale) =>
+      DateFormat.MMMd(locale).format(date);
 }
 
 const _headerStyle = TextStyle(

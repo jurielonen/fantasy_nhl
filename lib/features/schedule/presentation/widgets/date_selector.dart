@@ -116,7 +116,7 @@ class _DateSelectorState extends ConsumerState<DateSelector> {
     );
   }
 
-  void _scrollToSelected(List<GameWeekDay> weekDays, String currentDate) {
+  void _scrollToSelected(List<GameWeekDay> weekDays, DateTime currentDate) {
     final index = weekDays.indexWhere((d) => d.date == currentDate);
     if (index < 0 || !_scrollController.hasClients) return;
 
@@ -174,7 +174,7 @@ class _DayChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateStr = _formatShortDate(day.date, Localizations.localeOf(context).toString());
+    final dateStr = _formatShortDate(day.date, context.localeName);
 
     return GestureDetector(
       onTap: onTap,
@@ -245,11 +245,6 @@ class _DayChip extends StatelessWidget {
     );
   }
 
-  String _formatShortDate(String isoDate, String locale) {
-    try {
-      return DateFormat.MMMd(locale).format(DateTime.parse(isoDate));
-    } catch (_) {
-      return isoDate;
-    }
-  }
+  String _formatShortDate(DateTime date, String locale) =>
+      DateFormat.MMMd(locale).format(date);
 }

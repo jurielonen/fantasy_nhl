@@ -359,14 +359,10 @@ class _GameStatusCenter extends StatelessWidget {
     );
   }
 
-  String _formatTime(BuildContext context, String? utcTime) {
+  String _formatTime(BuildContext context, DateTime? utcTime) {
     if (utcTime == null) return context.l10n.scheduleTbd;
-    try {
-      final locale = Localizations.localeOf(context).toString();
-      return DateFormat.jm(locale).format(DateTime.parse(utcTime).toLocal());
-    } catch (_) {
-      return context.l10n.scheduleTbd;
-    }
+    final locale = context.localeName;
+    return DateFormat.jm(locale).format(utcTime.toLocal());
   }
 }
 

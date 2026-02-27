@@ -81,15 +81,8 @@ class UpcomingScheduleTab extends StatelessWidget {
     return false;
   }
 
-  int _daysDiff(String date1, String date2) {
-    try {
-      final d1 = DateTime.parse(date1);
-      final d2 = DateTime.parse(date2);
-      return (d2.difference(d1).inDays).abs();
-    } catch (_) {
-      return 999;
-    }
-  }
+  int _daysDiff(DateTime date1, DateTime date2) =>
+      (date2.difference(date1).inDays).abs();
 }
 
 class _ScheduleRow extends StatelessWidget {
@@ -105,7 +98,7 @@ class _ScheduleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
+    final locale = context.localeName;
     final isHome = game.homeTeamAbbrev == teamAbbrev;
     final opponent = isHome ? game.awayTeamAbbrev : game.homeTeamAbbrev;
     final prefix = isHome ? 'vs' : '@';
@@ -123,7 +116,10 @@ class _ScheduleRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_formatDate(game.date, locale), style: AppTextStyles.labelLarge),
+                Text(
+                  _formatDate(game.date, locale),
+                  style: AppTextStyles.labelLarge,
+                ),
                 if (timeStr != null)
                   Text(timeStr, style: AppTextStyles.labelSmall),
               ],
@@ -168,20 +164,11 @@ class _ScheduleRow extends StatelessWidget {
     );
   }
 
-  String _formatDate(String date, String locale) {
-    try {
-      return DateFormat('EEE, MMM d', locale).format(DateTime.parse(date));
-    } catch (_) {
-      return date;
-    }
-  }
+  String _formatDate(DateTime date, String locale) =>
+      DateFormat('EEE, MMM d', locale).format(date);
 
-  String? _formatTime(String? utc, String locale) {
+  String? _formatTime(DateTime? utc, String locale) {
     if (utc == null) return null;
-    try {
-      return DateFormat.jm(locale).format(DateTime.parse(utc).toLocal());
-    } catch (_) {
-      return null;
-    }
+    return DateFormat.jm(locale).format(utc.toLocal());
   }
 }
