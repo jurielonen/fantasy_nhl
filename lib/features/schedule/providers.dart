@@ -9,6 +9,6 @@ part 'providers.g.dart';
 
 @Riverpod(keepAlive: true)
 ScheduleRepository scheduleRepository(Ref ref) => ScheduleRepositoryImpl(
-      webApiClient: ref.watch(nhlWebApiClientProvider),
-      apiCacheDao: ref.watch(apiCacheDaoProvider),
-    );
+  webApiClient: ref.watch(nhlWebApiClientProvider),
+  apiCacheDao: ref.watch(apiCacheDaoProvider),
+);

@@ -26,7 +26,10 @@ class _CareerStatsTabState extends State<CareerStatsTab> {
     if (widget.seasons.isEmpty) {
       return SliverFillRemaining(
         child: Center(
-          child: Text(context.l10n.careerStatsEmpty, style: AppTextStyles.bodyMedium),
+          child: Text(
+            context.l10n.careerStatsEmpty,
+            style: AppTextStyles.bodyMedium,
+          ),
         ),
       );
     }
@@ -43,7 +46,10 @@ class _CareerStatsTabState extends State<CareerStatsTab> {
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: Row(
               children: [
-                Text(context.l10n.careerStatsTitle, style: AppTextStyles.titleMedium),
+                Text(
+                  context.l10n.careerStatsTitle,
+                  style: AppTextStyles.titleMedium,
+                ),
                 const Spacer(),
                 if (widget.seasons.any((s) => s.leagueAbbrev != 'NHL'))
                   FilterChip(
@@ -54,7 +60,9 @@ class _CareerStatsTabState extends State<CareerStatsTab> {
                     backgroundColor: AppColors.surfaceVariant,
                     labelStyle: TextStyle(
                       fontSize: 12,
-                      color: _nhlOnly ? AppColors.accent : AppColors.textSecondary,
+                      color: _nhlOnly
+                          ? AppColors.accent
+                          : AppColors.textSecondary,
                     ),
                     side: BorderSide(
                       color: _nhlOnly ? AppColors.accent : AppColors.border,
@@ -112,23 +120,27 @@ class _SkaterTable extends StatelessWidget {
             DataCell(Text('${s.gamesPlayed}')),
             DataCell(Text('${s.goals}')),
             DataCell(Text('${s.assists}')),
-            DataCell(Text(
-              '${s.points}',
-              style: _dataStyle.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.accent,
+            DataCell(
+              Text(
+                '${s.points}',
+                style: _dataStyle.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.accent,
+                ),
               ),
-            )),
-            DataCell(Text(
-              '${s.plusMinus > 0 ? "+" : ""}${s.plusMinus}',
-              style: _dataStyle.copyWith(
-                color: s.plusMinus > 0
-                    ? AppColors.success
-                    : s.plusMinus < 0
-                        ? AppColors.error
-                        : AppColors.textSecondary,
+            ),
+            DataCell(
+              Text(
+                '${s.plusMinus > 0 ? "+" : ""}${s.plusMinus}',
+                style: _dataStyle.copyWith(
+                  color: s.plusMinus > 0
+                      ? AppColors.success
+                      : s.plusMinus < 0
+                      ? AppColors.error
+                      : AppColors.textSecondary,
+                ),
               ),
-            )),
+            ),
             DataCell(Text('${s.pim}')),
           ],
         );
@@ -173,13 +185,15 @@ class _GoalieTable extends StatelessWidget {
             DataCell(Text('${s.losses}')),
             DataCell(Text('${s.otLosses}')),
             DataCell(Text(s.gaa.toStringAsFixed(2))),
-            DataCell(Text(
-              '.${(s.savePctg * 1000).round()}',
-              style: _dataStyle.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.accent,
+            DataCell(
+              Text(
+                '.${(s.savePctg * 1000).round()}',
+                style: _dataStyle.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.accent,
+                ),
               ),
-            )),
+            ),
             DataCell(Text('${s.shutouts}')),
           ],
         );
@@ -203,7 +217,4 @@ const _headerStyle = TextStyle(
   color: AppColors.textTertiary,
 );
 
-const _dataStyle = TextStyle(
-  fontSize: 12,
-  color: AppColors.textPrimary,
-);
+const _dataStyle = TextStyle(fontSize: 12, color: AppColors.textPrimary);

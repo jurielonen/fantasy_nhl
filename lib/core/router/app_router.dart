@@ -54,8 +54,7 @@ class AppShellRouteData extends StatefulShellRouteData {
     BuildContext context,
     GoRouterState state,
     StatefulNavigationShell navigationShell,
-  ) =>
-      AppShell(navigationShell: navigationShell);
+  ) => AppShell(navigationShell: navigationShell);
 }
 
 class WatchlistBranchData extends StatefulShellBranchData {
@@ -135,12 +134,12 @@ class PlayerDetailRoute extends GoRouteData with $PlayerDetailRoute {
   static final $parentNavigatorKey = _rootNavigatorKey;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      PlayerDetailScreen(
-        playerId: playerId,
-        playerDetailExtra: $extra ??
-            const PlayerDetailExtra(heroContext: PlayerHeroContext.watchlist),
-      );
+  Widget build(BuildContext context, GoRouterState state) => PlayerDetailScreen(
+    playerId: playerId,
+    playerDetailExtra:
+        $extra ??
+        const PlayerDetailExtra(heroContext: PlayerHeroContext.watchlist),
+  );
 }
 
 // ── AppShell widget ──────────────────────────────────────────────────────────

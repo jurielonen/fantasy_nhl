@@ -37,10 +37,7 @@ class AppTheme {
               color: AppColors.accent,
             );
           }
-          return const TextStyle(
-            fontSize: 12,
-            color: AppColors.textTertiary,
-          );
+          return const TextStyle(fontSize: 12, color: AppColors.textTertiary);
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
@@ -75,9 +72,7 @@ class AppTheme {
         selectedColor: AppColors.accent.withValues(alpha: 0.2),
         labelStyle: const TextStyle(color: AppColors.textPrimary),
         side: const BorderSide(color: AppColors.border),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }
@@ -116,10 +111,7 @@ class AppTheme {
               color: AppColors.accentDim,
             );
           }
-          return const TextStyle(
-            fontSize: 12,
-            color: Color(0xFF656D76),
-          );
+          return const TextStyle(fontSize: 12, color: Color(0xFF656D76));
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
@@ -154,9 +146,7 @@ class AppTheme {
         selectedColor: accent.withValues(alpha: 0.15),
         labelStyle: const TextStyle(color: Color(0xFF1F2328)),
         side: const BorderSide(color: Color(0xFFD0D7DE)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }

@@ -7,6 +7,5 @@ import 'domain/repositories/watchlist_repository.dart';
 part 'providers.g.dart';
 
 @Riverpod(keepAlive: true)
-WatchlistRepository watchlistRepository(Ref ref) => WatchlistRepositoryImpl(
-      dao: ref.watch(watchlistDaoProvider),
-    );
+WatchlistRepository watchlistRepository(Ref ref) =>
+    WatchlistRepositoryImpl(dao: ref.watch(watchlistDaoProvider));

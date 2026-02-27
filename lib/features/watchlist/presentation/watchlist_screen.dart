@@ -42,18 +42,40 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
             onSelected: (type) {
               ref.read(watchlistSortProvider.notifier).select(type);
               if (selectedWatchlist != null) {
-                ref.invalidate(
-                    watchlistPlayersProvider(selectedWatchlist.id));
+                ref.invalidate(watchlistPlayersProvider(selectedWatchlist.id));
               }
             },
             itemBuilder: (ctx) => [
-              _sortItem(WatchlistSortType.custom, ctx.l10n.watchlistSortCustom, sortType),
-              _sortItem(WatchlistSortType.name, ctx.l10n.watchlistSortName, sortType),
-              _sortItem(WatchlistSortType.position, ctx.l10n.watchlistSortPosition, sortType),
-              _sortItem(WatchlistSortType.points, ctx.l10n.watchlistSortPoints, sortType),
               _sortItem(
-                  WatchlistSortType.recentPerformance, ctx.l10n.watchlistSortRecentForm, sortType),
-              _sortItem(WatchlistSortType.gameTime, ctx.l10n.watchlistSortGameTime, sortType),
+                WatchlistSortType.custom,
+                ctx.l10n.watchlistSortCustom,
+                sortType,
+              ),
+              _sortItem(
+                WatchlistSortType.name,
+                ctx.l10n.watchlistSortName,
+                sortType,
+              ),
+              _sortItem(
+                WatchlistSortType.position,
+                ctx.l10n.watchlistSortPosition,
+                sortType,
+              ),
+              _sortItem(
+                WatchlistSortType.points,
+                ctx.l10n.watchlistSortPoints,
+                sortType,
+              ),
+              _sortItem(
+                WatchlistSortType.recentPerformance,
+                ctx.l10n.watchlistSortRecentForm,
+                sortType,
+              ),
+              _sortItem(
+                WatchlistSortType.gameTime,
+                ctx.l10n.watchlistSortGameTime,
+                sortType,
+              ),
             ],
           ),
         ],
@@ -93,8 +115,9 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
       return const WatchlistEmptyState();
     }
 
-    final playersAsync =
-        ref.watch(watchlistPlayersProvider(selectedWatchlist.id));
+    final playersAsync = ref.watch(
+      watchlistPlayersProvider(selectedWatchlist.id),
+    );
 
     return playersAsync.when(
       loading: () => ListView.builder(

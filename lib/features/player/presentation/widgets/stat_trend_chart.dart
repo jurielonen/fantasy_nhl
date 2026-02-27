@@ -27,14 +27,19 @@ class StatTrendChart extends StatelessWidget {
     if (gameLog.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Text(context.l10n.statTrendEmpty, style: AppTextStyles.bodyMedium),
+        child: Text(
+          context.l10n.statTrendEmpty,
+          style: AppTextStyles.bodyMedium,
+        ),
       );
     }
 
     final metrics = isGoalie ? _goalieMetrics : _skaterMetrics(context);
     // Take last 25 games, reversed to show oldest first
     final entries = gameLog.take(25).toList().reversed.toList();
-    final values = entries.map((e) => _extractMetric(e, selectedMetric)).toList();
+    final values = entries
+        .map((e) => _extractMetric(e, selectedMetric))
+        .toList();
     final rollingAvg = _calculateRollingAverage(values, 5);
 
     return Container(
@@ -63,7 +68,9 @@ class StatTrendChart extends StatelessWidget {
                 backgroundColor: AppColors.surfaceVariant,
                 labelStyle: TextStyle(
                   fontSize: 12,
-                  color: isSelected ? AppColors.accent : AppColors.textSecondary,
+                  color: isSelected
+                      ? AppColors.accent
+                      : AppColors.textSecondary,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 ),
                 side: BorderSide(
@@ -76,9 +83,7 @@ class StatTrendChart extends StatelessWidget {
           const SizedBox(height: 16),
           SizedBox(
             height: 180,
-            child: LineChart(
-              _buildChartData(values, rollingAvg, entries),
-            ),
+            child: LineChart(_buildChartData(values, rollingAvg, entries)),
           ),
         ],
       ),
@@ -108,7 +113,9 @@ class StatTrendChart extends StatelessWidget {
       ),
       titlesData: FlTitlesData(
         topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -144,7 +151,9 @@ class StatTrendChart extends StatelessWidget {
               return Text(
                 _isPercentageMetric(selectedMetric)
                     ? '.${(value * 1000).round()}'
-                    : value.toStringAsFixed(value == value.roundToDouble() ? 0 : 1),
+                    : value.toStringAsFixed(
+                        value == value.roundToDouble() ? 0 : 1,
+                      ),
                 style: const TextStyle(
                   fontSize: 9,
                   color: AppColors.textTertiary,
@@ -162,8 +171,7 @@ class StatTrendChart extends StatelessWidget {
           getTooltipItems: (spots) {
             return spots.map((spot) {
               final index = spot.x.toInt();
-              final date =
-                  index < entries.length ? entries[index].date : '';
+              final date = index < entries.length ? entries[index].date : '';
               final label = _isPercentageMetric(selectedMetric)
                   ? '.${(spot.y * 1000).round()}'
                   : spot.y.toStringAsFixed(
@@ -253,7 +261,4 @@ Map<String, String> _skaterMetrics(BuildContext context) => {
   'shots': context.l10n.statTrendShots,
 };
 
-const _goalieMetrics = {
-  'savePctg': 'SV%',
-  'goalsAgainst': 'GA',
-};
+const _goalieMetrics = {'savePctg': 'SV%', 'goalsAgainst': 'GA'};

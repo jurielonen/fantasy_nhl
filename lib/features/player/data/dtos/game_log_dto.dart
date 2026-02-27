@@ -7,9 +7,7 @@ part 'game_log_dto.g.dart';
 
 @freezed
 abstract class GameLogDto with _$GameLogDto {
-  const factory GameLogDto({
-    List<GameLogEntryDto>? gameLog,
-  }) = _GameLogDto;
+  const factory GameLogDto({List<GameLogEntryDto>? gameLog}) = _GameLogDto;
 
   factory GameLogDto.fromJson(Map<String, dynamic> json) =>
       _$GameLogDtoFromJson(json);

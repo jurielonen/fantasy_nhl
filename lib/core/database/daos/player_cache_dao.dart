@@ -10,8 +10,7 @@ class PlayerCacheDao extends DatabaseAccessor<AppDatabase>
   PlayerCacheDao(super.db);
 
   Future<CachedPlayerRow?> getById(int id) =>
-      (select(cachedPlayers)..where((t) => t.id.equals(id)))
-          .getSingleOrNull();
+      (select(cachedPlayers)..where((t) => t.id.equals(id))).getSingleOrNull();
 
   Future<void> upsert(CachedPlayersCompanion entry) =>
       into(cachedPlayers).insertOnConflictUpdate(entry);

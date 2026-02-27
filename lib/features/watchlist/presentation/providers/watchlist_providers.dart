@@ -13,7 +13,14 @@ part 'watchlist_providers.g.dart';
 
 // ── Sort type ────────────────────────────────────────────────────────────────
 
-enum WatchlistSortType { custom, name, position, points, recentPerformance, gameTime }
+enum WatchlistSortType {
+  custom,
+  name,
+  position,
+  points,
+  recentPerformance,
+  gameTime,
+}
 
 // ── All watchlists (reactive via Drift stream) ───────────────────────────────
 
@@ -58,9 +65,9 @@ Watchlist? selectedWatchlist(Ref ref) {
         if (match.isNotEmpty) return match.first;
       }
       Future.microtask(() {
-        ref.read(selectedWatchlistIdProvider.notifier).select(
-              watchlists.first.id,
-            );
+        ref
+            .read(selectedWatchlistIdProvider.notifier)
+            .select(watchlists.first.id);
       });
       return watchlists.first;
     },
@@ -132,7 +139,7 @@ Future<List<WatchlistPlayerInfo>> watchlistPlayers(
           recentAvg = recent.isEmpty
               ? null
               : recent.fold<int>(0, (sum, e) => sum + (e.points ?? 0)) /
-                  recent.length;
+                    recent.length;
         }
       }
     } catch (_) {
@@ -149,13 +156,15 @@ Future<List<WatchlistPlayerInfo>> watchlistPlayers(
       // Detail not available/cached — skip
     }
 
-    results.add(WatchlistPlayerInfo(
-      player: player,
-      todayGame: todayGame,
-      lastGameLog: lastLog,
-      seasonPoints: seasonPts,
-      recentAvgPoints: recentAvg,
-    ));
+    results.add(
+      WatchlistPlayerInfo(
+        player: player,
+        todayGame: todayGame,
+        lastGameLog: lastLog,
+        seasonPoints: seasonPts,
+        recentAvgPoints: recentAvg,
+      ),
+    );
   }
 
   final sortType = ref.read(watchlistSortProvider);
@@ -169,18 +178,22 @@ void _sortPlayers(List<WatchlistPlayerInfo> players, WatchlistSortType sort) {
     case WatchlistSortType.custom:
       break;
     case WatchlistSortType.name:
-      players.sort(
-          (a, b) => a.player.lastName.compareTo(b.player.lastName));
+      players.sort((a, b) => a.player.lastName.compareTo(b.player.lastName));
     case WatchlistSortType.position:
       const order = {'C': 0, 'LW': 1, 'RW': 2, 'D': 3, 'G': 4};
-      players.sort((a, b) => (order[a.player.position] ?? 5)
-          .compareTo(order[b.player.position] ?? 5));
+      players.sort(
+        (a, b) => (order[a.player.position] ?? 5).compareTo(
+          order[b.player.position] ?? 5,
+        ),
+      );
     case WatchlistSortType.points:
       players.sort(
-          (a, b) => (b.seasonPoints ?? 0).compareTo(a.seasonPoints ?? 0));
+        (a, b) => (b.seasonPoints ?? 0).compareTo(a.seasonPoints ?? 0),
+      );
     case WatchlistSortType.recentPerformance:
-      players.sort((a, b) =>
-          (b.recentAvgPoints ?? 0).compareTo(a.recentAvgPoints ?? 0));
+      players.sort(
+        (a, b) => (b.recentAvgPoints ?? 0).compareTo(a.recentAvgPoints ?? 0),
+      );
     case WatchlistSortType.gameTime:
       players.sort((a, b) {
         final aTime = a.todayGame?.startTimeUtc ?? '';

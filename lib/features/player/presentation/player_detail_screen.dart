@@ -25,7 +25,9 @@ class PlayerDetailScreen extends ConsumerStatefulWidget {
   const PlayerDetailScreen({
     super.key,
     required this.playerId,
-    this.playerDetailExtra = const PlayerDetailExtra(heroContext: PlayerHeroContext.watchlist),
+    this.playerDetailExtra = const PlayerDetailExtra(
+      heroContext: PlayerHeroContext.watchlist,
+    ),
   });
 
   @override
@@ -95,11 +97,7 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                 floating: true,
                 snap: true,
                 forceElevated: innerBoxIsScrolled,
-                actions: [
-                  _WatchlistButton(
-                    player: detail.player,
-                  ),
-                ],
+                actions: [_WatchlistButton(player: detail.player)],
               ),
               SliverToBoxAdapter(
                 child: PlayerDetailHeader(
@@ -149,9 +147,7 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                           isGoalie: isGoalie,
                         ),
                       ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(height: 24),
-                      ),
+                      const SliverToBoxAdapter(child: SizedBox(height: 24)),
                     ],
                   ),
                 ),
@@ -160,10 +156,7 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                   onRefresh: _refresh,
                   child: CustomScrollView(
                     slivers: [
-                      GameLogTab(
-                        gameLogAsync: gameLogAsync,
-                        onRetry: _refresh,
-                      ),
+                      GameLogTab(gameLogAsync: gameLogAsync, onRetry: _refresh),
                     ],
                   ),
                 ),
@@ -197,9 +190,7 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                   onRefresh: _refresh,
                   child: CustomScrollView(
                     slivers: [
-                      CareerStatsTab(
-                        seasons: detail.seasonBySeasonStats,
-                      ),
+                      CareerStatsTab(seasons: detail.seasonBySeasonStats),
                     ],
                   ),
                 ),
@@ -217,7 +208,9 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
       slivers: [
         SliverAppBar(
           title: Text(
-            preloaded != null ? preloaded.fullName : context.l10n.playerDetailLoading,
+            preloaded != null
+                ? preloaded.fullName
+                : context.l10n.playerDetailLoading,
           ),
           actions: preloaded != null
               ? [_WatchlistButton(player: preloaded)]
@@ -232,11 +225,17 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                       heroContext: widget.playerDetailExtra.heroContext,
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       child: ShimmerLoader(height: 180),
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       child: ShimmerLoader(height: 250),
                     ),
                   ],
@@ -247,7 +246,11 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                     children: [
                       Row(
                         children: [
-                          const ShimmerLoader(width: 80, height: 80, borderRadius: 40),
+                          const ShimmerLoader(
+                            width: 80,
+                            height: 80,
+                            borderRadius: 40,
+                          ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: Column(
@@ -278,10 +281,7 @@ class _StatTrendSection extends ConsumerWidget {
   final AsyncValue<List<dynamic>> gameLogAsync;
   final bool isGoalie;
 
-  const _StatTrendSection({
-    required this.gameLogAsync,
-    required this.isGoalie,
-  });
+  const _StatTrendSection({required this.gameLogAsync, required this.isGoalie});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -355,10 +355,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return ColoredBox(
-      color: AppColors.background,
-      child: tabBar,
-    );
+    return ColoredBox(color: AppColors.background, child: tabBar);
   }
 
   @override

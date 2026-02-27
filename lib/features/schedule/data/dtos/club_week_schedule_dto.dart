@@ -7,9 +7,8 @@ part 'club_week_schedule_dto.g.dart';
 
 @freezed
 abstract class ClubWeekScheduleDto with _$ClubWeekScheduleDto {
-  const factory ClubWeekScheduleDto({
-    List<ScheduleGameDto>? games,
-  }) = _ClubWeekScheduleDto;
+  const factory ClubWeekScheduleDto({List<ScheduleGameDto>? games}) =
+      _ClubWeekScheduleDto;
 
   factory ClubWeekScheduleDto.fromJson(Map<String, dynamic> json) =>
       _$ClubWeekScheduleDtoFromJson(json);

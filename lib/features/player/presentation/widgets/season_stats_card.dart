@@ -9,11 +9,7 @@ class SeasonStatsCard extends StatelessWidget {
   final PlayerSeasonStats? stats;
   final String title;
 
-  const SeasonStatsCard({
-    super.key,
-    required this.stats,
-    this.title = '',
-  });
+  const SeasonStatsCard({super.key, required this.stats, this.title = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +18,10 @@ class SeasonStatsCard extends StatelessWidget {
     if (stats == null) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Text(context.l10n.seasonStatsEmpty, style: AppTextStyles.bodyMedium),
+        child: Text(
+          context.l10n.seasonStatsEmpty,
+          style: AppTextStyles.bodyMedium,
+        ),
       );
     }
 

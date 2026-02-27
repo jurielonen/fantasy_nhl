@@ -24,15 +24,15 @@ class Watchlists extends Table {
 @DataClassName('WatchlistPlayerRow')
 class WatchlistPlayers extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get watchlistId => text().references(Watchlists, #id,
-      onDelete: KeyAction.cascade)();
+  TextColumn get watchlistId =>
+      text().references(Watchlists, #id, onDelete: KeyAction.cascade)();
   IntColumn get playerId => integer()();
   IntColumn get position => integer().withDefault(const Constant(0))();
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {watchlistId, playerId},
-      ];
+    {watchlistId, playerId},
+  ];
 }
 
 @DataClassName('CachedPlayerRow')
@@ -45,8 +45,7 @@ class CachedPlayers extends Table {
   TextColumn get position => text()();
   IntColumn get sweaterNumber => integer().nullable()();
   TextColumn get headshot => text().nullable()();
-  BoolColumn get isActive =>
-      boolean().withDefault(const Constant(true))();
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -57,8 +56,7 @@ class ApiCache extends Table {
   TextColumn get cacheKey => text()();
   TextColumn get data => text()();
   TextColumn get fetchedAt => text()(); // ISO-8601
-  IntColumn get ttlMinutes =>
-      integer().withDefault(const Constant(15))();
+  IntColumn get ttlMinutes => integer().withDefault(const Constant(15))();
 
   @override
   Set<Column> get primaryKey => {cacheKey};

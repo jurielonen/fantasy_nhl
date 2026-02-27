@@ -21,7 +21,8 @@ class MockApiCacheDao extends Mock implements ApiCacheDao {}
 
 class MockPlayerCacheDao extends Mock implements PlayerCacheDao {}
 
-class FakeCachedPlayersCompanion extends Fake implements CachedPlayersCompanion {}
+class FakeCachedPlayersCompanion extends Fake
+    implements CachedPlayersCompanion {}
 
 void main() {
   setUpAll(() {
@@ -96,10 +97,10 @@ void main() {
   group('getPlayerDetail', () {
     test('returns cached data when cache is fresh', () async {
       // Arrange
-      final cacheRow =
-          freshCacheRow('player_detail:8478402', testDto.toJson());
-      when(() => mockApiCacheDao.get('player_detail:8478402'))
-          .thenAnswer((_) async => cacheRow);
+      final cacheRow = freshCacheRow('player_detail:8478402', testDto.toJson());
+      when(
+        () => mockApiCacheDao.get('player_detail:8478402'),
+      ).thenAnswer((_) async => cacheRow);
       when(() => mockApiCacheDao.isExpired(cacheRow)).thenReturn(false);
 
       // Act
@@ -120,14 +121,16 @@ void main() {
 
     test('fetches from API and caches when no cached data', () async {
       // Arrange: no cache entry
-      when(() => mockApiCacheDao.get('player_detail:8478402'))
-          .thenAnswer((_) async => null);
-      when(() => mockWebClient.getPlayerLanding(8478402))
-          .thenAnswer((_) async => testDto);
-      when(() => mockApiCacheDao.set(any(), any(), any()))
-          .thenAnswer((_) async {});
-      when(() => mockPlayerCacheDao.upsert(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockApiCacheDao.get('player_detail:8478402'),
+      ).thenAnswer((_) async => null);
+      when(
+        () => mockWebClient.getPlayerLanding(8478402),
+      ).thenAnswer((_) async => testDto);
+      when(
+        () => mockApiCacheDao.set(any(), any(), any()),
+      ).thenAnswer((_) async {});
+      when(() => mockPlayerCacheDao.upsert(any())).thenAnswer((_) async {});
 
       // Act
       final result = await repository.getPlayerDetail(8478402);
@@ -136,8 +139,9 @@ void main() {
       verify(() => mockWebClient.getPlayerLanding(8478402)).called(1);
 
       // Assert: result cached in api_cache
-      verify(() => mockApiCacheDao.set('player_detail:8478402', any(), 15))
-          .called(1);
+      verify(
+        () => mockApiCacheDao.set('player_detail:8478402', any(), 15),
+      ).called(1);
 
       // Assert: basic player info also cached
       verify(() => mockPlayerCacheDao.upsert(any())).called(1);
@@ -153,19 +157,22 @@ void main() {
       final expiredRow = ApiCacheRow(
         cacheKey: 'player_detail:8478402',
         data: jsonEncode(testDto.toJson()),
-        fetchedAt:
-            DateTime.now().subtract(const Duration(hours: 1)).toIso8601String(),
+        fetchedAt: DateTime.now()
+            .subtract(const Duration(hours: 1))
+            .toIso8601String(),
         ttlMinutes: 15,
       );
-      when(() => mockApiCacheDao.get('player_detail:8478402'))
-          .thenAnswer((_) async => expiredRow);
+      when(
+        () => mockApiCacheDao.get('player_detail:8478402'),
+      ).thenAnswer((_) async => expiredRow);
       when(() => mockApiCacheDao.isExpired(expiredRow)).thenReturn(true);
-      when(() => mockWebClient.getPlayerLanding(8478402))
-          .thenAnswer((_) async => testDto);
-      when(() => mockApiCacheDao.set(any(), any(), any()))
-          .thenAnswer((_) async {});
-      when(() => mockPlayerCacheDao.upsert(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockWebClient.getPlayerLanding(8478402),
+      ).thenAnswer((_) async => testDto);
+      when(
+        () => mockApiCacheDao.set(any(), any(), any()),
+      ).thenAnswer((_) async {});
+      when(() => mockPlayerCacheDao.upsert(any())).thenAnswer((_) async {});
 
       // Act
       final result = await repository.getPlayerDetail(8478402);

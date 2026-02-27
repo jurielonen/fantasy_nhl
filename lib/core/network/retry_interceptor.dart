@@ -43,8 +43,7 @@ class RetryInterceptor extends Interceptor {
       DioExceptionType.sendTimeout => true,
       DioExceptionType.receiveTimeout => true,
       DioExceptionType.connectionError => true,
-      DioExceptionType.badResponse =>
-        (err.response?.statusCode ?? 0) >= 500,
+      DioExceptionType.badResponse => (err.response?.statusCode ?? 0) >= 500,
       _ => false,
     };
   }

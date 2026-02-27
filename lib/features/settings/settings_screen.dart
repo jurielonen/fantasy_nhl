@@ -126,8 +126,7 @@ class _CacheTile extends ConsumerWidget {
           ref.invalidate(cacheCountProvider);
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(context.l10n.settingsCacheCleared(count))),
+              SnackBar(content: Text(context.l10n.settingsCacheCleared(count))),
             );
           }
         },

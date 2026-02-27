@@ -19,7 +19,9 @@ Future<void> addToWatchlist(
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(context.l10n.watchlistAlreadyIn(player.fullName, existing.name)),
+        content: Text(
+          context.l10n.watchlistAlreadyIn(player.fullName, existing.name),
+        ),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -35,7 +37,9 @@ Future<void> addToWatchlist(
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(context.l10n.watchlistAddedTo(player.fullName, updated.first.name)),
+        content: Text(
+          context.l10n.watchlistAddedTo(player.fullName, updated.first.name),
+        ),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -47,7 +51,9 @@ Future<void> addToWatchlist(
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(context.l10n.watchlistAddedTo(player.fullName, watchlists.first.name)),
+        content: Text(
+          context.l10n.watchlistAddedTo(player.fullName, watchlists.first.name),
+        ),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -69,7 +75,9 @@ Future<void> addToWatchlist(
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(context.l10n.watchlistAddedTo(player.fullName, chosen.name)),
+        content: Text(
+          context.l10n.watchlistAddedTo(player.fullName, chosen.name),
+        ),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -89,7 +97,9 @@ Future<void> removeFromWatchlist(
   if (!context.mounted) return;
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(context.l10n.watchlistRemovedFrom(player.fullName, wl.name)),
+      content: Text(
+        context.l10n.watchlistRemovedFrom(player.fullName, wl.name),
+      ),
       behavior: SnackBarBehavior.floating,
     ),
   );

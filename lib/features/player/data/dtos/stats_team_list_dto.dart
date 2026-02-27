@@ -5,10 +5,8 @@ part 'stats_team_list_dto.g.dart';
 
 @freezed
 abstract class StatsTeamListDto with _$StatsTeamListDto {
-  const factory StatsTeamListDto({
-    List<StatsTeamDto>? data,
-    int? total,
-  }) = _StatsTeamListDto;
+  const factory StatsTeamListDto({List<StatsTeamDto>? data, int? total}) =
+      _StatsTeamListDto;
 
   factory StatsTeamListDto.fromJson(Map<String, dynamic> json) =>
       _$StatsTeamListDtoFromJson(json);

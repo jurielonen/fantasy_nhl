@@ -41,8 +41,7 @@ class SearchResultsList extends ConsumerWidget {
               player: player,
               heroContext: PlayerHeroContext.searchResult,
               onTap: () => onPlayerTap?.call(player),
-              onAddToWatchlist: () =>
-                  addToWatchlist(ref, context, player),
+              onAddToWatchlist: () => addToWatchlist(ref, context, player),
               onRemoveFromWatchlist: () =>
                   removeFromWatchlist(ref, context, player),
             );
@@ -50,10 +49,7 @@ class SearchResultsList extends ConsumerWidget {
         );
       },
       loading: () => Column(
-        children: List.generate(
-          5,
-          (index) => const ShimmerPlayerListTile(),
-        ),
+        children: List.generate(5, (index) => const ShimmerPlayerListTile()),
       ),
       error: (error, stack) => AppErrorWidget(
         message: context.l10n.exploreSearchFailed(error.toString()),

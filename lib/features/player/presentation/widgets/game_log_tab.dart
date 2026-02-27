@@ -12,11 +12,7 @@ class GameLogTab extends StatelessWidget {
   final AsyncValue<List<GameLogEntry>> gameLogAsync;
   final VoidCallback? onRetry;
 
-  const GameLogTab({
-    super.key,
-    required this.gameLogAsync,
-    this.onRetry,
-  });
+  const GameLogTab({super.key, required this.gameLogAsync, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -51,16 +47,13 @@ class GameLogTab extends StatelessWidget {
         final isGoalie = entries.first.isGoalie;
 
         return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              if (index == 0) {
-                return _GameLogHeader(isGoalie: isGoalie);
-              }
-              final entry = entries[index - 1];
-              return _GameLogRow(entry: entry, isGoalie: isGoalie);
-            },
-            childCount: entries.length + 1,
-          ),
+          delegate: SliverChildBuilderDelegate((context, index) {
+            if (index == 0) {
+              return _GameLogHeader(isGoalie: isGoalie);
+            }
+            final entry = entries[index - 1];
+            return _GameLogRow(entry: entry, isGoalie: isGoalie);
+          }, childCount: entries.length + 1),
         );
       },
     );
@@ -80,22 +73,42 @@ class _GameLogHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          SizedBox(width: 80, child: Text(context.l10n.gameLogDate, style: _headerStyle)),
-          SizedBox(width: 56, child: Text(context.l10n.gameLogOpp, style: _headerStyle)),
+          SizedBox(
+            width: 80,
+            child: Text(context.l10n.gameLogDate, style: _headerStyle),
+          ),
+          SizedBox(
+            width: 56,
+            child: Text(context.l10n.gameLogOpp, style: _headerStyle),
+          ),
           if (isGoalie) ...[
-            SizedBox(width: 32, child: Text(context.l10n.gameLogDec, style: _headerStyle)),
+            SizedBox(
+              width: 32,
+              child: Text(context.l10n.gameLogDec, style: _headerStyle),
+            ),
             const SizedBox(width: 32, child: Text('GA', style: _headerStyle)),
             const SizedBox(width: 32, child: Text('SV', style: _headerStyle)),
             const Expanded(
-              child: Text('SV%', style: _headerStyle, textAlign: TextAlign.right),
+              child: Text(
+                'SV%',
+                style: _headerStyle,
+                textAlign: TextAlign.right,
+              ),
             ),
           ] else ...[
-            const SizedBox(width: 56, child: Text('G-A-P', style: _headerStyle)),
+            const SizedBox(
+              width: 56,
+              child: Text('G-A-P', style: _headerStyle),
+            ),
             const SizedBox(width: 32, child: Text('+/-', style: _headerStyle)),
             const SizedBox(width: 32, child: Text('SOG', style: _headerStyle)),
             const SizedBox(width: 48, child: Text('TOI', style: _headerStyle)),
             const Expanded(
-              child: Text('PIM', style: _headerStyle, textAlign: TextAlign.right),
+              child: Text(
+                'PIM',
+                style: _headerStyle,
+                textAlign: TextAlign.right,
+              ),
             ),
           ],
         ],
@@ -118,7 +131,9 @@ class _GameLogRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: bgColor,
-        border: const Border(bottom: BorderSide(color: AppColors.border, width: 0.5)),
+        border: const Border(
+          bottom: BorderSide(color: AppColors.border, width: 0.5),
+        ),
       ),
       child: Row(
         children: [
@@ -147,7 +162,8 @@ class _GameLogRow extends StatelessWidget {
   }
 
   List<Widget> _skaterStats() {
-    final gap = '${entry.goals ?? 0}-${entry.assists ?? 0}-${entry.points ?? 0}';
+    final gap =
+        '${entry.goals ?? 0}-${entry.assists ?? 0}-${entry.points ?? 0}';
     final pm = entry.plusMinus ?? 0;
     final pmStr = pm > 0 ? '+$pm' : '$pm';
 
@@ -159,7 +175,9 @@ class _GameLogRow extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: (entry.points ?? 0) > 0 ? AppColors.accent : AppColors.textPrimary,
+            color: (entry.points ?? 0) > 0
+                ? AppColors.accent
+                : AppColors.textPrimary,
           ),
         ),
       ),
@@ -172,8 +190,8 @@ class _GameLogRow extends StatelessWidget {
             color: pm > 0
                 ? AppColors.success
                 : pm < 0
-                    ? AppColors.error
-                    : AppColors.textSecondary,
+                ? AppColors.error
+                : AppColors.textSecondary,
           ),
         ),
       ),
@@ -216,8 +234,8 @@ class _GameLogRow extends StatelessWidget {
             color: entry.decision == 'W'
                 ? AppColors.success
                 : entry.decision == 'L'
-                    ? AppColors.error
-                    : AppColors.textSecondary,
+                ? AppColors.error
+                : AppColors.textSecondary,
           ),
         ),
       ),
@@ -244,8 +262,8 @@ class _GameLogRow extends StatelessWidget {
             color: svPct != null && svPct >= 0.930
                 ? AppColors.success
                 : svPct != null && svPct < 0.880
-                    ? AppColors.error
-                    : AppColors.textPrimary,
+                ? AppColors.error
+                : AppColors.textPrimary,
           ),
           textAlign: TextAlign.right,
         ),
@@ -277,8 +295,19 @@ class _GameLogRow extends StatelessWidget {
     final month = int.tryParse(date.substring(5, 7)) ?? 0;
     final day = date.substring(8, 10);
     const months = [
-      '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      '',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${months[month]} $day';
   }

@@ -102,9 +102,7 @@ abstract class PeriodDescriptorDto with _$PeriodDescriptorDto {
 
 @freezed
 abstract class GameOutcomeDto with _$GameOutcomeDto {
-  const factory GameOutcomeDto({
-    String? lastPeriodType,
-  }) = _GameOutcomeDto;
+  const factory GameOutcomeDto({String? lastPeriodType}) = _GameOutcomeDto;
 
   factory GameOutcomeDto.fromJson(Map<String, dynamic> json) =>
       _$GameOutcomeDtoFromJson(json);

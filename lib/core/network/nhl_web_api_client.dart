@@ -21,14 +21,10 @@ abstract class NhlWebApiClient {
 
   // Player endpoints
   @GET('/v1/player/{playerId}/landing')
-  Future<PlayerLandingDto> getPlayerLanding(
-    @Path('playerId') int playerId,
-  );
+  Future<PlayerLandingDto> getPlayerLanding(@Path('playerId') int playerId);
 
   @GET('/v1/player/{playerId}/game-log/now')
-  Future<GameLogDto> getCurrentGameLog(
-    @Path('playerId') int playerId,
-  );
+  Future<GameLogDto> getCurrentGameLog(@Path('playerId') int playerId);
 
   @GET('/v1/player/{playerId}/game-log/{season}/{gameType}')
   Future<GameLogDto> getGameLog(
@@ -55,9 +51,7 @@ abstract class NhlWebApiClient {
 
   // Team / roster
   @GET('/v1/roster/{team}/current')
-  Future<RosterDto> getRoster(
-    @Path('team') String team,
-  );
+  Future<RosterDto> getRoster(@Path('team') String team);
 
   // Standings
   @GET('/v1/standings/now')
@@ -68,9 +62,7 @@ abstract class NhlWebApiClient {
   Future<ScheduleDto> getTodaySchedule();
 
   @GET('/v1/club-schedule/{team}/week/now')
-  Future<ClubWeekScheduleDto> getClubWeekSchedule(
-    @Path('team') String team,
-  );
+  Future<ClubWeekScheduleDto> getClubWeekSchedule(@Path('team') String team);
 
   // Scores
   @GET('/v1/score/now')
