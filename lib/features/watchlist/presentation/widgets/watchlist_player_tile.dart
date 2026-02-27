@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
@@ -171,7 +172,7 @@ class _GameStatusWidget extends StatelessWidget {
     return switch (game.gameState) {
       GameState.live => _liveGameWidget(context, game),
       GameState.final_ => _finalGameWidget(context, game),
-      GameState.future => _futureGameWidget(game),
+      GameState.future => _futureGameWidget(context, game),
       GameState.off => _noGameWidget(context),
     };
   }
@@ -238,12 +239,12 @@ class _GameStatusWidget extends StatelessWidget {
     );
   }
 
-  Widget _futureGameWidget(ScheduleGame game) {
+  Widget _futureGameWidget(BuildContext context, ScheduleGame game) {
     final teamAbbrev = info.player.teamAbbrev;
     final isHome = game.homeTeamAbbrev == teamAbbrev;
     final opponent = isHome ? game.awayTeamAbbrev : game.homeTeamAbbrev;
     final prefix = isHome ? 'vs' : '@';
-    final time = _formatGameTime(game.startTimeUtc);
+    final time = _formatGameTime(game.startTimeUtc, Localizations.localeOf(context).toString());
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -297,14 +298,10 @@ class _GameStatusWidget extends StatelessWidget {
     return '${log.goals ?? 0}G ${log.assists ?? 0}A ${log.points ?? 0}P';
   }
 
-  String _formatGameTime(String? utcTime) {
+  String _formatGameTime(String? utcTime, String locale) {
     if (utcTime == null) return '';
     try {
-      final dt = DateTime.parse(utcTime).toLocal();
-      final hour = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
-      final minute = dt.minute.toString().padLeft(2, '0');
-      final period = dt.hour >= 12 ? 'PM' : 'AM';
-      return '$hour:$minute $period';
+      return DateFormat.jm(locale).format(DateTime.parse(utcTime).toLocal());
     } catch (_) {
       return '';
     }

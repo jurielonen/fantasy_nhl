@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -140,7 +141,7 @@ class _GameLogRow extends StatelessWidget {
           SizedBox(
             width: 80,
             child: Text(
-              _formatDate(entry.date),
+              _formatDate(entry.date, Localizations.localeOf(context).toString()),
               style: AppTextStyles.labelSmall,
             ),
           ),
@@ -289,27 +290,12 @@ class _GameLogRow extends StatelessWidget {
     return null;
   }
 
-  String _formatDate(String date) {
-    if (date.length < 10) return date;
-    // "2025-01-15" → "Jan 15"
-    final month = int.tryParse(date.substring(5, 7)) ?? 0;
-    final day = date.substring(8, 10);
-    const months = [
-      '',
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${months[month]} $day';
+  String _formatDate(String date, String locale) {
+    try {
+      return DateFormat.MMMd(locale).format(DateTime.parse(date));
+    } catch (_) {
+      return date;
+    }
   }
 }
 

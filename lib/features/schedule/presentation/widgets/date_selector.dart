@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
@@ -173,7 +174,7 @@ class _DayChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateStr = _formatShortDate(day.date);
+    final dateStr = _formatShortDate(day.date, Localizations.localeOf(context).toString());
 
     return GestureDetector(
       onTap: onTap,
@@ -244,25 +245,9 @@ class _DayChip extends StatelessWidget {
     );
   }
 
-  /// Formats "2026-02-13" → "Feb 13"
-  String _formatShortDate(String isoDate) {
+  String _formatShortDate(String isoDate, String locale) {
     try {
-      final dt = DateTime.parse(isoDate);
-      const months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
-      return '${months[dt.month - 1]} ${dt.day}';
+      return DateFormat.MMMd(locale).format(DateTime.parse(isoDate));
     } catch (_) {
       return isoDate;
     }
