@@ -1,0 +1,32 @@
+name: PR Checks
+
+on:
+  pull_request:
+
+jobs:
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/flutter-setup
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/flutter-setup
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/flutter-setup
+      - name: Run tests
+        run: flutter test
