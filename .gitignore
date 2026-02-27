@@ -50,3 +50,6 @@ app.*.map.json
 **/*.mocks.dart
 
 /endpoint_docs
+
+# FVM Version Cache
+.fvm/
