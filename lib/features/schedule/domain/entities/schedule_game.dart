@@ -78,8 +78,8 @@ class GameGoal {
 
 class ScheduleGame {
   final int gameId;
-  final String date;
-  final String? startTimeUtc;
+  final DateTime date;
+  final DateTime? startTimeUtc;
   final String? venue;
   final GameState gameState;
   final GameTeam? awayTeam;

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/network/converters/date_time_converter.dart';
 import '../../../../core/network/converters/localized_string_converter.dart';
 
 part 'roster_dto.freezed.dart';
@@ -29,7 +30,7 @@ abstract class RosterPlayerDto with _$RosterPlayerDto {
     String? shootsCatches,
     int? heightInInches,
     int? weightInPounds,
-    String? birthDate,
+    @NullableDateTimeConverter() DateTime? birthDate,
     @LocalizedStringConverter() String? birthCity,
     String? birthCountry,
   }) = _RosterPlayerDto;

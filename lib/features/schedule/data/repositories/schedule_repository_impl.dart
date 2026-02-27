@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 import '../../../../core/database/daos/api_cache_dao.dart';
 import '../../../../core/network/nhl_web_api_client.dart';
 import '../../domain/entities/game_day.dart';
@@ -21,8 +23,9 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
        _apiCacheDao = apiCacheDao;
 
   @override
-  Future<GameDay> getGameDay(String? date) async {
-    final cacheKey = date == null ? 'gameday:now' : 'gameday:$date';
+  Future<GameDay> getGameDay(DateTime? date) async {
+    final dateStr = date != null ? DateFormat('yyyy-MM-dd').format(date) : null;
+    final cacheKey = dateStr == null ? 'gameday:now' : 'gameday:$dateStr';
     final ttl = _gameDayTtl(date);
 
     final cached = await _apiCacheDao.get(cacheKey);
@@ -33,22 +36,22 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
       return dto.toEntity();
     }
 
-    final dto = date == null
+    final dto = dateStr == null
         ? await _webApiClient.getTodayScores()
-        : await _webApiClient.getScoresByDate(date);
+        : await _webApiClient.getScoresByDate(dateStr);
 
     await _apiCacheDao.set(cacheKey, jsonEncode(dto.toJson()), ttl);
     return dto.toEntity();
   }
 
   /// 5 min TTL for today, 60 min for past dates, 15 min for future dates.
-  int _gameDayTtl(String? date) {
+  int _gameDayTtl(DateTime? date) {
     if (date == null) return 5;
     final now = DateTime.now();
-    final today =
-        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    if (date == today) return 5;
-    return date.compareTo(today) < 0 ? 60 : 15;
+    final today = DateTime(now.year, now.month, now.day);
+    final dateOnly = DateTime(date.year, date.month, date.day);
+    if (dateOnly == today) return 5;
+    return dateOnly.isBefore(today) ? 60 : 15;
   }
 
   @override

@@ -244,7 +244,7 @@ class _GameStatusWidget extends StatelessWidget {
     final isHome = game.homeTeamAbbrev == teamAbbrev;
     final opponent = isHome ? game.awayTeamAbbrev : game.homeTeamAbbrev;
     final prefix = isHome ? 'vs' : '@';
-    final time = _formatGameTime(game.startTimeUtc, Localizations.localeOf(context).toString());
+    final time = _formatGameTime(game.startTimeUtc, context.localeName);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -278,7 +278,7 @@ class _GameStatusWidget extends StatelessWidget {
         ),
         if (log != null)
           Text(
-            '${log.date}: ${_formatStatLine(log)}',
+            '${DateFormat.MMMd(context.localeName).format(log.date)}: ${_formatStatLine(log)}',
             style: const TextStyle(
               fontSize: 11,
               color: AppColors.textSecondary,
@@ -298,12 +298,8 @@ class _GameStatusWidget extends StatelessWidget {
     return '${log.goals ?? 0}G ${log.assists ?? 0}A ${log.points ?? 0}P';
   }
 
-  String _formatGameTime(String? utcTime, String locale) {
+  String _formatGameTime(DateTime? utcTime, String locale) {
     if (utcTime == null) return '';
-    try {
-      return DateFormat.jm(locale).format(DateTime.parse(utcTime).toLocal());
-    } catch (_) {
-      return '';
-    }
+    return DateFormat.jm(locale).format(utcTime.toLocal());
   }
 }

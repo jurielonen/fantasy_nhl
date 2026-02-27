@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/network/converters/date_time_converter.dart';
 import '../../../../core/network/converters/localized_string_converter.dart';
 
 part 'game_log_dto.freezed.dart';
@@ -19,7 +20,7 @@ abstract class GameLogEntryDto with _$GameLogEntryDto {
     int? gameId,
     String? teamAbbrev,
     String? homeRoadFlg,
-    String? gameDate,
+    @NullableDateTimeConverter() DateTime? gameDate,
     @LocalizedStringConverter() String? commonName,
     String? opponentAbbrev,
     String? toi,

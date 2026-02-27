@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/network/converters/date_time_converter.dart';
 import 'schedule_team_dto.dart';
 
 part 'schedule_dto.freezed.dart';
@@ -8,8 +9,8 @@ part 'schedule_dto.g.dart';
 @freezed
 abstract class ScheduleDto with _$ScheduleDto {
   const factory ScheduleDto({
-    String? nextStartDate,
-    String? previousStartDate,
+    @NullableDateTimeConverter() DateTime? nextStartDate,
+    @NullableDateTimeConverter() DateTime? previousStartDate,
     List<ScheduleDayDto>? gameWeek,
   }) = _ScheduleDto;
 
@@ -20,7 +21,7 @@ abstract class ScheduleDto with _$ScheduleDto {
 @freezed
 abstract class ScheduleDayDto with _$ScheduleDayDto {
   const factory ScheduleDayDto({
-    String? date,
+    @NullableDateTimeConverter() DateTime? date,
     String? dayAbbrev,
     int? numberOfGames,
     List<ScheduleGameDto>? games,

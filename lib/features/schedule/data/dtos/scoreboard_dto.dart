@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/network/converters/date_time_converter.dart';
 import 'schedule_team_dto.dart';
 
 part 'scoreboard_dto.freezed.dart';
@@ -8,7 +9,7 @@ part 'scoreboard_dto.g.dart';
 @freezed
 abstract class ScoreboardDto with _$ScoreboardDto {
   const factory ScoreboardDto({
-    String? focusedDate,
+    @NullableDateTimeConverter() DateTime? focusedDate,
     List<ScoreboardDateDto>? gamesByDate,
   }) = _ScoreboardDto;
 
@@ -19,7 +20,7 @@ abstract class ScoreboardDto with _$ScoreboardDto {
 @freezed
 abstract class ScoreboardDateDto with _$ScoreboardDateDto {
   const factory ScoreboardDateDto({
-    String? date,
+    @NullableDateTimeConverter() DateTime? date,
     List<ScheduleGameDto>? games,
   }) = _ScoreboardDateDto;
 

@@ -19,7 +19,7 @@ class PlayerDetail {
 class PlayerBio {
   final int? heightInInches;
   final int? weightInPounds;
-  final String? birthDate;
+  final DateTime? birthDate;
   final String? birthCity;
   final String? birthCountry;
   final String? shootsCatches;

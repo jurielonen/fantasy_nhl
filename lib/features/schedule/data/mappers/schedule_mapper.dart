@@ -10,7 +10,7 @@ import '../dtos/club_week_schedule_dto.dart';
 extension GameDayResponseDtoMapper on GameDayResponseDto {
   GameDay toEntity() => GameDay(
     prevDate: prevDate,
-    currentDate: currentDate ?? '',
+    currentDate: currentDate ?? DateTime(0),
     nextDate: nextDate,
     weekDays: (gameWeek ?? []).map((d) => d.toEntity()).toList(),
     games: (games ?? []).map((g) => g.toEntity()).toList(),
@@ -22,7 +22,7 @@ extension GameDayResponseDtoMapper on GameDayResponseDto {
 
 extension GameWeekDayDtoMapper on GameWeekDayDto {
   GameWeekDay toEntity() => GameWeekDay(
-    date: date ?? '',
+    date: date ?? DateTime(0),
     dayAbbrev: dayAbbrev ?? '',
     numberOfGames: numberOfGames ?? 0,
   );
@@ -31,7 +31,7 @@ extension GameWeekDayDtoMapper on GameWeekDayDto {
 extension GameDtoMapper on GameDto {
   ScheduleGame toEntity() => ScheduleGame(
     gameId: id ?? 0,
-    date: gameDate ?? '',
+    date: gameDate ?? DateTime(0),
     startTimeUtc: startTimeUTC,
     venue: venue,
     gameState: GameState.fromApiString(gameState),
@@ -92,7 +92,7 @@ extension GoalDtoMapper on GoalDto {
 extension ScheduleGameDtoMapper on ScheduleGameDto {
   ScheduleGame toEntity() => ScheduleGame(
     gameId: id ?? 0,
-    date: gameDate ?? '',
+    date: gameDate ?? DateTime(0),
     startTimeUtc: startTimeUTC,
     venue: venue,
     gameState: GameState.fromApiString(gameState),
