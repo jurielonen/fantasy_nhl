@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
@@ -361,11 +362,8 @@ class _GameStatusCenter extends StatelessWidget {
   String _formatTime(BuildContext context, String? utcTime) {
     if (utcTime == null) return context.l10n.scheduleTbd;
     try {
-      final dt = DateTime.parse(utcTime).toLocal();
-      final hour = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
-      final minute = dt.minute.toString().padLeft(2, '0');
-      final period = dt.hour >= 12 ? 'PM' : 'AM';
-      return '$hour:$minute $period';
+      final locale = Localizations.localeOf(context).toString();
+      return DateFormat.jm(locale).format(DateTime.parse(utcTime).toLocal());
     } catch (_) {
       return context.l10n.scheduleTbd;
     }

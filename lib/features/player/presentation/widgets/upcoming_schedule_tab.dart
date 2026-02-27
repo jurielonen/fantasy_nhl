@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -104,10 +105,11 @@ class _ScheduleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).toString();
     final isHome = game.homeTeamAbbrev == teamAbbrev;
     final opponent = isHome ? game.awayTeamAbbrev : game.homeTeamAbbrev;
     final prefix = isHome ? 'vs' : '@';
-    final timeStr = _formatTime(game.startTimeUtc);
+    final timeStr = _formatTime(game.startTimeUtc, locale);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -121,7 +123,7 @@ class _ScheduleRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_formatDate(game.date), style: AppTextStyles.labelLarge),
+                Text(_formatDate(game.date, locale), style: AppTextStyles.labelLarge),
                 if (timeStr != null)
                   Text(timeStr, style: AppTextStyles.labelSmall),
               ],
@@ -166,39 +168,18 @@ class _ScheduleRow extends StatelessWidget {
     );
   }
 
-  String _formatDate(String date) {
+  String _formatDate(String date, String locale) {
     try {
-      final d = DateTime.parse(date);
-      const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      const months = [
-        '',
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
-      return '${weekdays[d.weekday - 1]}, ${months[d.month]} ${d.day}';
+      return DateFormat('EEE, MMM d', locale).format(DateTime.parse(date));
     } catch (_) {
       return date;
     }
   }
 
-  String? _formatTime(String? utc) {
+  String? _formatTime(String? utc, String locale) {
     if (utc == null) return null;
     try {
-      final dt = DateTime.parse(utc).toLocal();
-      final hour = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
-      final minute = dt.minute.toString().padLeft(2, '0');
-      final amPm = dt.hour >= 12 ? 'PM' : 'AM';
-      return '$hour:$minute $amPm';
+      return DateFormat.jm(locale).format(DateTime.parse(utc).toLocal());
     } catch (_) {
       return null;
     }

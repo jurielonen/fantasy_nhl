@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -34,6 +35,7 @@ class StatTrendChart extends StatelessWidget {
       );
     }
 
+    final locale = Localizations.localeOf(context).toString();
     final metrics = isGoalie ? _goalieMetrics : _skaterMetrics(context);
     // Take last 25 games, reversed to show oldest first
     final entries = gameLog.take(25).toList().reversed.toList();
@@ -83,7 +85,7 @@ class StatTrendChart extends StatelessWidget {
           const SizedBox(height: 16),
           SizedBox(
             height: 180,
-            child: LineChart(_buildChartData(values, rollingAvg, entries)),
+            child: LineChart(_buildChartData(values, rollingAvg, entries, locale)),
           ),
         ],
       ),
@@ -94,6 +96,7 @@ class StatTrendChart extends StatelessWidget {
     List<double> values,
     List<double?> rollingAvg,
     List<GameLogEntry> entries,
+    String locale,
   ) {
     final maxY = values.isEmpty
         ? 5.0
@@ -127,9 +130,12 @@ class StatTrendChart extends StatelessWidget {
                 return const SizedBox.shrink();
               }
               final date = entries[index].date;
-              final short = date.length >= 10
-                  ? '${date.substring(5, 7)}/${date.substring(8, 10)}'
-                  : date;
+              String short;
+              try {
+                short = DateFormat.MMMd(locale).format(DateTime.parse(date));
+              } catch (_) {
+                short = date;
+              }
               return SideTitleWidget(
                 meta: meta,
                 child: Text(
