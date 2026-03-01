@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
 
 class CreateWatchlistDialog extends StatefulWidget {
@@ -26,11 +25,11 @@ class _CreateWatchlistDialogState extends State<CreateWatchlistDialog> {
       content: TextField(
         controller: _controller,
         autofocus: true,
-        style: const TextStyle(color: AppColors.textPrimary),
+        style: TextStyle(color: context.appColors.textPrimary),
         decoration: InputDecoration(
           hintText: context.l10n.watchlistNameHint,
           filled: true,
-          fillColor: AppColors.surfaceVariant,
+          fillColor: context.appColors.surfaceVariant,
         ),
         onSubmitted: (_) => _submit(),
       ),

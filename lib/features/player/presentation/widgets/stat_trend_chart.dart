@@ -4,8 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/game_log_entry.dart';
 
@@ -25,13 +24,11 @@ class StatTrendChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     if (gameLog.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Text(
-          context.l10n.statTrendEmpty,
-          style: AppTextStyles.bodyMedium,
-        ),
+        child: Text(context.l10n.statTrendEmpty, style: context.tsBodyMedium),
       );
     }
 
@@ -48,14 +45,14 @@ class StatTrendChart extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: colors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.l10n.statTrendTitle, style: AppTextStyles.titleMedium),
+          Text(context.l10n.statTrendTitle, style: context.tsTitleMedium),
           const SizedBox(height: 12),
           // Metric toggle chips
           Wrap(
@@ -66,17 +63,15 @@ class StatTrendChart extends StatelessWidget {
                 label: Text(e.value),
                 selected: isSelected,
                 onSelected: (_) => onMetricChanged(e.key),
-                selectedColor: AppColors.accent.withValues(alpha: 0.2),
-                backgroundColor: AppColors.surfaceVariant,
+                selectedColor: colors.accent.withValues(alpha: 0.2),
+                backgroundColor: colors.surfaceVariant,
                 labelStyle: TextStyle(
                   fontSize: 12,
-                  color: isSelected
-                      ? AppColors.accent
-                      : AppColors.textSecondary,
+                  color: isSelected ? colors.accent : colors.textSecondary,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 ),
                 side: BorderSide(
-                  color: isSelected ? AppColors.accent : AppColors.border,
+                  color: isSelected ? colors.accent : colors.border,
                 ),
                 visualDensity: VisualDensity.compact,
               );
@@ -86,7 +81,7 @@ class StatTrendChart extends StatelessWidget {
           SizedBox(
             height: 180,
             child: LineChart(
-              _buildChartData(values, rollingAvg, entries, locale),
+              _buildChartData(values, rollingAvg, entries, locale, colors),
             ),
           ),
         ],
@@ -99,6 +94,7 @@ class StatTrendChart extends StatelessWidget {
     List<double?> rollingAvg,
     List<GameLogEntry> entries,
     String locale,
+    AppThemeExtension colors,
   ) {
     final maxY = values.isEmpty
         ? 5.0
@@ -112,7 +108,7 @@ class StatTrendChart extends StatelessWidget {
         show: true,
         drawVerticalLine: false,
         getDrawingHorizontalLine: (_) => FlLine(
-          color: AppColors.border.withValues(alpha: 0.5),
+          color: colors.border.withValues(alpha: 0.5),
           strokeWidth: 0.5,
         ),
       ),
@@ -136,10 +132,7 @@ class StatTrendChart extends StatelessWidget {
                 meta: meta,
                 child: Text(
                   short,
-                  style: const TextStyle(
-                    fontSize: 9,
-                    color: AppColors.textTertiary,
-                  ),
+                  style: TextStyle(fontSize: 9, color: colors.textTertiary),
                 ),
               );
             },
@@ -156,10 +149,7 @@ class StatTrendChart extends StatelessWidget {
                     : value.toStringAsFixed(
                         value == value.roundToDouble() ? 0 : 1,
                       ),
-                style: const TextStyle(
-                  fontSize: 9,
-                  color: AppColors.textTertiary,
-                ),
+                style: TextStyle(fontSize: 9, color: colors.textTertiary),
               );
             },
           ),
@@ -168,7 +158,7 @@ class StatTrendChart extends StatelessWidget {
       borderData: FlBorderData(show: false),
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
-          getTooltipColor: (_) => AppColors.surfaceVariant,
+          getTooltipColor: (_) => colors.surfaceVariant,
           tooltipBorderRadius: BorderRadius.circular(8),
           getTooltipItems: (spots) {
             return spots.map((spot) {
@@ -183,9 +173,9 @@ class StatTrendChart extends StatelessWidget {
                     );
               return LineTooltipItem(
                 '$dateStr\n$label',
-                const TextStyle(
+                TextStyle(
                   fontSize: 11,
-                  color: AppColors.textPrimary,
+                  color: colors.textPrimary,
                   fontWeight: FontWeight.w500,
                 ),
               );
@@ -202,19 +192,19 @@ class StatTrendChart extends StatelessWidget {
           ),
           isCurved: true,
           curveSmoothness: 0.2,
-          color: AppColors.accent,
+          color: colors.accent,
           barWidth: 2,
           dotData: FlDotData(
             show: true,
             getDotPainter: (spot, percent, bar, index) => FlDotCirclePainter(
               radius: 3,
-              color: AppColors.accent,
+              color: colors.accent,
               strokeWidth: 0,
             ),
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: AppColors.accent.withValues(alpha: 0.1),
+            color: colors.accent.withValues(alpha: 0.1),
           ),
         ),
         // Rolling average line
@@ -225,7 +215,7 @@ class StatTrendChart extends StatelessWidget {
           ],
           isCurved: true,
           curveSmoothness: 0.3,
-          color: AppColors.warning.withValues(alpha: 0.7),
+          color: colors.warning.withValues(alpha: 0.7),
           barWidth: 1.5,
           dashArray: [6, 3],
           dotData: const FlDotData(show: false),

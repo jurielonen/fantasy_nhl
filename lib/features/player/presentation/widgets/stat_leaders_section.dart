@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/section_header.dart';
 import '../../../../shared/widgets/shimmer_loader.dart';
@@ -176,6 +175,7 @@ class _CategoryTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return SizedBox(
       height: 36,
       child: ListView.separated(
@@ -193,11 +193,11 @@ class _CategoryTabs extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppColors.accent.withValues(alpha: 0.15)
-                    : AppColors.surfaceVariant,
+                    ? colors.accent.withValues(alpha: 0.15)
+                    : colors.surfaceVariant,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: isSelected ? AppColors.accent : AppColors.border,
+                  color: isSelected ? colors.accent : colors.border,
                 ),
               ),
               child: Text(
@@ -205,9 +205,7 @@ class _CategoryTabs extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: isSelected
-                      ? AppColors.accent
-                      : AppColors.textSecondary,
+                  color: isSelected ? colors.accent : colors.textSecondary,
                 ),
               ),
             ),

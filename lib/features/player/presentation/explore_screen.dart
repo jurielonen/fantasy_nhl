@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/router/app_router.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/player_hero_context.dart';
 import '../domain/entities/player.dart';
@@ -61,6 +60,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
@@ -87,7 +87,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     controller: _searchController,
                     focusNode: _searchFocusNode,
                     onChanged: _onSearchChanged,
-                    style: const TextStyle(color: AppColors.textPrimary),
+                    style: TextStyle(color: colors.textPrimary),
                     decoration: InputDecoration(
                       hintText: context.l10n.exploreSearchHint,
                       prefixIcon: const Icon(Icons.search, size: 20),
@@ -98,7 +98,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             )
                           : null,
                       filled: true,
-                      fillColor: AppColors.surfaceVariant,
+                      fillColor: colors.surfaceVariant,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 10,

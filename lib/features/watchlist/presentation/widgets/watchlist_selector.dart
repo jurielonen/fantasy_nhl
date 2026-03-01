@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/watchlist.dart';
 import '../../providers.dart';
@@ -85,10 +84,10 @@ class WatchlistSelector extends ConsumerWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.delete, color: AppColors.error),
+              leading: Icon(Icons.delete, color: context.appColors.error),
               title: Text(
                 context.l10n.commonDelete,
-                style: const TextStyle(color: AppColors.error),
+                style: TextStyle(color: context.appColors.error),
               ),
               onTap: () {
                 Navigator.pop(ctx);
@@ -114,11 +113,11 @@ class WatchlistSelector extends ConsumerWidget {
         content: TextField(
           controller: controller,
           autofocus: true,
-          style: const TextStyle(color: AppColors.textPrimary),
+          style: TextStyle(color: context.appColors.textPrimary),
           decoration: InputDecoration(
             hintText: context.l10n.watchlistNameHint,
             filled: true,
-            fillColor: AppColors.surfaceVariant,
+            fillColor: context.appColors.surfaceVariant,
           ),
           onSubmitted: (v) => Navigator.pop(ctx, v.trim()),
         ),
@@ -163,7 +162,7 @@ class WatchlistSelector extends ConsumerWidget {
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
               context.l10n.commonDelete,
-              style: const TextStyle(color: AppColors.error),
+              style: TextStyle(color: context.appColors.error),
             ),
           ),
         ],

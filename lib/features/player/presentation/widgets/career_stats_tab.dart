@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/player_detail.dart';
 
@@ -28,12 +26,13 @@ class _CareerStatsTabState extends State<CareerStatsTab> {
         child: Center(
           child: Text(
             context.l10n.careerStatsEmpty,
-            style: AppTextStyles.bodyMedium,
+            style: context.tsBodyMedium,
           ),
         ),
       );
     }
 
+    final colors = context.appColors;
     final isGoalie =
         filtered.isNotEmpty && filtered.first.stats is GoalieSeasonStats;
 
@@ -48,7 +47,7 @@ class _CareerStatsTabState extends State<CareerStatsTab> {
               children: [
                 Text(
                   context.l10n.careerStatsTitle,
-                  style: AppTextStyles.titleMedium,
+                  style: context.tsTitleMedium,
                 ),
                 const Spacer(),
                 if (widget.seasons.any((s) => s.leagueAbbrev != 'NHL'))
@@ -56,16 +55,14 @@ class _CareerStatsTabState extends State<CareerStatsTab> {
                     label: Text(context.l10n.careerStatsNhlOnly),
                     selected: _nhlOnly,
                     onSelected: (v) => setState(() => _nhlOnly = v),
-                    selectedColor: AppColors.accent.withValues(alpha: 0.2),
-                    backgroundColor: AppColors.surfaceVariant,
+                    selectedColor: colors.accent.withValues(alpha: 0.2),
+                    backgroundColor: colors.surfaceVariant,
                     labelStyle: TextStyle(
                       fontSize: 12,
-                      color: _nhlOnly
-                          ? AppColors.accent
-                          : AppColors.textSecondary,
+                      color: _nhlOnly ? colors.accent : colors.textSecondary,
                     ),
                     side: BorderSide(
-                      color: _nhlOnly ? AppColors.accent : AppColors.border,
+                      color: _nhlOnly ? colors.accent : colors.border,
                     ),
                     visualDensity: VisualDensity.compact,
                   ),
@@ -93,14 +90,21 @@ class _SkaterTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final headerStyle = TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w600,
+      color: colors.textTertiary,
+    );
+    final dataStyle = TextStyle(fontSize: 12, color: colors.textPrimary);
     return DataTable(
       headingRowHeight: 36,
       dataRowMinHeight: 32,
       dataRowMaxHeight: 36,
       columnSpacing: 16,
       horizontalMargin: 0,
-      headingTextStyle: _headerStyle,
-      dataTextStyle: _dataStyle,
+      headingTextStyle: headerStyle,
+      dataTextStyle: dataStyle,
       columns: [
         DataColumn(label: Text(context.l10n.careerStatsColumnSeason)),
         DataColumn(label: Text(context.l10n.careerStatsColumnTeam)),
@@ -123,21 +127,21 @@ class _SkaterTable extends StatelessWidget {
             DataCell(
               Text(
                 '${s.points}',
-                style: _dataStyle.copyWith(
+                style: dataStyle.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.accent,
+                  color: colors.accent,
                 ),
               ),
             ),
             DataCell(
               Text(
                 '${s.plusMinus > 0 ? "+" : ""}${s.plusMinus}',
-                style: _dataStyle.copyWith(
+                style: dataStyle.copyWith(
                   color: s.plusMinus > 0
-                      ? AppColors.success
+                      ? colors.success
                       : s.plusMinus < 0
-                      ? AppColors.error
-                      : AppColors.textSecondary,
+                      ? colors.error
+                      : colors.textSecondary,
                 ),
               ),
             ),
@@ -155,14 +159,21 @@ class _GoalieTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final headerStyle = TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w600,
+      color: colors.textTertiary,
+    );
+    final dataStyle = TextStyle(fontSize: 12, color: colors.textPrimary);
     return DataTable(
       headingRowHeight: 36,
       dataRowMinHeight: 32,
       dataRowMaxHeight: 36,
       columnSpacing: 16,
       horizontalMargin: 0,
-      headingTextStyle: _headerStyle,
-      dataTextStyle: _dataStyle,
+      headingTextStyle: headerStyle,
+      dataTextStyle: dataStyle,
       columns: [
         DataColumn(label: Text(context.l10n.careerStatsColumnSeason)),
         DataColumn(label: Text(context.l10n.careerStatsColumnTeam)),
@@ -188,9 +199,9 @@ class _GoalieTable extends StatelessWidget {
             DataCell(
               Text(
                 '.${(s.savePctg * 1000).round()}',
-                style: _dataStyle.copyWith(
+                style: dataStyle.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.accent,
+                  color: colors.accent,
                 ),
               ),
             ),
@@ -210,11 +221,3 @@ String _formatSeason(int season) {
   }
   return str;
 }
-
-const _headerStyle = TextStyle(
-  fontSize: 11,
-  fontWeight: FontWeight.w600,
-  color: AppColors.textTertiary,
-);
-
-const _dataStyle = TextStyle(fontSize: 12, color: AppColors.textPrimary);

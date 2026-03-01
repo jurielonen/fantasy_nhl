@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/shimmer_loader.dart';
 import '../../domain/entities/game_day.dart';
@@ -174,6 +173,7 @@ class _DayChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final dateStr = _formatShortDate(day.date, context.localeName);
 
     return GestureDetector(
@@ -183,7 +183,7 @@ class _DayChip extends StatelessWidget {
         width: 64,
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.accent : AppColors.surfaceVariant,
+          color: isSelected ? colors.accent : colors.surfaceVariant,
           borderRadius: BorderRadius.circular(12),
         ),
         child: FittedBox(
@@ -196,9 +196,7 @@ class _DayChip extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
-                  color: isSelected
-                      ? AppColors.background
-                      : AppColors.textSecondary,
+                  color: isSelected ? colors.background : colors.textSecondary,
                 ),
               ),
               const SizedBox(height: 2),
@@ -207,9 +205,7 @@ class _DayChip extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: isSelected
-                      ? AppColors.background
-                      : AppColors.textPrimary,
+                  color: isSelected ? colors.background : colors.textPrimary,
                 ),
               ),
               const SizedBox(height: 4),
@@ -221,8 +217,8 @@ class _DayChip extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.background.withValues(alpha: 0.2)
-                        : AppColors.accent.withValues(alpha: 0.15),
+                        ? colors.background.withValues(alpha: 0.2)
+                        : colors.accent.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -230,9 +226,7 @@ class _DayChip extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
-                      color: isSelected
-                          ? AppColors.background
-                          : AppColors.accent,
+                      color: isSelected ? colors.background : colors.accent,
                     ),
                   ),
                 )

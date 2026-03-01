@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/schedule_game.dart';
 
@@ -36,7 +35,7 @@ class _ScheduleGameCardState extends State<ScheduleGameCard> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       color: hasWatchlistPlayers
-          ? AppColors.accent.withValues(alpha: 0.05)
+          ? context.appColors.accent.withValues(alpha: 0.05)
           : null,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -54,9 +53,9 @@ class _ScheduleGameCardState extends State<ScheduleGameCard> {
                 const SizedBox(height: 4),
                 Text(
                   game.venue!,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
-                    color: AppColors.textTertiary,
+                    color: context.appColors.textTertiary,
                   ),
                 ),
               ],
@@ -68,14 +67,14 @@ class _ScheduleGameCardState extends State<ScheduleGameCard> {
               // Watchlist players with goal/assist contributions
               if (hasWatchlistPlayers) ...[
                 const SizedBox(height: 8),
-                const Divider(height: 1, color: AppColors.border),
+                Divider(height: 1, color: context.appColors.border),
                 const SizedBox(height: 6),
                 _buildWatchlistSection(),
               ],
               // Expandable goals timeline
               if (_goalsExpanded && game.goals.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                const Divider(height: 1, color: AppColors.border),
+                Divider(height: 1, color: context.appColors.border),
                 const SizedBox(height: 6),
                 _GoalsTimeline(goals: game.goals),
               ],
@@ -111,19 +110,25 @@ class _ScheduleGameCardState extends State<ScheduleGameCard> {
       children: [
         Text(
           '${game.awayTeam?.shotsOnGoal ?? 0}',
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          style: TextStyle(
+            fontSize: 12,
+            color: context.appColors.textSecondary,
+          ),
         ),
         Text(
           ' SOG ',
           style: TextStyle(
             fontSize: 10,
-            color: AppColors.textTertiary,
+            color: context.appColors.textTertiary,
             fontWeight: FontWeight.w500,
           ),
         ),
         Text(
           '${game.homeTeam?.shotsOnGoal ?? 0}',
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          style: TextStyle(
+            fontSize: 12,
+            color: context.appColors.textSecondary,
+          ),
         ),
       ],
     );
@@ -198,6 +203,7 @@ class _TeamColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: alignEnd
           ? CrossAxisAlignment.end
@@ -215,19 +221,16 @@ class _TeamColumn extends StatelessWidget {
           ),
         Text(
           team?.abbrev ?? '',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: colors.textPrimary,
           ),
         ),
         if (team?.name != null && team!.name.isNotEmpty)
           Text(
             team!.name,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 12, color: colors.textSecondary),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -255,6 +258,7 @@ class _GameStatusCenter extends StatelessWidget {
   }
 
   Widget _buildLive(BuildContext context) {
+    final colors = context.appColors;
     final periodText = _periodDisplay(context);
     return Column(
       children: [
@@ -267,15 +271,15 @@ class _GameStatusCenter extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: AppColors.success.withValues(alpha: 0.2),
+                color: colors.success.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
                 context.l10n.scheduleLive,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.success,
+                  color: colors.success,
                 ),
               ),
             ),
@@ -284,19 +288,16 @@ class _GameStatusCenter extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           '${game.awayScore ?? 0} - ${game.homeScore ?? 0}',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: colors.textPrimary,
           ),
         ),
         if (periodText != null)
           Text(
             periodText,
-            style: const TextStyle(
-              fontSize: 11,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 11, color: colors.textSecondary),
           ),
       ],
     );
@@ -320,20 +321,18 @@ class _GameStatusCenter extends StatelessWidget {
   }
 
   Widget _buildFinal(BuildContext context) {
+    final colors = context.appColors;
     final label = _finalLabel(context);
     return Column(
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 11, color: AppColors.textTertiary),
-        ),
+        Text(label, style: TextStyle(fontSize: 11, color: colors.textTertiary)),
         const SizedBox(height: 2),
         Text(
           '${game.awayScore ?? 0} - ${game.homeScore ?? 0}',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: colors.textPrimary,
           ),
         ),
       ],
@@ -351,10 +350,10 @@ class _GameStatusCenter extends StatelessWidget {
   Widget _buildFuture(BuildContext context) {
     return Text(
       _formatTime(context, game.startTimeUtc),
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w600,
-        color: AppColors.textSecondary,
+        color: context.appColors.textSecondary,
       ),
     );
   }
@@ -400,7 +399,7 @@ class _PulsingDotState extends State<_PulsingDot>
           height: 8,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.success.withValues(
+            color: context.appColors.success.withValues(
               alpha: 0.4 + (_controller.value * 0.6),
             ),
           ),
@@ -422,10 +421,10 @@ class _GoalsTimeline extends StatelessWidget {
       children: [
         Text(
           context.l10n.scheduleGoals,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
-            color: AppColors.textSecondary,
+            color: context.appColors.textSecondary,
           ),
         ),
         const SizedBox(height: 4),
@@ -442,6 +441,7 @@ class _GoalRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final assistText = goal.assists.isEmpty
         ? context.l10n.scheduleUnassisted
         : goal.assists.join(', ');
@@ -456,9 +456,9 @@ class _GoalRow extends StatelessWidget {
             width: 48,
             child: Text(
               'P${goal.period} ${goal.timeInPeriod}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 11,
-                color: AppColors.textTertiary,
+                color: colors.textTertiary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -485,26 +485,26 @@ class _GoalRow extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: goal.scorerName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: colors.textPrimary,
                         ),
                       ),
                       TextSpan(
                         text: ' (${goal.teamAbbrev})',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
-                          color: AppColors.textSecondary,
+                          color: colors.textSecondary,
                         ),
                       ),
                       if (goal.strength != 'ev')
                         TextSpan(
                           text: ' ${goal.strength.toUpperCase()}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.accent,
+                            color: colors.accent,
                           ),
                         ),
                     ],
@@ -512,10 +512,7 @@ class _GoalRow extends StatelessWidget {
                 ),
                 Text(
                   assistText,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppColors.textTertiary,
-                  ),
+                  style: TextStyle(fontSize: 11, color: colors.textTertiary),
                 ),
               ],
             ),
@@ -523,10 +520,10 @@ class _GoalRow extends StatelessWidget {
           // Running score
           Text(
             '${goal.awayScore}-${goal.homeScore}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: AppColors.textSecondary,
+              color: colors.textSecondary,
             ),
           ),
         ],
@@ -549,6 +546,7 @@ class _WatchlistNames extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (names.isEmpty) return const SizedBox.shrink();
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: align,
       children: names.map((n) {
@@ -559,9 +557,9 @@ class _WatchlistNames extends StatelessWidget {
             if (align == CrossAxisAlignment.end) const Spacer(),
             Text(
               n,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: AppColors.accent,
+                color: colors.accent,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -570,15 +568,15 @@ class _WatchlistNames extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                 decoration: BoxDecoration(
-                  color: AppColors.success.withValues(alpha: 0.15),
+                  color: colors.success.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
                   contrib,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.success,
+                    color: colors.success,
                   ),
                 ),
               ),

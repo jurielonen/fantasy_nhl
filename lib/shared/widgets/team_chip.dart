@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../core/theme/app_colors.dart';
+import '../../core/utils/extensions.dart';
 
 class TeamChip extends StatelessWidget {
   final String abbreviation;
@@ -19,6 +19,7 @@ class TeamChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -27,12 +28,10 @@ class TeamChip extends StatelessWidget {
         margin: const EdgeInsets.only(right: 8),
         decoration: BoxDecoration(
           color: selected
-              ? AppColors.accent.withValues(alpha: 0.15)
-              : AppColors.surfaceVariant,
+              ? colors.accent.withValues(alpha: 0.15)
+              : colors.surfaceVariant,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: selected ? AppColors.accent : AppColors.border,
-          ),
+          border: Border.all(color: selected ? colors.accent : colors.border),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -52,7 +51,7 @@ class TeamChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: selected ? AppColors.accent : AppColors.textSecondary,
+                color: selected ? colors.accent : colors.textSecondary,
               ),
             ),
           ],

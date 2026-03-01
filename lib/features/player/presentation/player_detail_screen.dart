@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/player_hero_context.dart';
@@ -113,11 +111,11 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                     controller: _tabController,
                     isScrollable: true,
                     tabAlignment: TabAlignment.start,
-                    labelColor: AppColors.accent,
-                    unselectedLabelColor: AppColors.textSecondary,
-                    indicatorColor: AppColors.accent,
-                    dividerColor: AppColors.border,
-                    labelStyle: AppTextStyles.labelLarge,
+                    labelColor: context.appColors.accent,
+                    unselectedLabelColor: context.appColors.textSecondary,
+                    indicatorColor: context.appColors.accent,
+                    dividerColor: context.appColors.border,
+                    labelStyle: context.tsLabelLarge,
                     tabs: [
                       Tab(text: context.l10n.playerDetailTabOverview),
                       Tab(text: context.l10n.playerDetailTabGameLog),
@@ -178,7 +176,9 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                           child: Center(
                             child: Text(
                               context.l10n.playerDetailNoTeam,
-                              style: TextStyle(color: AppColors.textSecondary),
+                              style: TextStyle(
+                                color: context.appColors.textSecondary,
+                              ),
                             ),
                           ),
                         ),
@@ -296,7 +296,7 @@ class _StatTrendSection extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Text(
           context.l10n.playerDetailTrendError,
-          style: const TextStyle(color: AppColors.textSecondary),
+          style: TextStyle(color: context.appColors.textSecondary),
         ),
       ),
       data: (entries) => StatTrendChart(
@@ -322,7 +322,7 @@ class _WatchlistButton extends ConsumerWidget {
     return IconButton(
       icon: Icon(
         isInWatchlist ? Icons.bookmark_added : Icons.bookmark_add_outlined,
-        color: isInWatchlist ? AppColors.accent : null,
+        color: isInWatchlist ? context.appColors.accent : null,
       ),
       tooltip: isInWatchlist
           ? context.l10n.commonInWatchlist
@@ -355,7 +355,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return ColoredBox(color: AppColors.background, child: tabBar);
+    return ColoredBox(color: context.appColors.background, child: tabBar);
   }
 
   @override
