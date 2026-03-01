@@ -1,6 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/nhl_team.dart';
+import '../../../../core/network/providers.dart';
 import '../../domain/entities/player.dart';
 import '../../domain/entities/stat_leader.dart';
 import '../../providers.dart';
@@ -102,6 +104,27 @@ class ShowAllGoalieLeaders extends _$ShowAllGoalieLeaders {
 }
 
 // ── Browse by Team ──────────────────────────────────────────────────────────
+
+@riverpod
+Future<List<NhlTeam>> teamList(Ref ref) async {
+  try {
+    final standings = await ref.watch(nhlWebApiClientProvider).getStandings();
+    final teams =
+        standings.standings
+            ?.where((t) => t.teamAbbrev != null)
+            .map(
+              (t) => t.teamLogo != null
+                  ? NhlTeam.fromLogoUrl(t.teamAbbrev!, t.teamLogo!)
+                  : NhlTeam(t.teamAbbrev!),
+            )
+            .toList() ??
+        [];
+    if (teams.isEmpty) return AppConstants.teamCodes;
+    return teams..sort((a, b) => a.abbrev.compareTo(b.abbrev));
+  } catch (_) {
+    return AppConstants.teamCodes;
+  }
+}
 
 @riverpod
 Future<List<Player>> teamRoster(Ref ref, String teamAbbrev) {

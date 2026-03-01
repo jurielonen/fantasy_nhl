@@ -17,15 +17,16 @@ abstract class StandingsDto with _$StandingsDto {
 @freezed
 abstract class StandingsTeamDto with _$StandingsTeamDto {
   const factory StandingsTeamDto({
-    String? teamAbbrev,
+    @LocalizedStringConverter() String? teamAbbrev,
     @LocalizedStringConverter() String? teamName,
+    String? teamLogo,
     int? gamesPlayed,
     int? wins,
     int? losses,
     int? otLosses,
     int? points,
-    String? divisionName,
-    String? conferenceName,
+    @LocalizedStringConverter() String? divisionName,
+    @LocalizedStringConverter() String? conferenceName,
     int? divisionSequence,
     int? conferenceSequence,
     int? leagueSequence,

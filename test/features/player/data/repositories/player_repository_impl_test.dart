@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:fantasy_nhl/core/database/app_database.dart';
 import 'package:fantasy_nhl/core/database/daos/api_cache_dao.dart';
 import 'package:fantasy_nhl/core/database/daos/player_cache_dao.dart';
@@ -12,6 +9,8 @@ import 'package:fantasy_nhl/features/player/data/dtos/player_landing_dto.dart';
 import 'package:fantasy_nhl/features/player/data/dtos/player_stats_dto.dart';
 import 'package:fantasy_nhl/features/player/data/repositories/player_repository_impl.dart';
 import 'package:fantasy_nhl/features/player/domain/entities/player_detail.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockNhlWebApiClient extends Mock implements NhlWebApiClient {}
 
