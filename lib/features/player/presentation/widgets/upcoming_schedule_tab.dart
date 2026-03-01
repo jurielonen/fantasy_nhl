@@ -48,7 +48,7 @@ class UpcomingScheduleTab extends StatelessWidget {
             child: Center(
               child: Text(
                 context.l10n.scheduleUpcomingEmpty,
-                style: TextStyle(color: context.appColors.textSecondary),
+                style: context.tsBodyMedium,
               ),
             ),
           );
@@ -129,9 +129,7 @@ class _ScheduleRow extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               prefix,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+              style: context.tsBodySmallMedium.copyWith(
                 color: isHome ? colors.textPrimary : colors.textSecondary,
               ),
             ),
@@ -150,11 +148,7 @@ class _ScheduleRow extends StatelessWidget {
               ),
               child: Text(
                 context.l10n.scheduleBackToBack,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: colors.warning,
-                ),
+                style: context.tsBadgeLabel.copyWith(color: colors.warning),
               ),
             ),
         ],

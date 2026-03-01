@@ -202,9 +202,7 @@ class _CategoryTabs extends StatelessWidget {
               ),
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: context.tsLabelMedium.copyWith(
                   color: isSelected ? colors.accent : colors.textSecondary,
                 ),
               ),

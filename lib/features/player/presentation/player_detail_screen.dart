@@ -176,9 +176,7 @@ class _PlayerDetailScreenState extends ConsumerState<PlayerDetailScreen>
                           child: Center(
                             child: Text(
                               context.l10n.playerDetailNoTeam,
-                              style: TextStyle(
-                                color: context.appColors.textSecondary,
-                              ),
+                              style: context.tsBodyMedium,
                             ),
                           ),
                         ),
@@ -296,7 +294,7 @@ class _StatTrendSection extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Text(
           context.l10n.playerDetailTrendError,
-          style: TextStyle(color: context.appColors.textSecondary),
+          style: context.tsBodyMedium,
         ),
       ),
       data: (entries) => StatTrendChart(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/player_detail.dart';
 
@@ -57,8 +58,7 @@ class _CareerStatsTabState extends State<CareerStatsTab> {
                     onSelected: (v) => setState(() => _nhlOnly = v),
                     selectedColor: colors.accent.withValues(alpha: 0.2),
                     backgroundColor: colors.surfaceVariant,
-                    labelStyle: TextStyle(
-                      fontSize: 12,
+                    labelStyle: AppTextStyles.bodySmall.copyWith(
                       color: _nhlOnly ? colors.accent : colors.textSecondary,
                     ),
                     side: BorderSide(
@@ -91,20 +91,14 @@ class _SkaterTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final headerStyle = TextStyle(
-      fontSize: 11,
-      fontWeight: FontWeight.w600,
-      color: colors.textTertiary,
-    );
-    final dataStyle = TextStyle(fontSize: 12, color: colors.textPrimary);
     return DataTable(
       headingRowHeight: 36,
       dataRowMinHeight: 32,
       dataRowMaxHeight: 36,
       columnSpacing: 16,
       horizontalMargin: 0,
-      headingTextStyle: headerStyle,
-      dataTextStyle: dataStyle,
+      headingTextStyle: context.tsTableHeader,
+      dataTextStyle: context.tsBodySmall,
       columns: [
         DataColumn(label: Text(context.l10n.careerStatsColumnSeason)),
         DataColumn(label: Text(context.l10n.careerStatsColumnTeam)),
@@ -127,16 +121,13 @@ class _SkaterTable extends StatelessWidget {
             DataCell(
               Text(
                 '${s.points}',
-                style: dataStyle.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: colors.accent,
-                ),
+                style: context.tsBodySmallStrong.copyWith(color: colors.accent),
               ),
             ),
             DataCell(
               Text(
                 '${s.plusMinus > 0 ? "+" : ""}${s.plusMinus}',
-                style: dataStyle.copyWith(
+                style: context.tsBodySmall.copyWith(
                   color: s.plusMinus > 0
                       ? colors.success
                       : s.plusMinus < 0
@@ -160,20 +151,14 @@ class _GoalieTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final headerStyle = TextStyle(
-      fontSize: 11,
-      fontWeight: FontWeight.w600,
-      color: colors.textTertiary,
-    );
-    final dataStyle = TextStyle(fontSize: 12, color: colors.textPrimary);
     return DataTable(
       headingRowHeight: 36,
       dataRowMinHeight: 32,
       dataRowMaxHeight: 36,
       columnSpacing: 16,
       horizontalMargin: 0,
-      headingTextStyle: headerStyle,
-      dataTextStyle: dataStyle,
+      headingTextStyle: context.tsTableHeader,
+      dataTextStyle: context.tsBodySmall,
       columns: [
         DataColumn(label: Text(context.l10n.careerStatsColumnSeason)),
         DataColumn(label: Text(context.l10n.careerStatsColumnTeam)),
@@ -199,10 +184,7 @@ class _GoalieTable extends StatelessWidget {
             DataCell(
               Text(
                 '.${(s.savePctg * 1000).round()}',
-                style: dataStyle.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: colors.accent,
-                ),
+                style: context.tsBodySmallStrong.copyWith(color: colors.accent),
               ),
             ),
             DataCell(Text('${s.shutouts}')),

@@ -28,7 +28,7 @@ class WatchlistEmptyState extends StatelessWidget {
             Text(
               context.l10n.watchlistEmptySubtitle,
               textAlign: TextAlign.center,
-              style: TextStyle(color: context.appColors.textSecondary),
+              style: context.tsBodyMedium,
             ),
             const SizedBox(height: 24),
             FilledButton.icon(

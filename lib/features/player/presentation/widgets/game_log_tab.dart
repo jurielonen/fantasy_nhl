@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/app_error_widget.dart';
@@ -38,7 +39,7 @@ class GameLogTab extends StatelessWidget {
             child: Center(
               child: Text(
                 context.l10n.gameLogEmpty,
-                style: TextStyle(color: context.appColors.textSecondary),
+                style: context.tsBodyMedium,
               ),
             ),
           );
@@ -66,11 +67,6 @@ class _GameLogHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headerStyle = TextStyle(
-      fontSize: 11,
-      fontWeight: FontWeight.w600,
-      color: context.appColors.textTertiary,
-    );
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -80,35 +76,56 @@ class _GameLogHeader extends StatelessWidget {
         children: [
           SizedBox(
             width: 80,
-            child: Text(context.l10n.gameLogDate, style: headerStyle),
+            child: Text(context.l10n.gameLogDate, style: context.tsTableHeader),
           ),
           SizedBox(
             width: 56,
-            child: Text(context.l10n.gameLogOpp, style: headerStyle),
+            child: Text(context.l10n.gameLogOpp, style: context.tsTableHeader),
           ),
           if (isGoalie) ...[
             SizedBox(
               width: 32,
-              child: Text(context.l10n.gameLogDec, style: headerStyle),
+              child: Text(
+                context.l10n.gameLogDec,
+                style: context.tsTableHeader,
+              ),
             ),
-            SizedBox(width: 32, child: Text('GA', style: headerStyle)),
-            SizedBox(width: 32, child: Text('SV', style: headerStyle)),
+            SizedBox(
+              width: 32,
+              child: Text('GA', style: context.tsTableHeader),
+            ),
+            SizedBox(
+              width: 32,
+              child: Text('SV', style: context.tsTableHeader),
+            ),
             Expanded(
               child: Text(
                 'SV%',
-                style: headerStyle,
+                style: context.tsTableHeader,
                 textAlign: TextAlign.right,
               ),
             ),
           ] else ...[
-            SizedBox(width: 56, child: Text('G-A-P', style: headerStyle)),
-            SizedBox(width: 32, child: Text('+/-', style: headerStyle)),
-            SizedBox(width: 32, child: Text('SOG', style: headerStyle)),
-            SizedBox(width: 48, child: Text('TOI', style: headerStyle)),
+            SizedBox(
+              width: 56,
+              child: Text('G-A-P', style: context.tsTableHeader),
+            ),
+            SizedBox(
+              width: 32,
+              child: Text('+/-', style: context.tsTableHeader),
+            ),
+            SizedBox(
+              width: 32,
+              child: Text('SOG', style: context.tsTableHeader),
+            ),
+            SizedBox(
+              width: 48,
+              child: Text('TOI', style: context.tsTableHeader),
+            ),
             Expanded(
               child: Text(
                 'PIM',
-                style: headerStyle,
+                style: context.tsTableHeader,
                 textAlign: TextAlign.right,
               ),
             ),
@@ -149,9 +166,7 @@ class _GameLogRow extends StatelessWidget {
             width: 56,
             child: Text(
               '${entry.homeAway == "A" ? "@" : "vs"} ${entry.opponentAbbrev}',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+              style: AppTextStyles.bodySmallMedium.copyWith(
                 color: colors.textPrimary,
               ),
             ),
@@ -173,9 +188,7 @@ class _GameLogRow extends StatelessWidget {
         width: 56,
         child: Text(
           gap,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+          style: AppTextStyles.bodySmallStrong.copyWith(
             color: (entry.points ?? 0) > 0 ? colors.accent : colors.textPrimary,
           ),
         ),
@@ -184,8 +197,7 @@ class _GameLogRow extends StatelessWidget {
         width: 32,
         child: Text(
           pmStr,
-          style: TextStyle(
-            fontSize: 12,
+          style: AppTextStyles.bodySmall.copyWith(
             color: pm > 0
                 ? colors.success
                 : pm < 0
@@ -198,20 +210,20 @@ class _GameLogRow extends StatelessWidget {
         width: 32,
         child: Text(
           '${entry.shots ?? 0}',
-          style: TextStyle(fontSize: 12, color: colors.textSecondary),
+          style: AppTextStyles.bodySmall.copyWith(color: colors.textSecondary),
         ),
       ),
       SizedBox(
         width: 48,
         child: Text(
           entry.toi ?? '-',
-          style: TextStyle(fontSize: 12, color: colors.textSecondary),
+          style: AppTextStyles.bodySmall.copyWith(color: colors.textSecondary),
         ),
       ),
       Expanded(
         child: Text(
           '${entry.pim ?? 0}',
-          style: TextStyle(fontSize: 12, color: colors.textSecondary),
+          style: AppTextStyles.bodySmall.copyWith(color: colors.textSecondary),
           textAlign: TextAlign.right,
         ),
       ),
@@ -227,9 +239,7 @@ class _GameLogRow extends StatelessWidget {
         width: 32,
         child: Text(
           entry.decision ?? '-',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+          style: AppTextStyles.bodySmallStrong.copyWith(
             color: entry.decision == 'W'
                 ? colors.success
                 : entry.decision == 'L'
@@ -242,22 +252,20 @@ class _GameLogRow extends StatelessWidget {
         width: 32,
         child: Text(
           '${entry.goalsAgainst ?? 0}',
-          style: TextStyle(fontSize: 12, color: colors.textSecondary),
+          style: AppTextStyles.bodySmall.copyWith(color: colors.textSecondary),
         ),
       ),
       SizedBox(
         width: 32,
         child: Text(
           '$saves',
-          style: TextStyle(fontSize: 12, color: colors.textSecondary),
+          style: AppTextStyles.bodySmall.copyWith(color: colors.textSecondary),
         ),
       ),
       Expanded(
         child: Text(
           svPct != null ? '.${(svPct * 1000).round()}' : '-',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+          style: AppTextStyles.bodySmallStrong.copyWith(
             color: svPct != null && svPct >= 0.930
                 ? colors.success
                 : svPct != null && svPct < 0.880

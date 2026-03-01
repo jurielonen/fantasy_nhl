@@ -108,11 +108,7 @@ class _Headshot extends StatelessWidget {
           : Center(
               child: Text(
                 fallback.isNotEmpty ? fallback[0] : '?',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: colors.textSecondary,
-                ),
+                style: context.tsHeadshotFallback,
               ),
             ),
     );
@@ -134,11 +130,7 @@ class _PositionBadge extends StatelessWidget {
       ),
       child: Text(
         position,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: colors.accent,
-        ),
+        style: context.tsBodySmallStrong.copyWith(color: colors.accent),
       ),
     );
   }
@@ -157,14 +149,7 @@ class _TeamBadge extends StatelessWidget {
         color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Text(
-        abbrev,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: colors.textSecondary,
-        ),
-      ),
+      child: Text(abbrev, style: context.tsBodySmallStrongSecondary),
     );
   }
 }

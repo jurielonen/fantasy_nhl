@@ -51,13 +51,7 @@ class _ScheduleGameCardState extends State<ScheduleGameCard> {
               // Venue
               if (game.venue != null) ...[
                 const SizedBox(height: 4),
-                Text(
-                  game.venue!,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: context.appColors.textTertiary,
-                  ),
-                ),
+                Text(game.venue!, style: context.tsCaption),
               ],
               // Shots on goal (live or final)
               if (_showShotsOnGoal) ...[
@@ -110,25 +104,12 @@ class _ScheduleGameCardState extends State<ScheduleGameCard> {
       children: [
         Text(
           '${game.awayTeam?.shotsOnGoal ?? 0}',
-          style: TextStyle(
-            fontSize: 12,
-            color: context.appColors.textSecondary,
-          ),
+          style: context.tsBodySmallSecondary,
         ),
-        Text(
-          ' SOG ',
-          style: TextStyle(
-            fontSize: 10,
-            color: context.appColors.textTertiary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        Text(' SOG ', style: context.tsMicroLabel),
         Text(
           '${game.homeTeam?.shotsOnGoal ?? 0}',
-          style: TextStyle(
-            fontSize: 12,
-            color: context.appColors.textSecondary,
-          ),
+          style: context.tsBodySmallSecondary,
         ),
       ],
     );
@@ -203,7 +184,6 @@ class _TeamColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
     return Column(
       crossAxisAlignment: alignEnd
           ? CrossAxisAlignment.end
@@ -219,18 +199,11 @@ class _TeamColumn extends StatelessWidget {
               errorWidget: (context, url, error) => const SizedBox(width: 32),
             ),
           ),
-        Text(
-          team?.abbrev ?? '',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: colors.textPrimary,
-          ),
-        ),
+        Text(team?.abbrev ?? '', style: context.tsTitleLargeBold),
         if (team?.name != null && team!.name.isNotEmpty)
           Text(
             team!.name,
-            style: TextStyle(fontSize: 12, color: colors.textSecondary),
+            style: context.tsBodySmallSecondary,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -276,11 +249,7 @@ class _GameStatusCenter extends StatelessWidget {
               ),
               child: Text(
                 context.l10n.scheduleLive,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: colors.success,
-                ),
+                style: context.tsBadgeLabel.copyWith(color: colors.success),
               ),
             ),
           ],
@@ -288,17 +257,10 @@ class _GameStatusCenter extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           '${game.awayScore ?? 0} - ${game.homeScore ?? 0}',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: colors.textPrimary,
-          ),
+          style: context.tsScoreDisplay,
         ),
         if (periodText != null)
-          Text(
-            periodText,
-            style: TextStyle(fontSize: 11, color: colors.textSecondary),
-          ),
+          Text(periodText, style: context.tsCaptionSecondary),
       ],
     );
   }
@@ -321,19 +283,14 @@ class _GameStatusCenter extends StatelessWidget {
   }
 
   Widget _buildFinal(BuildContext context) {
-    final colors = context.appColors;
     final label = _finalLabel(context);
     return Column(
       children: [
-        Text(label, style: TextStyle(fontSize: 11, color: colors.textTertiary)),
+        Text(label, style: context.tsCaption),
         const SizedBox(height: 2),
         Text(
           '${game.awayScore ?? 0} - ${game.homeScore ?? 0}',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: colors.textPrimary,
-          ),
+          style: context.tsScoreDisplay,
         ),
       ],
     );
@@ -350,9 +307,7 @@ class _GameStatusCenter extends StatelessWidget {
   Widget _buildFuture(BuildContext context) {
     return Text(
       _formatTime(context, game.startTimeUtc),
-      style: TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
+      style: context.tsPlayerName.copyWith(
         color: context.appColors.textSecondary,
       ),
     );
@@ -421,10 +376,8 @@ class _GoalsTimeline extends StatelessWidget {
       children: [
         Text(
           context.l10n.scheduleGoals,
-          style: TextStyle(
-            fontSize: 12,
+          style: context.tsBodySmallSecondary.copyWith(
             fontWeight: FontWeight.bold,
-            color: context.appColors.textSecondary,
           ),
         ),
         const SizedBox(height: 4),
@@ -456,11 +409,7 @@ class _GoalRow extends StatelessWidget {
             width: 48,
             child: Text(
               'P${goal.period} ${goal.timeInPeriod}',
-              style: TextStyle(
-                fontSize: 11,
-                color: colors.textTertiary,
-                fontWeight: FontWeight.w500,
-              ),
+              style: context.tsCaption.copyWith(fontWeight: FontWeight.w500),
             ),
           ),
           // Mugshot
@@ -485,46 +434,30 @@ class _GoalRow extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: goal.scorerName,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: colors.textPrimary,
-                        ),
+                        style: context.tsBodySmallStrong,
                       ),
                       TextSpan(
                         text: ' (${goal.teamAbbrev})',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: colors.textSecondary,
-                        ),
+                        style: context.tsCaptionSecondary,
                       ),
                       if (goal.strength != 'ev')
                         TextSpan(
                           text: ' ${goal.strength.toUpperCase()}',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                          style: context.tsBadgeLabel.copyWith(
                             color: colors.accent,
                           ),
                         ),
                     ],
                   ),
                 ),
-                Text(
-                  assistText,
-                  style: TextStyle(fontSize: 11, color: colors.textTertiary),
-                ),
+                Text(assistText, style: context.tsCaption),
               ],
             ),
           ),
           // Running score
           Text(
             '${goal.awayScore}-${goal.homeScore}',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: colors.textSecondary,
-            ),
+            style: context.tsBodySmallStrongSecondary,
           ),
         ],
       ),
@@ -557,11 +490,7 @@ class _WatchlistNames extends StatelessWidget {
             if (align == CrossAxisAlignment.end) const Spacer(),
             Text(
               n,
-              style: TextStyle(
-                fontSize: 12,
-                color: colors.accent,
-                fontWeight: FontWeight.w500,
-              ),
+              style: context.tsBodySmallMedium.copyWith(color: colors.accent),
             ),
             if (contrib != null) ...[
               const SizedBox(width: 4),
@@ -573,11 +502,7 @@ class _WatchlistNames extends StatelessWidget {
                 ),
                 child: Text(
                   contrib,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: colors.success,
-                  ),
+                  style: context.tsBadgeLabel.copyWith(color: colors.success),
                 ),
               ),
             ],

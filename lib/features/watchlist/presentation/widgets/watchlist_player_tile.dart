@@ -75,11 +75,7 @@ class WatchlistPlayerTile extends StatelessWidget {
                   children: [
                     Text(
                       info.player.fullName,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: colors.textPrimary,
-                      ),
+                      style: context.tsPlayerName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -121,7 +117,7 @@ class _Avatar extends StatelessWidget {
         backgroundColor: colors.surfaceVariant,
         child: Text(
           name.isNotEmpty ? name[0] : '?',
-          style: TextStyle(color: colors.textSecondary),
+          style: context.tsBodyMedium,
         ),
       );
     }
@@ -146,14 +142,7 @@ class _Badge extends StatelessWidget {
         color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: colors.textSecondary,
-        ),
-      ),
+      child: Text(text, style: context.tsTableHeaderSecondary),
     );
   }
 }
@@ -196,22 +185,11 @@ class _GameStatusWidget extends StatelessWidget {
           ),
           child: Text(
             context.l10n.watchlistLive,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              color: colors.success,
-            ),
+            style: context.tsBadgeLabel.copyWith(color: colors.success),
           ),
         ),
         const SizedBox(height: 2),
-        Text(
-          score,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: colors.textPrimary,
-          ),
-        ),
+        Text(score, style: context.tsBodySmallStrong),
       ],
     );
   }
@@ -228,23 +206,18 @@ class _GameStatusWidget extends StatelessWidget {
       children: [
         Text(
           context.l10n.watchlistFinalScore(score),
-          style: TextStyle(fontSize: 11, color: colors.textSecondary),
+          style: context.tsCaptionSecondary,
         ),
         if (log != null)
           Text(
             _formatStatLine(log),
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: colors.accent,
-            ),
+            style: context.tsBodySmallStrong.copyWith(color: colors.accent),
           ),
       ],
     );
   }
 
   Widget _futureGameWidget(BuildContext context, ScheduleGame game) {
-    final colors = context.appColors;
     final teamAbbrev = info.player.teamAbbrev;
     final isHome = game.homeTeamAbbrev == teamAbbrev;
     final opponent = isHome ? game.awayTeamAbbrev : game.homeTeamAbbrev;
@@ -255,34 +228,23 @@ class _GameStatusWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(
-          '$prefix $opponent',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: colors.textPrimary,
-          ),
-        ),
-        Text(time, style: TextStyle(fontSize: 11, color: colors.textSecondary)),
+        Text('$prefix $opponent', style: context.tsLabelMedium),
+        Text(time, style: context.tsCaptionSecondary),
       ],
     );
   }
 
   Widget _noGameWidget(BuildContext context) {
-    final colors = context.appColors;
     final log = info.lastGameLog;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(
-          context.l10n.watchlistNoGameToday,
-          style: TextStyle(fontSize: 11, color: colors.textTertiary),
-        ),
+        Text(context.l10n.watchlistNoGameToday, style: context.tsCaption),
         if (log != null)
           Text(
             '${DateFormat.MMMd(context.localeName).format(log.date)}: ${_formatStatLine(log)}',
-            style: TextStyle(fontSize: 11, color: colors.textSecondary),
+            style: context.tsCaptionSecondary,
           ),
       ],
     );
