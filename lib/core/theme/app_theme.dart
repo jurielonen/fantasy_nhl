@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
+import 'app_theme_extension.dart';
 
 class AppTheme {
   AppTheme._();
@@ -8,11 +9,27 @@ class AppTheme {
     final colorScheme = ColorScheme.dark(
       primary: AppColors.accent,
       onPrimary: AppColors.background,
+      primaryContainer: AppColors.accentDim.withValues(alpha: 0.2),
+      onPrimaryContainer: AppColors.accent,
       secondary: AppColors.accentDim,
+      onSecondary: AppColors.background,
+      secondaryContainer: AppColors.surfaceVariant,
+      onSecondaryContainer: AppColors.textPrimary,
       surface: AppColors.surface,
       onSurface: AppColors.textPrimary,
-      error: AppColors.error,
+      onSurfaceVariant: AppColors.textSecondary,
+      surfaceContainerHighest: AppColors.surfaceVariant,
+      surfaceContainer: AppColors.surfaceVariant,
+      surfaceContainerHigh: AppColors.surfaceVariant,
       outline: AppColors.border,
+      outlineVariant: AppColors.border.withValues(alpha: 0.5),
+      error: AppColors.error,
+      onError: AppColors.textPrimary,
+      inverseSurface: AppColors.textPrimary,
+      onInverseSurface: AppColors.background,
+      inversePrimary: AppColors.accentDim,
+      scrim: Colors.black,
+      shadow: Colors.black,
     );
 
     return ThemeData(
@@ -20,6 +37,7 @@ class AppTheme {
       brightness: Brightness.dark,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.background,
+      extensions: [AppThemeExtension.dark as ThemeExtension<dynamic>],
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
@@ -78,31 +96,47 @@ class AppTheme {
   }
 
   static ThemeData get lightTheme {
-    const accent = AppColors.accentDim;
     final colorScheme = ColorScheme.light(
-      primary: accent,
+      primary: AppColors.accentDim,
       onPrimary: Colors.white,
+      primaryContainer: AppColors.accentDim.withValues(alpha: 0.12),
+      onPrimaryContainer: AppColors.accentDim,
       secondary: AppColors.accent,
-      surface: Colors.white,
-      onSurface: const Color(0xFF1F2328),
+      onSecondary: Colors.white,
+      secondaryContainer: AppColors.lightSurfaceVariant,
+      onSecondaryContainer: AppColors.lightTextPrimary,
+      surface: AppColors.lightSurface,
+      onSurface: AppColors.lightTextPrimary,
+      onSurfaceVariant: AppColors.lightTextSecondary,
+      surfaceContainerHighest: AppColors.lightSurfaceVariant,
+      surfaceContainer: AppColors.lightSurfaceVariant,
+      surfaceContainerHigh: AppColors.lightSurfaceVariant,
+      outline: AppColors.lightBorder,
+      outlineVariant: AppColors.lightBorder.withValues(alpha: 0.5),
       error: AppColors.error,
-      outline: const Color(0xFFD0D7DE),
+      onError: Colors.white,
+      inverseSurface: AppColors.lightTextPrimary,
+      onInverseSurface: AppColors.lightSurface,
+      inversePrimary: AppColors.accentDim,
+      scrim: Colors.black,
+      shadow: Colors.black,
     );
 
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: const Color(0xFFF6F8FA),
+      scaffoldBackgroundColor: AppColors.lightBackground,
+      extensions: [AppThemeExtension.light as ThemeExtension<dynamic>],
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
-        foregroundColor: Color(0xFF1F2328),
+        backgroundColor: AppColors.lightSurface,
+        foregroundColor: AppColors.lightTextPrimary,
         elevation: 0,
         centerTitle: false,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: Colors.white,
-        indicatorColor: accent.withValues(alpha: 0.15),
+        backgroundColor: AppColors.lightSurface,
+        indicatorColor: AppColors.accentDim.withValues(alpha: 0.15),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const TextStyle(
@@ -111,41 +145,44 @@ class AppTheme {
               color: AppColors.accentDim,
             );
           }
-          return const TextStyle(fontSize: 12, color: Color(0xFF656D76));
+          return const TextStyle(
+            fontSize: 12,
+            color: AppColors.lightTextSecondary,
+          );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: AppColors.accentDim);
           }
-          return const IconThemeData(color: Color(0xFF656D76));
+          return const IconThemeData(color: AppColors.lightTextSecondary);
         }),
       ),
       cardTheme: CardThemeData(
-        color: Colors.white,
+        color: AppColors.lightSurface,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: Color(0xFFD0D7DE)),
+          side: const BorderSide(color: AppColors.lightBorder),
         ),
       ),
       dividerTheme: const DividerThemeData(
-        color: Color(0xFFD0D7DE),
+        color: AppColors.lightBorder,
         thickness: 1,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFFF6F8FA),
+        fillColor: AppColors.lightSurfaceVariant,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
         ),
-        hintStyle: const TextStyle(color: Color(0xFF656D76)),
+        hintStyle: const TextStyle(color: AppColors.lightTextTertiary),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: const Color(0xFFF6F8FA),
-        selectedColor: accent.withValues(alpha: 0.15),
-        labelStyle: const TextStyle(color: Color(0xFF1F2328)),
-        side: const BorderSide(color: Color(0xFFD0D7DE)),
+        backgroundColor: AppColors.lightSurfaceVariant,
+        selectedColor: AppColors.accentDim.withValues(alpha: 0.15),
+        labelStyle: const TextStyle(color: AppColors.lightTextPrimary),
+        side: const BorderSide(color: AppColors.lightBorder),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/app_error_widget.dart';
 import '../../../../shared/widgets/shimmer_loader.dart';
@@ -39,7 +38,7 @@ class GameLogTab extends StatelessWidget {
             child: Center(
               child: Text(
                 context.l10n.gameLogEmpty,
-                style: TextStyle(color: AppColors.textSecondary),
+                style: TextStyle(color: context.appColors.textSecondary),
               ),
             ),
           );
@@ -67,47 +66,49 @@ class _GameLogHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final headerStyle = TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w600,
+      color: context.appColors.textTertiary,
+    );
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.border)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: context.appColors.border)),
       ),
       child: Row(
         children: [
           SizedBox(
             width: 80,
-            child: Text(context.l10n.gameLogDate, style: _headerStyle),
+            child: Text(context.l10n.gameLogDate, style: headerStyle),
           ),
           SizedBox(
             width: 56,
-            child: Text(context.l10n.gameLogOpp, style: _headerStyle),
+            child: Text(context.l10n.gameLogOpp, style: headerStyle),
           ),
           if (isGoalie) ...[
             SizedBox(
               width: 32,
-              child: Text(context.l10n.gameLogDec, style: _headerStyle),
+              child: Text(context.l10n.gameLogDec, style: headerStyle),
             ),
-            const SizedBox(width: 32, child: Text('GA', style: _headerStyle)),
-            const SizedBox(width: 32, child: Text('SV', style: _headerStyle)),
-            const Expanded(
+            SizedBox(width: 32, child: Text('GA', style: headerStyle)),
+            SizedBox(width: 32, child: Text('SV', style: headerStyle)),
+            Expanded(
               child: Text(
                 'SV%',
-                style: _headerStyle,
+                style: headerStyle,
                 textAlign: TextAlign.right,
               ),
             ),
           ] else ...[
-            const SizedBox(
-              width: 56,
-              child: Text('G-A-P', style: _headerStyle),
-            ),
-            const SizedBox(width: 32, child: Text('+/-', style: _headerStyle)),
-            const SizedBox(width: 32, child: Text('SOG', style: _headerStyle)),
-            const SizedBox(width: 48, child: Text('TOI', style: _headerStyle)),
-            const Expanded(
+            SizedBox(width: 56, child: Text('G-A-P', style: headerStyle)),
+            SizedBox(width: 32, child: Text('+/-', style: headerStyle)),
+            SizedBox(width: 32, child: Text('SOG', style: headerStyle)),
+            SizedBox(width: 48, child: Text('TOI', style: headerStyle)),
+            Expanded(
               child: Text(
                 'PIM',
-                style: _headerStyle,
+                style: headerStyle,
                 textAlign: TextAlign.right,
               ),
             ),
@@ -126,15 +127,14 @@ class _GameLogRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = _getRowColor();
+    final colors = context.appColors;
+    final bgColor = _getRowColor(colors);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: bgColor,
-        border: const Border(
-          bottom: BorderSide(color: AppColors.border, width: 0.5),
-        ),
+        border: Border(bottom: BorderSide(color: colors.border, width: 0.5)),
       ),
       child: Row(
         children: [
@@ -142,27 +142,27 @@ class _GameLogRow extends StatelessWidget {
             width: 80,
             child: Text(
               _formatDate(entry.date, context.localeName),
-              style: AppTextStyles.labelSmall,
+              style: context.tsLabelSmall,
             ),
           ),
           SizedBox(
             width: 56,
             child: Text(
               '${entry.homeAway == "A" ? "@" : "vs"} ${entry.opponentAbbrev}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: colors.textPrimary,
               ),
             ),
           ),
-          if (isGoalie) ..._goalieStats() else ..._skaterStats(),
+          if (isGoalie) ..._goalieStats(colors) else ..._skaterStats(colors),
         ],
       ),
     );
   }
 
-  List<Widget> _skaterStats() {
+  List<Widget> _skaterStats(AppThemeExtension colors) {
     final gap =
         '${entry.goals ?? 0}-${entry.assists ?? 0}-${entry.points ?? 0}';
     final pm = entry.plusMinus ?? 0;
@@ -176,9 +176,7 @@ class _GameLogRow extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: (entry.points ?? 0) > 0
-                ? AppColors.accent
-                : AppColors.textPrimary,
+            color: (entry.points ?? 0) > 0 ? colors.accent : colors.textPrimary,
           ),
         ),
       ),
@@ -189,10 +187,10 @@ class _GameLogRow extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             color: pm > 0
-                ? AppColors.success
+                ? colors.success
                 : pm < 0
-                ? AppColors.error
-                : AppColors.textSecondary,
+                ? colors.error
+                : colors.textSecondary,
           ),
         ),
       ),
@@ -200,27 +198,27 @@ class _GameLogRow extends StatelessWidget {
         width: 32,
         child: Text(
           '${entry.shots ?? 0}',
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 12, color: colors.textSecondary),
         ),
       ),
       SizedBox(
         width: 48,
         child: Text(
           entry.toi ?? '-',
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 12, color: colors.textSecondary),
         ),
       ),
       Expanded(
         child: Text(
           '${entry.pim ?? 0}',
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 12, color: colors.textSecondary),
           textAlign: TextAlign.right,
         ),
       ),
     ];
   }
 
-  List<Widget> _goalieStats() {
+  List<Widget> _goalieStats(AppThemeExtension colors) {
     final saves = (entry.shotsAgainst ?? 0) - (entry.goalsAgainst ?? 0);
     final svPct = entry.savePctg;
 
@@ -233,10 +231,10 @@ class _GameLogRow extends StatelessWidget {
             fontSize: 12,
             fontWeight: FontWeight.w600,
             color: entry.decision == 'W'
-                ? AppColors.success
+                ? colors.success
                 : entry.decision == 'L'
-                ? AppColors.error
-                : AppColors.textSecondary,
+                ? colors.error
+                : colors.textSecondary,
           ),
         ),
       ),
@@ -244,14 +242,14 @@ class _GameLogRow extends StatelessWidget {
         width: 32,
         child: Text(
           '${entry.goalsAgainst ?? 0}',
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 12, color: colors.textSecondary),
         ),
       ),
       SizedBox(
         width: 32,
         child: Text(
           '$saves',
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 12, color: colors.textSecondary),
         ),
       ),
       Expanded(
@@ -261,10 +259,10 @@ class _GameLogRow extends StatelessWidget {
             fontSize: 12,
             fontWeight: FontWeight.w600,
             color: svPct != null && svPct >= 0.930
-                ? AppColors.success
+                ? colors.success
                 : svPct != null && svPct < 0.880
-                ? AppColors.error
-                : AppColors.textPrimary,
+                ? colors.error
+                : colors.textPrimary,
           ),
           textAlign: TextAlign.right,
         ),
@@ -272,20 +270,22 @@ class _GameLogRow extends StatelessWidget {
     ];
   }
 
-  Color? _getRowColor() {
+  Color? _getRowColor(AppThemeExtension colors) {
     if (isGoalie) {
       final svPct = entry.savePctg;
       if (svPct != null && svPct >= 0.930) {
-        return AppColors.success.withValues(alpha: 0.08);
+        return colors.success.withValues(alpha: 0.08);
       }
       if (svPct != null && svPct < 0.880) {
-        return AppColors.error.withValues(alpha: 0.08);
+        return colors.error.withValues(alpha: 0.08);
       }
     } else {
       final pts = entry.points ?? 0;
       final pm = entry.plusMinus ?? 0;
-      if (pts >= 3) return AppColors.success.withValues(alpha: 0.08);
-      if (pts == 0 && pm < 0) return AppColors.error.withValues(alpha: 0.08);
+      if (pts >= 3) return colors.success.withValues(alpha: 0.08);
+      if (pts == 0 && pm < 0) {
+        return colors.error.withValues(alpha: 0.08);
+      }
     }
     return null;
   }
@@ -293,9 +293,3 @@ class _GameLogRow extends StatelessWidget {
   String _formatDate(DateTime date, String locale) =>
       DateFormat.MMMd(locale).format(date);
 }
-
-const _headerStyle = TextStyle(
-  fontSize: 11,
-  fontWeight: FontWeight.w600,
-  color: AppColors.textTertiary,
-);

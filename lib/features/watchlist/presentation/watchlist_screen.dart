@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/router/app_router.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../shared/widgets/app_error_widget.dart';
 import '../../../shared/widgets/player_hero_context.dart';
@@ -83,7 +82,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
       body: Column(
         children: [
           const WatchlistSelector(),
-          const Divider(height: 1, color: AppColors.border),
+          Divider(height: 1, color: context.appColors.border),
           Expanded(child: _buildBody(selectedWatchlist)),
         ],
       ),
@@ -100,7 +99,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
       child: Row(
         children: [
           if (type == current)
-            const Icon(Icons.check, size: 18, color: AppColors.accent)
+            Icon(Icons.check, size: 18, color: context.appColors.accent)
           else
             const SizedBox(width: 18),
           const SizedBox(width: 8),
@@ -279,7 +278,7 @@ class _PlayerList extends StatelessWidget {
       proxyDecorator: (child, index, animation) {
         return Material(
           elevation: 4,
-          color: AppColors.surface,
+          color: context.appColors.surface,
           borderRadius: BorderRadius.circular(8),
           child: child,
         );

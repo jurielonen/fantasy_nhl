@@ -24,4 +24,15 @@ class AppColors {
 
   // Dividers / borders
   static const border = Color(0xFF30363D);
+
+  // Light palette
+  static const lightBackground = Color(0xFFF6F8FA);
+  static const lightSurface = Color(0xFFFFFFFF);
+  static const lightSurfaceVariant = Color(0xFFF6F8FA);
+  static const lightTextPrimary = Color(0xFF1F2328);
+  static const lightTextSecondary = Color(0xFF656D76);
+  static const lightTextTertiary = Color(0xFF8C959F);
+  static const lightBorder = Color(0xFFD0D7DE);
+  static const lightSuccess = Color(0xFF1A7F37);
+  static const lightWarning = Color(0xFF9A6700);
 }

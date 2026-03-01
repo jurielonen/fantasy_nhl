@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/theme/app_colors.dart';
+import '../../core/utils/extensions.dart';
 import '../../features/player/domain/entities/player.dart';
 import 'player_hero_context.dart';
 
@@ -21,15 +21,16 @@ class PlayerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: 160,
         margin: const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: colors.border),
         ),
         clipBehavior: Clip.antiAlias,
         child: Stack(
@@ -44,22 +45,22 @@ class PlayerCard extends StatelessWidget {
                         fit: BoxFit.cover,
                         alignment: Alignment.topCenter,
                         placeholder: (context, url) =>
-                            const ColoredBox(color: AppColors.surfaceVariant),
-                        errorWidget: (context, url, error) => const ColoredBox(
-                          color: AppColors.surfaceVariant,
+                            ColoredBox(color: colors.surfaceVariant),
+                        errorWidget: (context, url, error) => ColoredBox(
+                          color: colors.surfaceVariant,
                           child: Icon(
                             Icons.person,
                             size: 48,
-                            color: AppColors.textTertiary,
+                            color: colors.textTertiary,
                           ),
                         ),
                       )
-                    : const ColoredBox(
-                        color: AppColors.surfaceVariant,
+                    : ColoredBox(
+                        color: colors.surfaceVariant,
                         child: Icon(
                           Icons.person,
                           size: 48,
-                          color: AppColors.textTertiary,
+                          color: colors.textTertiary,
                         ),
                       ),
               ),
@@ -77,8 +78,8 @@ class PlayerCard extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      AppColors.surface.withValues(alpha: 0.85),
-                      AppColors.surface,
+                      colors.surface.withValues(alpha: 0.85),
+                      colors.surface,
                     ],
                   ),
                 ),
@@ -95,10 +96,10 @@ class PlayerCard extends StatelessWidget {
                 children: [
                   Text(
                     player.fullName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: colors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -109,20 +110,17 @@ class PlayerCard extends StatelessWidget {
                       if (player.teamAbbrev != null)
                         Text(
                           player.teamAbbrev!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: AppColors.textSecondary,
+                            color: colors.textSecondary,
                           ),
                         ),
-                      const Text(
-                        ' · ',
-                        style: TextStyle(color: AppColors.textTertiary),
-                      ),
+                      Text(' · ', style: TextStyle(color: colors.textTertiary)),
                       Text(
                         player.position,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
-                          color: AppColors.textSecondary,
+                          color: colors.textSecondary,
                         ),
                       ),
                     ],
@@ -131,10 +129,10 @@ class PlayerCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       featuredStat!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.accent,
+                        color: colors.accent,
                       ),
                     ),
                   ],
@@ -158,7 +156,7 @@ class ShimmerPlayerCard extends StatelessWidget {
       height: 200,
       margin: const EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
+        color: context.appColors.surfaceVariant,
         borderRadius: BorderRadius.circular(12),
       ),
     );

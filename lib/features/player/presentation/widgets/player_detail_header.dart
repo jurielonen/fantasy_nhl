@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/player_hero_context.dart';
 import '../../domain/entities/player.dart';
@@ -41,14 +39,14 @@ class PlayerDetailHeader extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(player.fullName, style: AppTextStyles.headlineMedium),
+                  Text(player.fullName, style: context.tsHeadlineMedium),
                   const SizedBox(height: 4),
                   Row(
                     children: [
                       if (player.sweaterNumber != null)
                         Text(
                           '#${player.sweaterNumber}',
-                          style: AppTextStyles.bodyMedium,
+                          style: context.tsBodyMedium,
                         ),
                       if (player.sweaterNumber != null)
                         const SizedBox(width: 8),
@@ -88,37 +86,32 @@ class _Headshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       width: 80,
       height: 80,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.surfaceVariant,
-        border: Border.all(color: AppColors.accent, width: 2),
+        color: colors.surfaceVariant,
+        border: Border.all(color: colors.accent, width: 2),
       ),
       clipBehavior: Clip.antiAlias,
       child: url != null && url!.isNotEmpty
           ? CachedNetworkImage(
               imageUrl: url!,
               fit: BoxFit.cover,
-              placeholder: (_, _) => const Icon(
-                Icons.person,
-                size: 40,
-                color: AppColors.textTertiary,
-              ),
-              errorWidget: (_, _, _) => const Icon(
-                Icons.person,
-                size: 40,
-                color: AppColors.textTertiary,
-              ),
+              placeholder: (_, _) =>
+                  Icon(Icons.person, size: 40, color: colors.textTertiary),
+              errorWidget: (_, _, _) =>
+                  Icon(Icons.person, size: 40, color: colors.textTertiary),
             )
           : Center(
               child: Text(
                 fallback.isNotEmpty ? fallback[0] : '?',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textSecondary,
+                  color: colors.textSecondary,
                 ),
               ),
             ),
@@ -132,18 +125,19 @@ class _PositionBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.accent),
+        border: Border.all(color: colors.accent),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         position,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: AppColors.accent,
+          color: colors.accent,
         ),
       ),
     );
@@ -156,18 +150,19 @@ class _TeamBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
+        color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         abbrev,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: AppColors.textSecondary,
+          color: colors.textSecondary,
         ),
       ),
     );
@@ -215,7 +210,7 @@ class _BioRow extends StatelessWidget {
         spacing: 16,
         runSpacing: 4,
         children: items
-            .map((item) => Text(item, style: AppTextStyles.bodyMedium))
+            .map((item) => Text(item, style: context.tsBodyMedium))
             .toList(),
       ),
     );
@@ -259,15 +254,15 @@ class _DraftInfoRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          const Icon(
+          Icon(
             Icons.sports_hockey,
             size: 14,
-            color: AppColors.textTertiary,
+            color: context.appColors.textTertiary,
           ),
           const SizedBox(width: 6),
           Text(
             context.l10n.playerDetailDraftLabel(parts.join(' · ')),
-            style: AppTextStyles.labelSmall,
+            style: context.tsLabelSmall,
           ),
         ],
       ),

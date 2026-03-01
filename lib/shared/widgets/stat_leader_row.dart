@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/theme/app_colors.dart';
+import '../../core/utils/extensions.dart';
 import '../../features/player/domain/entities/stat_leader.dart';
 import 'player_hero_context.dart';
 
@@ -19,6 +19,7 @@ class StatLeaderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -33,7 +34,7 @@ class StatLeaderRow extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: rank <= 3 ? FontWeight.bold : FontWeight.normal,
-                  color: rank <= 3 ? AppColors.accent : AppColors.textTertiary,
+                  color: rank <= 3 ? colors.accent : colors.textTertiary,
                 ),
               ),
             ),
@@ -42,16 +43,16 @@ class StatLeaderRow extends StatelessWidget {
               tag: PlayerHeroContext.statLeader.tag(leader.playerId),
               child: CircleAvatar(
                 radius: 18,
-                backgroundColor: AppColors.surfaceVariant,
+                backgroundColor: colors.surfaceVariant,
                 backgroundImage: leader.headshot != null
                     ? CachedNetworkImageProvider(leader.headshot!)
                     : null,
                 child: leader.headshot == null
                     ? Text(
                         leader.firstName.isNotEmpty ? leader.firstName[0] : '?',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: AppColors.textSecondary,
+                          color: colors.textSecondary,
                         ),
                       )
                     : null,
@@ -65,10 +66,10 @@ class StatLeaderRow extends StatelessWidget {
                 children: [
                   Text(
                     leader.fullName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.textPrimary,
+                      color: colors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -76,9 +77,9 @@ class StatLeaderRow extends StatelessWidget {
                   if (leader.teamAbbrev != null)
                     Text(
                       leader.teamAbbrev!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.textTertiary,
+                        color: colors.textTertiary,
                       ),
                     ),
                 ],
@@ -86,10 +87,10 @@ class StatLeaderRow extends StatelessWidget {
             ),
             Text(
               _formatStatValue(leader.statValue, leader.statCategory),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: colors.textPrimary,
               ),
             ),
           ],

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/theme/app_colors.dart';
 import '../../core/utils/extensions.dart';
 import '../../features/player/domain/entities/player.dart';
 import '../../features/watchlist/presentation/providers/watchlist_providers.dart';
@@ -34,6 +33,7 @@ class PlayerListTile extends ConsumerWidget {
     final isInWatchlist = showWatchlistButton
         ? ref.watch(isPlayerInWatchlistProvider(player.id)).value ?? false
         : false;
+    final colors = context.appColors;
 
     return InkWell(
       onTap: onTap,
@@ -58,10 +58,10 @@ class PlayerListTile extends ConsumerWidget {
                 children: [
                   Text(
                     player.fullName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: colors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -78,9 +78,9 @@ class PlayerListTile extends ConsumerWidget {
                         const SizedBox(width: 6),
                         Text(
                           '#${player.sweaterNumber}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.textTertiary,
+                            color: colors.textTertiary,
                           ),
                         ),
                       ],
@@ -96,18 +96,18 @@ class PlayerListTile extends ConsumerWidget {
                 children: [
                   Text(
                     trailingStat!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.accent,
+                      color: colors.accent,
                     ),
                   ),
                   if (trailingLabel != null)
                     Text(
                       trailingLabel!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
-                        color: AppColors.textTertiary,
+                        color: colors.textTertiary,
                       ),
                     ),
                 ],
@@ -121,7 +121,7 @@ class PlayerListTile extends ConsumerWidget {
                       ? Icons.bookmark_added
                       : Icons.add_circle_outline,
                   size: 22,
-                  color: AppColors.accent,
+                  color: colors.accent,
                 ),
                 onPressed: isInWatchlist
                     ? onRemoveFromWatchlist
@@ -146,19 +146,17 @@ class _PlayerAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     if (url == null || url!.isEmpty) {
       return CircleAvatar(
         radius: 22,
-        backgroundColor: AppColors.surfaceVariant,
-        child: Text(
-          fallback,
-          style: const TextStyle(color: AppColors.textSecondary),
-        ),
+        backgroundColor: colors.surfaceVariant,
+        child: Text(fallback, style: TextStyle(color: colors.textSecondary)),
       );
     }
     return CircleAvatar(
       radius: 22,
-      backgroundColor: AppColors.surfaceVariant,
+      backgroundColor: colors.surfaceVariant,
       backgroundImage: CachedNetworkImageProvider(url!),
     );
   }
@@ -170,18 +168,19 @@ class _TeamBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
+        color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         abbrev,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          color: AppColors.textSecondary,
+          color: colors.textSecondary,
         ),
       ),
     );
@@ -194,18 +193,19 @@ class _PositionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: colors.border),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         position,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w500,
-          color: AppColors.textTertiary,
+          color: colors.textTertiary,
         ),
       ),
     );
@@ -217,14 +217,12 @@ class ShimmerPlayerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          const CircleAvatar(
-            radius: 22,
-            backgroundColor: AppColors.surfaceVariant,
-          ),
+          CircleAvatar(radius: 22, backgroundColor: colors.surfaceVariant),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -234,7 +232,7 @@ class ShimmerPlayerListTile extends StatelessWidget {
                   width: 140,
                   height: 14,
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceVariant,
+                    color: colors.surfaceVariant,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -243,7 +241,7 @@ class ShimmerPlayerListTile extends StatelessWidget {
                   width: 80,
                   height: 12,
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceVariant,
+                    color: colors.surfaceVariant,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),

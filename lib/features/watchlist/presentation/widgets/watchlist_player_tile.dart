@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../core/utils/stat_formatter.dart';
 import '../../../../shared/widgets/player_hero_context.dart';
@@ -27,6 +26,7 @@ class WatchlistPlayerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Slidable(
       key: ValueKey(info.player.id),
       startActionPane: ActionPane(
@@ -34,8 +34,8 @@ class WatchlistPlayerTile extends StatelessWidget {
         children: [
           SlidableAction(
             onPressed: (ctx) => onMove(),
-            backgroundColor: AppColors.accent,
-            foregroundColor: Colors.white,
+            backgroundColor: colors.accent,
+            foregroundColor: colors.textPrimary,
             icon: Icons.drive_file_move_outlined,
             label: context.l10n.watchlistMove,
           ),
@@ -47,8 +47,8 @@ class WatchlistPlayerTile extends StatelessWidget {
         children: [
           SlidableAction(
             onPressed: (ctx) => onRemove(),
-            backgroundColor: AppColors.error,
-            foregroundColor: Colors.white,
+            backgroundColor: colors.error,
+            foregroundColor: colors.textPrimary,
             icon: Icons.delete_outline,
             label: context.l10n.watchlistRemove,
           ),
@@ -75,10 +75,10 @@ class WatchlistPlayerTile extends StatelessWidget {
                   children: [
                     Text(
                       info.player.fullName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
+                        color: colors.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -114,19 +114,20 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     if (url == null || url!.isEmpty) {
       return CircleAvatar(
         radius: 22,
-        backgroundColor: AppColors.surfaceVariant,
+        backgroundColor: colors.surfaceVariant,
         child: Text(
           name.isNotEmpty ? name[0] : '?',
-          style: const TextStyle(color: AppColors.textSecondary),
+          style: TextStyle(color: colors.textSecondary),
         ),
       );
     }
     return CircleAvatar(
       radius: 22,
-      backgroundColor: AppColors.surfaceVariant,
+      backgroundColor: colors.surfaceVariant,
       backgroundImage: CachedNetworkImageProvider(url!),
     );
   }
@@ -138,18 +139,19 @@ class _Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
+        color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          color: AppColors.textSecondary,
+          color: colors.textSecondary,
         ),
       ),
     );
@@ -178,6 +180,7 @@ class _GameStatusWidget extends StatelessWidget {
   }
 
   Widget _liveGameWidget(BuildContext context, ScheduleGame game) {
+    final colors = context.appColors;
     final score =
         '${game.awayTeamAbbrev} ${game.awayScore ?? 0} - '
         '${game.homeScore ?? 0} ${game.homeTeamAbbrev}';
@@ -188,25 +191,25 @@ class _GameStatusWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-            color: AppColors.success.withValues(alpha: 0.2),
+            color: colors.success.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
             context.l10n.watchlistLive,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.bold,
-              color: AppColors.success,
+              color: colors.success,
             ),
           ),
         ),
         const SizedBox(height: 2),
         Text(
           score,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
+            color: colors.textPrimary,
           ),
         ),
       ],
@@ -214,6 +217,7 @@ class _GameStatusWidget extends StatelessWidget {
   }
 
   Widget _finalGameWidget(BuildContext context, ScheduleGame game) {
+    final colors = context.appColors;
     final score =
         '${game.awayTeamAbbrev} ${game.awayScore ?? 0} - '
         '${game.homeScore ?? 0} ${game.homeTeamAbbrev}';
@@ -224,15 +228,15 @@ class _GameStatusWidget extends StatelessWidget {
       children: [
         Text(
           context.l10n.watchlistFinalScore(score),
-          style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 11, color: colors.textSecondary),
         ),
         if (log != null)
           Text(
             _formatStatLine(log),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: AppColors.accent,
+              color: colors.accent,
             ),
           ),
       ],
@@ -240,6 +244,7 @@ class _GameStatusWidget extends StatelessWidget {
   }
 
   Widget _futureGameWidget(BuildContext context, ScheduleGame game) {
+    final colors = context.appColors;
     final teamAbbrev = info.player.teamAbbrev;
     final isHome = game.homeTeamAbbrev == teamAbbrev;
     final opponent = isHome ? game.awayTeamAbbrev : game.homeTeamAbbrev;
@@ -252,21 +257,19 @@ class _GameStatusWidget extends StatelessWidget {
       children: [
         Text(
           '$prefix $opponent',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
+            color: colors.textPrimary,
           ),
         ),
-        Text(
-          time,
-          style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
-        ),
+        Text(time, style: TextStyle(fontSize: 11, color: colors.textSecondary)),
       ],
     );
   }
 
   Widget _noGameWidget(BuildContext context) {
+    final colors = context.appColors;
     final log = info.lastGameLog;
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -274,15 +277,12 @@ class _GameStatusWidget extends StatelessWidget {
       children: [
         Text(
           context.l10n.watchlistNoGameToday,
-          style: const TextStyle(fontSize: 11, color: AppColors.textTertiary),
+          style: TextStyle(fontSize: 11, color: colors.textTertiary),
         ),
         if (log != null)
           Text(
             '${DateFormat.MMMd(context.localeName).format(log.date)}: ${_formatStatLine(log)}',
-            style: const TextStyle(
-              fontSize: 11,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 11, color: colors.textSecondary),
           ),
       ],
     );

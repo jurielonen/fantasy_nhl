@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/player_detail.dart';
 
@@ -18,25 +16,23 @@ class SeasonStatsCard extends StatelessWidget {
     if (stats == null) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Text(
-          context.l10n.seasonStatsEmpty,
-          style: AppTextStyles.bodyMedium,
-        ),
+        child: Text(context.l10n.seasonStatsEmpty, style: context.tsBodyMedium),
       );
     }
 
+    final colors = context.appColors;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: colors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(displayTitle, style: AppTextStyles.titleMedium),
+          Text(displayTitle, style: context.tsTitleMedium),
           const SizedBox(height: 12),
           switch (stats!) {
             SkaterSeasonStats s => _SkaterStatsGrid(stats: s),
@@ -117,10 +113,10 @@ class _StatsGrid extends StatelessWidget {
             children: [
               Text(
                 item.value,
-                style: AppTextStyles.statValue.copyWith(fontSize: 17),
+                style: context.tsStatValue.copyWith(fontSize: 17),
               ),
               const SizedBox(height: 2),
-              Text(item.label, style: AppTextStyles.statLabel),
+              Text(item.label, style: context.tsStatLabel),
             ],
           ),
         );

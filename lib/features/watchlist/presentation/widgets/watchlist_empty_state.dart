@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/router/app_router.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/extensions.dart';
 
 class WatchlistEmptyState extends StatelessWidget {
@@ -18,7 +17,7 @@ class WatchlistEmptyState extends StatelessWidget {
             Icon(
               Icons.person_search_outlined,
               size: 64,
-              color: AppColors.textTertiary,
+              color: context.appColors.textTertiary,
             ),
             const SizedBox(height: 16),
             Text(
@@ -29,7 +28,7 @@ class WatchlistEmptyState extends StatelessWidget {
             Text(
               context.l10n.watchlistEmptySubtitle,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textSecondary),
+              style: TextStyle(color: context.appColors.textSecondary),
             ),
             const SizedBox(height: 24),
             FilledButton.icon(

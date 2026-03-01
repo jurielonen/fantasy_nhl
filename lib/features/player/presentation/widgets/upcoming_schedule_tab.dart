@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../shared/widgets/app_error_widget.dart';
 import '../../../../shared/widgets/shimmer_loader.dart';
@@ -50,7 +48,7 @@ class UpcomingScheduleTab extends StatelessWidget {
             child: Center(
               child: Text(
                 context.l10n.scheduleUpcomingEmpty,
-                style: TextStyle(color: AppColors.textSecondary),
+                style: TextStyle(color: context.appColors.textSecondary),
               ),
             ),
           );
@@ -98,6 +96,7 @@ class _ScheduleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final locale = context.localeName;
     final isHome = game.homeTeamAbbrev == teamAbbrev;
     final opponent = isHome ? game.awayTeamAbbrev : game.homeTeamAbbrev;
@@ -106,8 +105,8 @@ class _ScheduleRow extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.border, width: 0.5)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: colors.border, width: 0.5)),
       ),
       child: Row(
         children: [
@@ -118,10 +117,9 @@ class _ScheduleRow extends StatelessWidget {
               children: [
                 Text(
                   _formatDate(game.date, locale),
-                  style: AppTextStyles.labelLarge,
+                  style: context.tsLabelLarge,
                 ),
-                if (timeStr != null)
-                  Text(timeStr, style: AppTextStyles.labelSmall),
+                if (timeStr != null) Text(timeStr, style: context.tsLabelSmall),
               ],
             ),
           ),
@@ -134,20 +132,20 @@ class _ScheduleRow extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: isHome ? AppColors.textPrimary : AppColors.textSecondary,
+                color: isHome ? colors.textPrimary : colors.textSecondary,
               ),
             ),
           ),
           const SizedBox(width: 8),
-          Expanded(child: Text(opponent, style: AppTextStyles.titleMedium)),
+          Expanded(child: Text(opponent, style: context.tsTitleMedium)),
           if (isBackToBack)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: AppColors.warning.withValues(alpha: 0.2),
+                color: colors.warning.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
-                  color: AppColors.warning.withValues(alpha: 0.5),
+                  color: colors.warning.withValues(alpha: 0.5),
                 ),
               ),
               child: Text(
@@ -155,7 +153,7 @@ class _ScheduleRow extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.warning,
+                  color: colors.warning,
                 ),
               ),
             ),
