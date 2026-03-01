@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme_extension.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../domain/entities/game_log_entry.dart';
@@ -65,8 +66,7 @@ class StatTrendChart extends StatelessWidget {
                 onSelected: (_) => onMetricChanged(e.key),
                 selectedColor: colors.accent.withValues(alpha: 0.2),
                 backgroundColor: colors.surfaceVariant,
-                labelStyle: TextStyle(
-                  fontSize: 12,
+                labelStyle: AppTextStyles.bodySmall.copyWith(
                   color: isSelected ? colors.accent : colors.textSecondary,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 ),
@@ -132,7 +132,9 @@ class StatTrendChart extends StatelessWidget {
                 meta: meta,
                 child: Text(
                   short,
-                  style: TextStyle(fontSize: 9, color: colors.textTertiary),
+                  style: AppTextStyles.chartAxisLabel.copyWith(
+                    color: colors.textTertiary,
+                  ),
                 ),
               );
             },
@@ -149,7 +151,9 @@ class StatTrendChart extends StatelessWidget {
                     : value.toStringAsFixed(
                         value == value.roundToDouble() ? 0 : 1,
                       ),
-                style: TextStyle(fontSize: 9, color: colors.textTertiary),
+                style: AppTextStyles.chartAxisLabel.copyWith(
+                  color: colors.textTertiary,
+                ),
               );
             },
           ),
@@ -173,10 +177,9 @@ class StatTrendChart extends StatelessWidget {
                     );
               return LineTooltipItem(
                 '$dateStr\n$label',
-                TextStyle(
-                  fontSize: 11,
-                  color: colors.textPrimary,
+                AppTextStyles.caption.copyWith(
                   fontWeight: FontWeight.w500,
+                  color: colors.textPrimary,
                 ),
               );
             }).toList();

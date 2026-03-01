@@ -96,11 +96,7 @@ class PlayerCard extends StatelessWidget {
                 children: [
                   Text(
                     player.fullName,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: colors.textPrimary,
-                    ),
+                    style: context.tsLabelMedium,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -110,28 +106,17 @@ class PlayerCard extends StatelessWidget {
                       if (player.teamAbbrev != null)
                         Text(
                           player.teamAbbrev!,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: colors.textSecondary,
-                          ),
+                          style: context.tsCaptionSecondary,
                         ),
-                      Text(' · ', style: TextStyle(color: colors.textTertiary)),
-                      Text(
-                        player.position,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: colors.textSecondary,
-                        ),
-                      ),
+                      Text(' · ', style: context.tsCaption),
+                      Text(player.position, style: context.tsCaptionSecondary),
                     ],
                   ),
                   if (featuredStat != null) ...[
                     const SizedBox(height: 4),
                     Text(
                       featuredStat!,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      style: context.tsTitleLargeBold.copyWith(
                         color: colors.accent,
                       ),
                     ),

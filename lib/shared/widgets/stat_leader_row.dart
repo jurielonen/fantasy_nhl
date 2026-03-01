@@ -31,8 +31,7 @@ class StatLeaderRow extends StatelessWidget {
               child: Text(
                 '$rank',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
+                style: context.tsLabelLarge.copyWith(
                   fontWeight: rank <= 3 ? FontWeight.bold : FontWeight.normal,
                   color: rank <= 3 ? colors.accent : colors.textTertiary,
                 ),
@@ -50,10 +49,7 @@ class StatLeaderRow extends StatelessWidget {
                 child: leader.headshot == null
                     ? Text(
                         leader.firstName.isNotEmpty ? leader.firstName[0] : '?',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: colors.textSecondary,
-                        ),
+                        style: context.tsBodyMedium,
                       )
                     : null,
               ),
@@ -66,32 +62,21 @@ class StatLeaderRow extends StatelessWidget {
                 children: [
                   Text(
                     leader.fullName,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: colors.textPrimary,
-                    ),
+                    style: context.tsLabelLarge,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   if (leader.teamAbbrev != null)
                     Text(
                       leader.teamAbbrev!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: colors.textTertiary,
-                      ),
+                      style: context.tsBodySmallTertiary,
                     ),
                 ],
               ),
             ),
             Text(
               _formatStatValue(leader.statValue, leader.statCategory),
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: colors.textPrimary,
-              ),
+              style: context.tsTitleLargeBold,
             ),
           ],
         ),

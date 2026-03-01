@@ -21,21 +21,14 @@ class SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 20, 8, 8),
       child: Row(
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: colors.textPrimary,
-            ),
-          ),
+          Text(title, style: context.tsTitleLargeBold),
           const Spacer(),
           if (actionText != null)
             TextButton(
               onPressed: onAction,
               child: Text(
                 actionText!,
-                style: TextStyle(fontSize: 13, color: colors.accent),
+                style: context.tsLabelMedium.copyWith(color: colors.accent),
               ),
             ),
         ],

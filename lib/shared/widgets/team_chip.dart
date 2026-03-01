@@ -48,9 +48,7 @@ class TeamChip extends StatelessWidget {
             ],
             Text(
               abbreviation,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+              style: context.tsLabelMedium.copyWith(
                 color: selected ? colors.accent : colors.textSecondary,
               ),
             ),

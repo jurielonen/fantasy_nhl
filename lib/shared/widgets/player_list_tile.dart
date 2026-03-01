@@ -58,11 +58,7 @@ class PlayerListTile extends ConsumerWidget {
                 children: [
                   Text(
                     player.fullName,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: colors.textPrimary,
-                    ),
+                    style: context.tsPlayerName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -78,10 +74,7 @@ class PlayerListTile extends ConsumerWidget {
                         const SizedBox(width: 6),
                         Text(
                           '#${player.sweaterNumber}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: colors.textTertiary,
-                          ),
+                          style: context.tsBodySmallTertiary,
                         ),
                       ],
                     ],
@@ -94,22 +87,9 @@ class PlayerListTile extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    trailingStat!,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: colors.accent,
-                    ),
-                  ),
+                  Text(trailingStat!, style: context.tsStatValueSmall),
                   if (trailingLabel != null)
-                    Text(
-                      trailingLabel!,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: colors.textTertiary,
-                      ),
-                    ),
+                    Text(trailingLabel!, style: context.tsCaption),
                 ],
               ),
               const SizedBox(width: 8),
@@ -151,7 +131,7 @@ class _PlayerAvatar extends StatelessWidget {
       return CircleAvatar(
         radius: 22,
         backgroundColor: colors.surfaceVariant,
-        child: Text(fallback, style: TextStyle(color: colors.textSecondary)),
+        child: Text(fallback, style: context.tsBodyMedium),
       );
     }
     return CircleAvatar(
@@ -175,14 +155,7 @@ class _TeamBadge extends StatelessWidget {
         color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Text(
-        abbrev,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: colors.textSecondary,
-        ),
-      ),
+      child: Text(abbrev, style: context.tsTableHeaderSecondary),
     );
   }
 }
@@ -200,14 +173,7 @@ class _PositionChip extends StatelessWidget {
         border: Border.all(color: colors.border),
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Text(
-        position,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w500,
-          color: colors.textTertiary,
-        ),
-      ),
+      child: Text(position, style: context.tsStatLabel),
     );
   }
 }

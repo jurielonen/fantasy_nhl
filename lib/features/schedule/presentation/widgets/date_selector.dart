@@ -193,18 +193,14 @@ class _DayChip extends StatelessWidget {
             children: [
               Text(
                 day.dayAbbrev,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
+                style: context.tsChipLabel.copyWith(
                   color: isSelected ? colors.background : colors.textSecondary,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 dateStr,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: context.tsLabelMedium.copyWith(
                   color: isSelected ? colors.background : colors.textPrimary,
                 ),
               ),
@@ -223,9 +219,7 @@ class _DayChip extends StatelessWidget {
                   ),
                   child: Text(
                     '${day.numberOfGames}',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+                    style: context.tsBadgeLabel.copyWith(
                       color: isSelected ? colors.background : colors.accent,
                     ),
                   ),
