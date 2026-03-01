@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/theme/app_colors.dart';
 
 class TeamChip extends StatelessWidget {
   final String abbreviation;
+  final String? logoUrl;
   final bool selected;
   final VoidCallback? onTap;
 
   const TeamChip({
     super.key,
     required this.abbreviation,
+    this.logoUrl,
     this.selected = false,
     this.onTap,
   });
@@ -20,7 +23,7 @@ class TeamChip extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         margin: const EdgeInsets.only(right: 8),
         decoration: BoxDecoration(
           color: selected
@@ -31,13 +34,28 @@ class TeamChip extends StatelessWidget {
             color: selected ? AppColors.accent : AppColors.border,
           ),
         ),
-        child: Text(
-          abbreviation,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: selected ? AppColors.accent : AppColors.textSecondary,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (logoUrl != null) ...[
+              SvgPicture.network(
+                logoUrl!,
+                width: 24,
+                height: 24,
+                placeholderBuilder: (_) =>
+                    const SizedBox(width: 24, height: 24),
+              ),
+              const SizedBox(width: 6),
+            ],
+            Text(
+              abbreviation,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: selected ? AppColors.accent : AppColors.textSecondary,
+              ),
+            ),
+          ],
         ),
       ),
     );
